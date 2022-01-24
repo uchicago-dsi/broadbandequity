@@ -1,44 +1,46 @@
+import configparser
+import ast
 import requests
 import pandas as pd
+
+API_URL = "https://api.census.gov"
+IL_FIPS = "17"
+COOK_FIPS = "031"  # 017031
+CHICAGO_FIPS = "14000"
+
+def get_config():
+    config = configparser.ConfigParser()
+    if not config.has_section('Data Pipeline'):
+        config.read('config.ini')
+    return config
+
+def call_api(dataset_url,geography_url):
+    config = get_config()
+    variables_url = "?get="+",".join(ast.literal_eval(config['Data Pipeline'][dataset_url]))
+    key_url = "&key="+config['API Keys']['CensusAPIKey']
+    request = API_URL + dataset_url + variables_url + geography_url + key_url
+    response = requests.get(request)
+    try:
+        response = response.json()
+    except:
+        raise Exception(response)
+    return pd.DataFrame(columns=response[0], data=response[1:])
+
+def acs5_aggregate():
+    geography_url = "&for=tract:*"+"&in=state:"+IL_FIPS+"&in=county:"+COOK_FIPS
+    return call_api("/data/2019/acs/acs5", geography_url)
+
+def acs5_individual():
+    return
 
 # Specify dataset
 # https://www.census.gov/data/developers/data-sets/census-microdata-api.ACS_5-Year_PUMS.html
 
-api_url = "https://api.census.gov"
-dataset_url = "/data/2019/acs/acs5"
-
-# Specify variables:
-# https://api.census.gov/data/2019/acs/acs5/variables.html
-
-vars = {"B28002_004E" : "estimated total with broadband subscription"
-    }
-
-variables_url = "?get="+",".join(vars)
-
 # Specify geography: 
 # https://api.census.gov/data/2019/acs/acs5/geography.html
 
-cook_fips = "031"  # 017031
-il_fips = "17"
-chicago_fips = "14000"
-
-geography_url = "&for=tract:*"+"&in=state:"+il_fips+"&in=county:"+cook_fips
-
-# key db7beae177bf4d220d9d5fcb8907c57250054ddb
-
-#api_key = "db7beae177bf4d220d9d5fcb8907c57250054ddb"
-#key_url = "&key="+api_key
 
 # Interact with api and read into dataframe
-
-request = api_url + dataset_url + variables_url + geography_url
-response = requests.get(request)
-try:
-    response = response.json()
-except:
-    print(response)
-acs_data = pd.DataFrame(columns=response[0], data=response[1:])
-print(acs5_data)
 
 # What about 1 year data?
 # https://www.census.gov/programs-surveys/acs/guidance/estimates.html
