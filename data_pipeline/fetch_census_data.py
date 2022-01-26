@@ -4,6 +4,7 @@ from config import config
 import ast
 import requests
 import pandas as pd
+import os
 
 API_URL = "https://api.census.gov"
 ACS5_AGG_URL = "/data/2019/acs/acs5"
@@ -21,7 +22,7 @@ def call_api(dataset_url,geography_url):
         dataframe containing requested dataset
 
     Raises:
-        Exception: for non-OK API response
+        Exception: for responses other than 200 (OK) and 204 (empty)
     """
 
     # finish constructing API request:
@@ -42,9 +43,13 @@ def acs5_aggregate():
     
     Set variables of interest in config.ini.
     """
-
-    geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['IL_FIPS']+"&in=county:"+config['Geography']['COOK_FIPS']
-    return call_api(ACS5_AGG_URL, geography_url)
+    try:
+        data = pd.read_csv(os.path.join(os.path.dirname(__file__), '../data/acs5_aggregate.csv'), index_col = 0)
+    except:
+        geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['IL_FIPS']+"&in=county:"+config['Geography']['COOK_FIPS']
+        data = call_api(ACS5_AGG_URL, geography_url)
+        data.to_csv(os.path.join(os.path.dirname(__file__), '../data/acs5_aggregate.csv'))
+    return data
 
 def acs5_individual():
     """Returns dataframe of 5-year ACS microdata for tracts in Cook County.
@@ -52,8 +57,13 @@ def acs5_individual():
     Set variables of interest in config.ini.
     """
 
-    geography_url = "&for=public%20use%20microdata%20area:*"+"&in=state:"+config['Geography']['IL_FIPS']
-    return call_api(ACS5_IND_URL,geography_url)
+    try:
+        data = pd.read_csv(os.path.join(os.path.dirname(__file__), '../data/acs5_individual.csv'), index_col = 0)
+    except:
+        geography_url = "&for=public%20use%20microdata%20area:*"+"&in=state:"+config['Geography']['IL_FIPS']
+        data = call_api(ACS5_IND_URL, geography_url)
+        data.to_csv(os.path.join(os.path.dirname(__file__), '../data/acs5_individual.csv'))
+    return data
 
 def cps_individual():
     """Returns dataframe of CPS internet supplement microdata for counties in Illinois.
@@ -61,5 +71,10 @@ def cps_individual():
     Set variables of interest in config.ini.
     """
 
-    geography_url = "&for=county:*"+"&in=state:"+config['Geography']['IL_FIPS']
-    return call_api(CPS_IND_URL,geography_url)
+    try:
+        data = pd.read_csv(os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv'), index_col = 0)
+    except:
+        geography_url = "&for=county:*"+"&in=state:"+config['Geography']['IL_FIPS']
+        data = call_api(CPS_IND_URL,geography_url)
+        data.to_csv(os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv'))
+    return data
