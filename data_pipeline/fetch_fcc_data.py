@@ -13,6 +13,13 @@ FCC_URL = "https://opendata.fcc.gov/resource/hicn-aujz.json"
 
 def fcc_fixed(force_api_call=False):
     """Returns dataframe of Dec 2020 fixed broadband data from Form 477.
+
+    Args:
+    force_api_call (optional): When True, calls relevant API and writes local CSV.
+        Otherwise, will preferentially just read local CSV. Defaults to False.
+
+    Returns:
+        data: pandas dataframe
     
     Raises:
         Exception: for responses other than 200 (OK) and 204 (empty)
@@ -21,7 +28,7 @@ def fcc_fixed(force_api_call=False):
     csv_address = os.path.join(os.path.dirname(__file__), '../data/fcc_fixed.csv')
     while True:
         if force_api_call:
-            request = FCC_URL + "?$limit=5000&$$app_token=" + config['API Keys']['FCCAppToken']
+            request = FCC_URL + "?stateabbr=MD&$$app_token=" + config['API Keys']['FCCAppToken']
             response = requests.get(request)
             try:
                 response = response.json()
@@ -35,3 +42,5 @@ def fcc_fixed(force_api_call=False):
             return data
         except:
             force_api_call = True
+
+fcc_fixed(force_api_call=True)
