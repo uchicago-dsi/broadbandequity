@@ -38,43 +38,60 @@ def call_api(dataset_url,geography_url):
         raise Exception(response)
     return pd.DataFrame(columns=response[0], data=response[1:])
 
-def acs5_aggregate():
+def acs5_aggregate(force_api_call=False):
     """Returns dataframe of 5-year ACS aggregate data for tracts in Cook County.
     
     Set variables of interest in config.ini.
     """
-    try:
-        data = pd.read_csv(os.path.join(os.path.dirname(__file__), '../data/acs5_aggregate.csv'), index_col = 0)
-    except:
-        geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['IL_FIPS']+"&in=county:"+config['Geography']['COOK_FIPS']
-        data = call_api(ACS5_AGG_URL, geography_url)
-        data.to_csv(os.path.join(os.path.dirname(__file__), '../data/acs5_aggregate.csv'))
-    return data
 
-def acs5_individual():
+    csv_address = os.path.join(os.path.dirname(__file__), '../data/acs5_aggregate.csv')
+    while True:
+        if force_api_call:
+            geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['IL_FIPS']+"&in=county:"+config['Geography']['COOK_FIPS']
+            data = call_api(ACS5_AGG_URL, geography_url)
+            data.to_csv(csv_address)
+            return data
+        try:  # access data stored locally, or if we just wrote it, check that it wrote correctly
+            data = pd.read_csv(csv_address, index_col = 0)
+            return data
+        except:
+            force_api_call = True
+
+
+def acs5_individual(force_api_call=False):
     """Returns dataframe of 5-year ACS microdata for tracts in Cook County.
     
     Set variables of interest in config.ini.
     """
 
-    try:
-        data = pd.read_csv(os.path.join(os.path.dirname(__file__), '../data/acs5_individual.csv'), index_col = 0)
-    except:
-        geography_url = "&for=public%20use%20microdata%20area:*"+"&in=state:"+config['Geography']['IL_FIPS']
-        data = call_api(ACS5_IND_URL, geography_url)
-        data.to_csv(os.path.join(os.path.dirname(__file__), '../data/acs5_individual.csv'))
-    return data
+    csv_address = os.path.join(os.path.dirname(__file__), '../data/acs5_individual.csv')
+    while True:
+        if force_api_call:
+            geography_url = "&for=public%20use%20microdata%20area:*"+"&in=state:"+config['Geography']['IL_FIPS']
+            data = call_api(ACS5_IND_URL, geography_url)
+            data.to_csv(csv_address, '../data/acs5_individual.csv')
+            return data
+        try:
+            data = pd.read_csv(csv_address, index_col = 0)
+            return data
+        except:
+            force_api_call = True
 
-def cps_individual():
+def cps_individual(force_api_call=False):
     """Returns dataframe of CPS internet supplement microdata for counties in Illinois.
     
     Set variables of interest in config.ini.
     """
 
-    try:
-        data = pd.read_csv(os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv'), index_col = 0)
-    except:
-        geography_url = "&for=county:*"+"&in=state:"+config['Geography']['IL_FIPS']
-        data = call_api(CPS_IND_URL,geography_url)
-        data.to_csv(os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv'))
-    return data
+    csv_address = os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv')
+    while True:
+        if force_api_call:
+            geography_url = "&for=county:*"+"&in=state:"+config['Geography']['IL_FIPS']
+            data = call_api(CPS_IND_URL,geography_url)
+            data.to_csv(os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv'))
+            return data
+        try:
+            data = pd.read_csv(csv_address, index_col = 0)
+            return data
+        except:
+            force_api_call = True

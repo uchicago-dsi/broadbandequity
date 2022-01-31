@@ -11,22 +11,27 @@ import os
 
 FCC_URL = "https://opendata.fcc.gov/resource/hicn-aujz.json"
 
-def fcc_fixed():
+def fcc_fixed(force_api_call=False):
     """Returns dataframe of Dec 2020 fixed broadband data from Form 477.
     
     Raises:
         Exception: for responses other than 200 (OK) and 204 (empty)
     """
 
-    try:
-        data = pd.read_csv(os.path.join(os.path.dirname(__file__), '../data/fcc_fixed.csv'), index_col = 0)
-    except:
-        request = FCC_URL + "?$limit=5000&$$app_token=" + config['API Keys']['FCCAppToken']
-        response = requests.get(request)
+    csv_address = os.path.join(os.path.dirname(__file__), '../data/fcc_fixed.csv')
+    while True:
+        if force_api_call:
+            request = FCC_URL + "?$limit=5000&$$app_token=" + config['API Keys']['FCCAppToken']
+            response = requests.get(request)
+            try:
+                response = response.json()
+            except:
+                print(response)
+            data = pd.DataFrame(columns=response[0], data=response[1:])
+            data.to_csv(csv_address)   
+            return data 
         try:
-            response = response.json()
+            data = pd.read_csv(csv_address, index_col = 0)
+            return data
         except:
-            print(response)
-        data = pd.DataFrame(columns=response[0], data=response[1:])
-        data.to_csv(os.path.join(os.path.dirname(__file__), '../data/fcc_fixed.csv'))    
-    return data
+            force_api_call = True
