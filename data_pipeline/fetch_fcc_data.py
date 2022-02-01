@@ -28,7 +28,7 @@ def fcc_fixed(force_api_call=False):
     csv_address = os.path.join(os.path.dirname(__file__), '../data/fcc_fixed.csv')
     while True:
         if force_api_call:
-            request = FCC_URL + "?stateabbr=MD&$$app_token=" + config['API Keys']['FCCAppToken']
+            request = FCC_URL + "?stateabbr=IL&$$app_token=" + config['API Keys']['FCCAppToken']
             response = requests.get(request)
             try:
                 response = response.json()
