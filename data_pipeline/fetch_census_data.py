@@ -7,10 +7,10 @@ import pandas as pd
 import os
 
 API_URL = "https://api.census.gov"
-ACS5_AGG_URL = "/data/2019/acs/acs5"
-ACS5_PROF_URL = "/data/2019/acs/acs5/profile"
-ACS5_IND_URL = "/data/2019/acs/acs5/pums"
-CPS_IND_URL = "/data/2019/cps/internet/nov"
+ACS5_AGG_URL = f"/data/{config['Dates']['Census']}/acs/acs5"
+ACS5_PROF_URL = f"/data/{config['Dates']['Census']}/acs/acs5/profile"
+ACS5_IND_URL = f"/data/{config['Dates']['Census']}/acs/acs5/pums"
+CPS_IND_URL = f"/data/{config['Dates']['Census']}/cps/internet/nov"
 
 def call_api(dataset_url,geography_url):
     """Requests data from census API.
@@ -23,7 +23,7 @@ def call_api(dataset_url,geography_url):
         dataframe containing requested dataset
 
     Raises:
-        Exception: for responses other than 200 (OK) and 204 (empty)
+        Exception: for any unsuccessful API responses
     """
 
     # finish constructing API request:
@@ -56,7 +56,7 @@ def acs5_aggregate(force_api_call=False):
     csv_address = os.path.join(os.path.dirname(__file__), '../data/acs5_aggregate.csv')
     while True:
         if force_api_call:
-            geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['IL_FIPS']+"&in=county:"+config['Geography']['COOK_FIPS']
+            geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['State_FIPS']+"&in=county:"+config['Geography']['County_FIPS']
             data = call_api(ACS5_AGG_URL, geography_url)
             data.to_csv(csv_address)
             return data
@@ -67,7 +67,7 @@ def acs5_aggregate(force_api_call=False):
             force_api_call = True
 
 def acs5_profile(force_api_call=False):
-    """Returns dataframe of 5-year ACS aggregate data for tracts in Cook County.
+    """Returns dataframe of 5-year ACS aggregate data for tracts in specified county.
 
     Args:
     force_api_call (optional): When True, calls relevant API and writes local CSV.
@@ -82,7 +82,7 @@ def acs5_profile(force_api_call=False):
     csv_address = os.path.join(os.path.dirname(__file__), '../data/acs5_profile.csv')
     while True:
         if force_api_call:
-            geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['IL_FIPS']+"&in=county:"+config['Geography']['COOK_FIPS']
+            geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['State_FIPS']+"&in=county:"+config['Geography']['County_FIPS']
             data = call_api(ACS5_PROF_URL, geography_url)
             data.to_csv(csv_address)
             return data
@@ -93,7 +93,7 @@ def acs5_profile(force_api_call=False):
             force_api_call = True
 
 def acs5_individual(force_api_call=False):
-    """Returns dataframe of 5-year ACS microdata for tracts in Cook County.
+    """Returns dataframe of 5-year ACS microdata for PUMAs in specified county.
 
     Args:
     force_api_call (optional): When True, calls relevant API and writes local CSV.
@@ -108,7 +108,7 @@ def acs5_individual(force_api_call=False):
     csv_address = os.path.join(os.path.dirname(__file__), '../data/acs5_individual.csv')
     while True:
         if force_api_call:
-            geography_url = "&for=public%20use%20microdata%20area:*"+"&in=state:"+config['Geography']['IL_FIPS']
+            geography_url = "&for=public%20use%20microdata%20area:*"+"&in=state:"+config['Geography']['State_FIPS']
             data = call_api(ACS5_IND_URL, geography_url)
             data.to_csv(csv_address, '../data/acs5_individual.csv')
             return data
@@ -119,7 +119,7 @@ def acs5_individual(force_api_call=False):
             force_api_call = True
 
 def cps_individual(force_api_call=False):
-    """Returns dataframe of CPS internet supplement microdata for counties in Illinois.
+    """Returns dataframe of CPS internet supplement microdata for counties in specified state.
 
     Args:
     force_api_call (optional): When True, calls relevant API and writes local CSV.
@@ -134,7 +134,7 @@ def cps_individual(force_api_call=False):
     csv_address = os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv')
     while True:
         if force_api_call:
-            geography_url = "&for=county:*"+"&in=state:"+config['Geography']['IL_FIPS']
+            geography_url = "&for=county:*"+"&in=state:"+config['Geography']['State_FIPS']
             data = call_api(CPS_IND_URL,geography_url)
             data.to_csv(os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv'))
             return data
