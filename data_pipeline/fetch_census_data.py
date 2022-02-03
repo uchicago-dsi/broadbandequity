@@ -35,9 +35,10 @@ def call_api(dataset_url,geography_url):
     response = requests.get(request)
     try:
         response = response.json()
+        data = pd.DataFrame(columns=response[0], data=response[1:])
     except:
         raise Exception(response)
-    return pd.DataFrame(columns=response[0], data=response[1:])
+    return data
 
 def acs5_aggregate(force_api_call=False):
     """Returns dataframe of 5-year ACS aggregate data for tracts in Cook County.

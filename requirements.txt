@@ -1,0 +1,9 @@
+### Requirements to install ###
+notebook
+pandas
+requests
+
+### Built-ins ###
+# ast
+# configparser
+# os
