@@ -1,6 +1,16 @@
 import geopandas as gpd
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import os
+
+import pdb
+
+current_file = os.path.dirname(__file__)
+blocks = os.path.join(current_file, '../geo/blocks.shp')
+community_areas = os.path.join(current_file, '../geo/community_areas.shp')
+tracts = os.path.join(current_file, '../geo/tracts.shp')
+wards = os.path.join(current_file, '../geo/wards.shp')
 
 def aggregate(data,source_geography,target_geography):
 
@@ -40,8 +50,21 @@ def aggregate(data,source_geography,target_geography):
 
 def map(data,target_geography):
     if target_geography == 'tracts':
-        pass
+        geo = gpd.read_file(tracts)
+        geo = geo.rename(columns={'tractce10':'tract'})
+        pdb.set_trace()
+        geo.join(data,on='tract')
+        print('test')
+        print(geo.head())
     if target_geography == 'neighborhoods':
-        pass
+        geo = gpd.read_file(community_areas)
+        geo.join(data,on='commarea')
     if target_geography == 'wards':
-        pass
+        geo = gpd.read_file(wards)
+        geo.join(data,on='ward')
+    geo.plot()
+    plt.show()
+
+from fetch_census_data import acs5_aggregate
+data = acs5_aggregate()
+map(data,'tracts')

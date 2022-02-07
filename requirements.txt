@@ -1,7 +1,9 @@
 ### Requirements to install ###
+descartes
 geopandas
 notebook
 pandas
+matplotlib
 requests
 
 ### Built-ins ###
