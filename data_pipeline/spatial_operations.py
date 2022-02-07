@@ -14,10 +14,10 @@ wards = os.path.join(current_file, '../geo/wards.shp')
 
 def aggregate(data,source_geography,target_geography):
 
-    if source_geography == 'blocks':
+    if source_geography == 'block':
         source_areas = 0
         source_col = 0
-    elif source_geography == 'tracts':
+    elif source_geography == 'tract':
         source_areas = 0
         source_col = 0
     elif source_geography == 'ookla':
@@ -26,17 +26,17 @@ def aggregate(data,source_geography,target_geography):
     else:
         raise Exception("Did not specify valid source geography.")
 
-    if target_geography == 'tracts':
+    if target_geography == 'tract':
         target_areas = 0
         target_col = 0
-    elif target_geography == 'neighborhoods':
+    elif target_geography == 'neighborhood':
         target_areas = 0
         target_col = 0
-    elif target_geography == 'wards':
+    elif target_geography == 'ward':
         target_areas = 0
         target_col = 0
     else:
-        raise Exception("Did not specify valid source geography.")
+        raise Exception("Did not specify valid target geography.")
 
     price_col = 'price' #?
 
@@ -48,23 +48,23 @@ def aggregate(data,source_geography,target_geography):
     output = overlap.groupby(target_col).agg(values)
     output.columns = output.columns.droplevel()
 
-def map(data,target_geography):
-    if target_geography == 'tracts':
+def map(data,variable,target_geography):
+
+    if target_geography == 'block':
+        geo = gpd.read_file(blocks)
+    elif target_geography == 'tract':
         geo = gpd.read_file(tracts)
         geo = geo.rename(columns={'tractce10':'tract'})
-        pdb.set_trace()
-        geo.join(data,on='tract')
-        print('test')
-        print(geo.head())
-    if target_geography == 'neighborhoods':
+    elif target_geography == 'neighborhood':
         geo = gpd.read_file(community_areas)
         geo.join(data,on='commarea')
-    if target_geography == 'wards':
+    elif target_geography == 'ward':
         geo = gpd.read_file(wards)
         geo.join(data,on='ward')
-    geo.plot()
-    plt.show()
+    else:
+        raise Exception("Did not specify valid target geography.")
 
-from fetch_census_data import acs5_aggregate
-data = acs5_aggregate()
-map(data,'tracts')
+    geo[target_geography] = geo[target_geography].astype(int)
+    geo = geo.join(data.set_index(target_geography),on=target_geography)
+    geo.plot(column=variable,legend=True)
+    plt.show()
