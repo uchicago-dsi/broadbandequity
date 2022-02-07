@@ -1,4 +1,5 @@
 ### Requirements to install ###
+geopandas
 notebook
 pandas
 requests
