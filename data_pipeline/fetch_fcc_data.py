@@ -17,7 +17,7 @@ def fcc_fixed(force_api_call=False):
     WARNING: Slow (due to API response) and returns 3.4M data points.
 
     Args:
-    force_api_call (optional): When True, calls relevant API and writes local CSV.
+    force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
         Otherwise, will preferentially just read local CSV. Defaults to False.
 
     Returns:
