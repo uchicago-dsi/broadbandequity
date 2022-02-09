@@ -53,8 +53,9 @@ Additional files:
 + [agg_data.ipynb](agg_data.ipynb) is the Jupyter notebook containing the code used to wrangle, merge, analyze, and export summaries of the fetched data. 
 
 ---
-### Spatial analysis
+### Spatial analysis 
 
+Coming soon...
 
 
 
