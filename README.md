@@ -37,19 +37,19 @@ We fetched publicly available datasets from the American Community Survey (ACS) 
 
 All of the fetching scripts can be found in the [data_pipeline](data_pipeline) folder. 
 + [config.ini](config.ini) contains the specific variables we wanted from the datasets and the geography criteria (Cook County, IL). 
-+ [fetch_census_data.py](fetch_census_data.py) is the script used to fetch ACS and CPS data
-+ [fetch_fcc_data.py](fetch_fcc_data.py) is the script used to fetch FCC data
++ [fetch_census_data.py](data_pipeline/fetch_census_data.py) is the script used to fetch ACS and CPS data
++ [fetch_fcc_data.py](data_pipeline/fetch_fcc_data.py) is the script used to fetch FCC data
 
 The fetched data was written into csv files found in the [data](data) folder. 
-+ [acs5_aggregate.csv](acs5_aggregate.csv) is the csv with ACS 5-year aggregate data 
-+ [acs5_profile.csv](acs5_profile.csv) is the csv with ACS 5-year profile data 
-+ [fcc_fixed.csv](fcc_fixed.csv) is the csv with the fetched FCC data 
++ [acs5_aggregate.csv](data/acs5_aggregate.csv) is the csv with ACS 5-year aggregate data 
++ [acs5_profile.csv](data/acs5_profile.csv) is the csv with ACS 5-year profile data 
++ [fcc_fixed.csv](data/fcc_fixed.csv) is the csv with the fetched FCC data 
 
-Note: we ran into some issues with using the API for FCC data. As a backup, we manually [downloaded](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477) the csv file for IL. Because of its large size, we narrowed it down to Cook County, IL, selected the most relevant columns, and exported it as a new csv [chi_fcc.csv](chi_fcc.csv). The code used to do this can be found in the [agg_data.ipynb](agg_data.ipynb). 
+Note: we ran into some issues with using the API for FCC data. As a backup, we manually [downloaded](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477) the csv file for IL. Because of its large size, we narrowed it down to Cook County, IL, selected the most relevant columns, and exported it as a new csv [chi_fcc.csv](data/chi_fcc.csv). The code used to do this can be found in the [agg_data.ipynb](agg_data.ipynb). 
 
 Additional files:
-+ [chi_tracts.csv](chi_tracts.csv) is the csv we used to map Census tracts to Chicago community areas provided by [Rob Paral](http://robparal.blogspot.com/2012/04/census-tracts-in-chicago-community.html). 
-+ [access_comm_area.csv](access_comm_area.csv) is the csv of the final table showing total population and number of households, broadband access, and sociodemographics by Chicago community area. 
++ [chi_tracts.csv](data/chi_tracts.csv) is the csv we used to map Census tracts to Chicago community areas provided by [Rob Paral](http://robparal.blogspot.com/2012/04/census-tracts-in-chicago-community.html). 
++ [access_comm_area.csv](data/access_comm_area.csv) is the csv of the final table showing total population and number of households, broadband access, and sociodemographics by Chicago community area. 
 + [agg_data.ipynb](agg_data.ipynb) is the Jupyter notebook containing the code used to wrangle, merge, analyze, and export summaries of the fetched data. 
 
 ---
