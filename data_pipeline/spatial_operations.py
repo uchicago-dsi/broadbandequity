@@ -1,5 +1,7 @@
 """Spatial manipulations for internet and census data."""
 
+import pdb
+
 import geopandas as gpd
 import pandas as pd
 import numpy as np
@@ -24,6 +26,9 @@ def get_shapefile(geography):
         geodataframe
     """
 
+    # note: for some reason, below line prints deprecation warning for some (but not all geometries)
+    # (for example, for community_areas but not for tracts)
+    # ShapelyDeprecationWarning: __len__ for multi-part geometries is deprecated and will be removed in Shapely 2.0.
     geo = gpd.read_file(current_file+'/../geo/'+geography+'s.shp')
     geo = geo.rename(columns=geo_codes)
     if geography != 'community_area':  # community areas have string names
@@ -53,8 +58,9 @@ def aggregate(data,variables,source_geography,target_geography):
     Args:
         data (df): dataframe with statistics at original geographical level
         variables (dict): dictionary with keys = columns in data to convert,
-            values = 'mean' or 'sum' to select aggregation method for statistic
+            values = 'areal mean', 'areal sum', 'pop mean', 'pop sum' to select aggregation method
             (use mean for intensive statistics, sum for extensive statistics)
+            (use areal for areal-based weighting, use pop for population-based weighting)
         source_geography: column of data with original spatial information
         target_geography: geographical level to convert to
     
@@ -78,18 +84,30 @@ def aggregate(data,variables,source_geography,target_geography):
     output = []
     # have not yet tested for multiple variables
     for variable, method in variables.items():
-        if method == 'mean':
+        if method == 'areal mean':
             # area-weighted mean
             aggregation_function = lambda x: np.average(x, weights=overlap.loc[x.index, 'area'])
-        elif method == 'sum':
+        elif method == 'areal sum':
             # area-weighted sum... or my initial attempt at it? 
             # here's the problem: we need to multiply each intersection-area's value by the proportion
             # of its *original* area it consists of. So we need to reference the source geographies.
             # But .agg() passes all the points at once to the aggregation_function, so just using a dictionary doesn't work
             # since a dictionary can't hash a list/array. So I'm trying vectorize but not sure what values are getting passed currently.
             aggregation_function = np.vectorize(lambda x: np.dot(x,overlap.loc[x,'area'])/original_areas[overlap.loc[x,source_geography]])
-        output.append(overlap.groupby(target_geography).agg(weighted_sum=(variable,aggregation_function)))
-    return output[0].join(output[1:],on=target_geography)  # combine different variables' dfs
+        elif method == 'pop mean':
+            raise NotImplementedError
+        elif method == 'pop sum':
+            raise NotImplementedError
+        output.append(
+            overlap.groupby(target_geography)
+            .agg(variable=(variable,aggregation_function))
+            .reset_index()
+            .rename(columns={'variable':variable})
+            .set_index(target_geography)
+            )
+    if len(output) > 1:
+        output[0] = output[0].join(output[1:])  # combine different variables' dfs
+    return output[0]
 
 def map(data,variable,target_geography):
     """Maps single variable on given geography.
@@ -108,3 +126,14 @@ def map(data,variable,target_geography):
     geo = geographize(data,target_geography)
     geo.plot(column=variable,legend=True)
     plt.show()
+
+# testing
+from fetch_census_data import acs5_aggregate
+data = acs5_aggregate()
+data['household computers per person']=data['estimated total has a computer']/data['estimated total population']
+test = aggregate(
+    data,variables={
+    'household computers per person':'areal mean',
+    'estimated total population':'areal mean'},
+    source_geography='tract',target_geography='community_area')
+pdb.set_trace()
