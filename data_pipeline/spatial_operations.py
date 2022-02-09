@@ -52,6 +52,18 @@ def geographize(data,target_geography):
     geo = get_shapefile(target_geography)
     return geo.join(data.set_index(target_geography),on=target_geography)
 
+def areal_mean_aggregator(x):
+    return np.average(x, weights=overlap.loc[x.index, 'area'])
+
+def areal_sum():
+    pass
+
+def pop_sum():
+    pass
+
+def pop_mean():
+    pass
+
 def aggregate(data,variables,source_geography,target_geography):
     """Calculates statistic at new geographical level with areal-based weighting.
 
@@ -82,11 +94,10 @@ def aggregate(data,variables,source_geography,target_geography):
     original_areas = dict(source_geo[[source_geography,'area']].values)
     
     output = []
-    # have not yet tested for multiple variables
     for variable, method in variables.items():
         if method == 'areal mean':
-            # area-weighted mean
-            aggregation_function = lambda x: np.average(x, weights=overlap.loc[x.index, 'area'])
+            #aggregation_function = lambda x: np.average(x, weights=overlap.loc[x.index, 'area'])
+            aggregation_function = areal_mean_aggregator
         elif method == 'areal sum':
             # area-weighted sum... or my initial attempt at it? 
             # here's the problem: we need to multiply each intersection-area's value by the proportion
@@ -105,7 +116,7 @@ def aggregate(data,variables,source_geography,target_geography):
             .rename(columns={'variable':variable})
             .set_index(target_geography)
             )
-    if len(output) > 1:
+    if len(output) > 1:  # avoid returning error if we're only aggregating one variable
         output[0] = output[0].join(output[1:])  # combine different variables' dfs
     return output[0]
 
@@ -131,9 +142,13 @@ def map(data,variable,target_geography):
 from fetch_census_data import acs5_aggregate
 data = acs5_aggregate()
 data['household computers per person']=data['estimated total has a computer']/data['estimated total population']
+
+
 test = aggregate(
     data,variables={
     'household computers per person':'areal mean',
     'estimated total population':'areal mean'},
     source_geography='tract',target_geography='community_area')
+
+
 pdb.set_trace()
