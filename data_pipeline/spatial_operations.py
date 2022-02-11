@@ -1,7 +1,5 @@
 """Spatial manipulations for internet and census data."""
 
-import pdb
-
 import geopandas as gpd
 import pandas as pd
 import numpy as np
@@ -147,7 +145,6 @@ def aggregate(data,variables,source_geography,target_geography):
             .agg(variable=(variable,aggregation_function))
             .reset_index()
             .rename(columns={'variable':variable})
-            .set_index(target_geography)
             )
     if len(output) > 1:  # avoid returning error if we're only aggregating one variable
         output[0] = output[0].join(output[1:])  # combine different variables' dfs
@@ -170,18 +167,3 @@ def map(data,variable,target_geography):
     geo = geographize(data,target_geography)
     geo.plot(column=variable,legend=True)
     plt.show()
-
-# testing
-from fetch_census_data import acs5_aggregate
-data = acs5_aggregate()
-data['household computers per person']=data['estimated total has a computer']/data['estimated total population']
-
-
-test = aggregate(
-    data,variables={
-    'household computers per person':'pop mean',
-    'estimated total population':'pop sum'},
-    source_geography='tract',target_geography='community_area')
-
-
-pdb.set_trace()
