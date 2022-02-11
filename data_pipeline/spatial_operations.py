@@ -52,21 +52,61 @@ def geographize(data,target_geography):
     geo = get_shapefile(target_geography)
     return geo.join(data.set_index(target_geography),on=target_geography)
 
-def aggregator(x,method,overlap,original_areas,source_geography):
+def aggregator(x,method,overlap,original_areas,original_pops,source_geography):
+    """Returns functions for areal interpolation.
+
+    Args:
+        x (series): variable of interest
+        method (str): 'areal mean', 'areal sum', 'pop mean', 'pop sum' to select aggregation method
+            (use mean for intensive statistics, sum for extensive statistics)
+            (use areal for areal-based weighting, use pop for population-based weighting)
+        overlap (gdf): intersection of source and target geographies
+        original_areas (dict): area of each source geography
+        original_pops (dict): population of each source geography
+        source_geography (str): source geography level
+    
+    Returns:
+        func: for use in pd.agg
+
+    WARNING: Have not fully thought through "population-weighted sum", not sure if it makes sense.
+    Returns on the order of population^2 when I test on population (but does that actually make sense??)
+    """
 
     if method == "areal mean":
-        return np.average(x, weights=overlap.loc[x.index, 'area'])
+        # weighted average of variable across subgeographies
+        # where weights are proportion of supergeography area contributed by each subgeography
+        # weights = overlapping_area
+        return np.average(x,weights=overlap.loc[x.index, 'area'])
+
     elif method == 'areal sum':
-        return np.dot(
-            x, pd.Series(
-                [overlap.loc[index,'area']/
+        # dot product of variables and weights across subgeographies
+        # where weights are fraction of each subgeography's area that is in the supergeography
+        weights = pd.Series(
+            [overlap.loc[index,'area']/
+            original_areas[overlap.loc[index,source_geography]] for index,items in x.items()])
+        return np.dot(x,weights)
+
+    elif method == 'pop mean':
+        # weighted average of variable across subgeographies
+        # where weights are proportion of supergeography pop. contributed by each subgeography
+        # in other words, weights are each subgeography's area in supergeography times pop. density 
+        # weights = overlapping_area * population / original_area
+        return np.average(
+            x,
+            weights = pd.Series(
+                [overlap.loc[index,'area']*original_pops[overlap.loc[index,source_geography]]/
                 original_areas[overlap.loc[index,source_geography]] for index,items in x.items()]
                 )
             )
-    elif method == 'pop mean':
-        raise NotImplementedError
+
     elif method == 'pop sum':
-        raise NotImplementedError
+        # dot product of variables and weights across subgeographies
+        # where weights are fraction of each subgeography's area that is in the supergeography
+        # times that subgeography's population density
+        weights = pd.Series(
+            [overlap.loc[index,'area']*original_pops[overlap.loc[index,source_geography]]/
+            (original_areas[overlap.loc[index,source_geography]])**2 for index,items in x.items()])
+        return np.dot(x,weights)
 
 def aggregate(data,variables,source_geography,target_geography):
     """Calculates statistic at new geographical level with areal-based weighting.
@@ -94,12 +134,14 @@ def aggregate(data,variables,source_geography,target_geography):
     overlap = gpd.overlay(source_geo,target_geo,how='intersection')
     source_geo['area'] = source_geo.area
     overlap['area'] = overlap.area
-    # construct dictionary with areas of original geographies
+
+    # construct dictionaries with areas and populations of original geographies
     original_areas = dict(source_geo[[source_geography,'area']].values)
+    original_pops = dict(source_geo[[source_geography,'estimated total population']].values)
     
     output = []
     for variable, method in variables.items():
-        aggregation_function = lambda x: aggregator(x,method,overlap,original_areas,source_geography)
+        aggregation_function = lambda x: aggregator(x,method,overlap,original_areas,original_pops,source_geography)
         output.append(
             overlap.groupby(target_geography)
             .agg(variable=(variable,aggregation_function))
@@ -137,8 +179,8 @@ data['household computers per person']=data['estimated total has a computer']/da
 
 test = aggregate(
     data,variables={
-    'household computers per person':'areal mean',
-    'estimated total population':'areal sum'},
+    'household computers per person':'pop mean',
+    'estimated total population':'pop sum'},
     source_geography='tract',target_geography='community_area')
 
 
