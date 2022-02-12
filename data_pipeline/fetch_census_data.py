@@ -41,6 +41,23 @@ def call_api(dataset_url,geography_url):
         raise Exception(response)
     return data.rename(columns=variables)
 
+def read_data(csv_address):
+    """Tries to get data from local CSV.
+    
+    Args:
+        csv_address (str): CSV to read
+
+    Returns:
+        dataframe containing requested dataset OR False if read failed
+    """
+
+    try:  # access data stored locally, or if we just wrote it, check that it wrote correctly
+        data = pd.read_csv(csv_address, index_col = 0)
+        return data
+    except:
+        data = False  # this will trigger API call
+    return data
+
 def acs5_aggregate(force_api_call=False):
     """Returns dataframe of 5-year ACS aggregate data for tracts in Cook County.
 
@@ -55,17 +72,13 @@ def acs5_aggregate(force_api_call=False):
     """
 
     csv_address = os.path.join(os.path.dirname(__file__), '../data/acs5_aggregate.csv')
-    while True:
-        if force_api_call:
-            geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['State_FIPS']+"&in=county:"+config['Geography']['County_FIPS']
-            data = call_api(ACS5_AGG_URL, geography_url)
-            data.to_csv(csv_address)
-            return data
-        try:  # access data stored locally, or if we just wrote it, check that it wrote correctly
-            data = pd.read_csv(csv_address, index_col = 0)
-            return data
-        except:
-            force_api_call = True
+    if not force_api_call:
+        data = read_data(csv_address)
+    if force_api_call or (data is False):
+        geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['State_FIPS']+"&in=county:"+config['Geography']['County_FIPS']
+        data = call_api(ACS5_AGG_URL, geography_url)
+        data.to_csv(csv_address)
+    return data
 
 def acs5_profile(force_api_call=False):
     """Returns dataframe of 5-year ACS aggregate data for tracts in specified county.
@@ -81,17 +94,13 @@ def acs5_profile(force_api_call=False):
     """
 
     csv_address = os.path.join(os.path.dirname(__file__), '../data/acs5_profile.csv')
-    while True:
-        if force_api_call:
-            geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['State_FIPS']+"&in=county:"+config['Geography']['County_FIPS']
-            data = call_api(ACS5_PROF_URL, geography_url)
-            data.to_csv(csv_address)
-            return data
-        try:  # access data stored locally, or if we just wrote it, check that it wrote correctly
-            data = pd.read_csv(csv_address, index_col = 0)
-            return data
-        except:
-            force_api_call = True
+    if not force_api_call:
+        data = read_data(csv_address)
+    if force_api_call or (data is False):
+        geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['State_FIPS']+"&in=county:"+config['Geography']['County_FIPS']
+        data = call_api(ACS5_PROF_URL, geography_url)
+        data.to_csv(csv_address)
+    return data
 
 def acs5_individual(force_api_call=False):
     """Returns dataframe of 5-year ACS microdata for PUMAs in specified county.
@@ -107,17 +116,13 @@ def acs5_individual(force_api_call=False):
     """
 
     csv_address = os.path.join(os.path.dirname(__file__), '../data/acs5_individual.csv')
-    while True:
-        if force_api_call:
-            geography_url = "&for=public%20use%20microdata%20area:*"+"&in=state:"+config['Geography']['State_FIPS']
-            data = call_api(ACS5_IND_URL, geography_url)
-            data.to_csv(csv_address, '../data/acs5_individual.csv')
-            return data
-        try:
-            data = pd.read_csv(csv_address, index_col = 0)
-            return data
-        except:
-            force_api_call = True
+    if not force_api_call:
+        data = read_data(csv_address)
+    if force_api_call or (data is False):
+        geography_url = "&for=public%20use%20microdata%20area:*"+"&in=state:"+config['Geography']['State_FIPS']
+        data = call_api(ACS5_IND_URL, geography_url)
+        data.to_csv(csv_address, '../data/acs5_individual.csv')
+    return data
 
 def cps_individual(force_api_call=False):
     """Returns dataframe of CPS internet supplement microdata for counties in specified state.
@@ -133,14 +138,10 @@ def cps_individual(force_api_call=False):
     """
 
     csv_address = os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv')
-    while True:
-        if force_api_call:
-            geography_url = "&for=county:*"+"&in=state:"+config['Geography']['State_FIPS']
-            data = call_api(CPS_IND_URL,geography_url)
-            data.to_csv(os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv'))
-            return data
-        try:
-            data = pd.read_csv(csv_address, index_col = 0)
-            return data
-        except:
-            force_api_call = True
+    if not force_api_call:
+        data = read_data(csv_address)
+    if force_api_call or (data is False):
+        geography_url = "&for=county:*"+"&in=state:"+config['Geography']['State_FIPS']
+        data = call_api(CPS_IND_URL,geography_url)
+        data.to_csv(os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv'))
+    return data
