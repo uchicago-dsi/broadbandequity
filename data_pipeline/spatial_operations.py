@@ -79,9 +79,6 @@ def aggregator(x,method,overlap,original_areas,original_pops,source_geography):
     
     Returns:
         func: for use in pd.agg
-
-    WARNING: Have not fully thought through "population-weighted sum", not sure if it makes sense.
-    Returns on the order of population^2 when I test on population (but does that actually make sense??)
     """
 
     if method == "areal mean":
@@ -100,7 +97,7 @@ def aggregator(x,method,overlap,original_areas,original_pops,source_geography):
 
     elif method == 'pop mean':
         # weighted average of variable across subgeographies
-        # where weights are proportion of supergeography pop. contributed by each subgeography
+        # where weights are proportion of supergeography population contributed by each subgeography
         # in other words, weights are each subgeography's area in supergeography times pop. density 
         # weights = overlapping_area * population / original_area
         return np.average(
@@ -113,18 +110,20 @@ def aggregator(x,method,overlap,original_areas,original_pops,source_geography):
 
     elif method == 'pop sum':
         # dot product of variables and weights across subgeographies
-        # where weights are fraction of each subgeography's area that is in the supergeography
-        # times that subgeography's population density
+        # where weights are fraction of each subgeography's population that is in the supergeography
+        # this is the same thing as areal sum, because the same fraction of each subgeography's
+        # population and area are in the supergeography (we assume homogeneity in subgeographies)
+        print("Note: Population-weighted sum is equivalent to areal-weighted sum.")
         weights = pd.Series(
-            [overlap.loc[index,'area']*original_pops[overlap.loc[index,source_geography]]/
-            (original_areas[overlap.loc[index,source_geography]])**2 for index,items in x.items()])
+            [overlap.loc[index,'area']/
+            original_areas[overlap.loc[index,source_geography]] for index,items in x.items()])
         return np.dot(x,weights)
 
 def aggregate(data,variables,source_geography,target_geography):
     """Calculates statistic at new geographical level with areal-based weighting.
 
     Args:
-        data (df): dataframe with statistics at original geographical level
+        data (df): (geo)dataframe with statistics at original geographical level
         variables (dict): dictionary with keys = columns in data to convert,
             values = 'areal mean', 'areal sum', 'pop mean', 'pop sum' to select aggregation method
             (use mean for intensive statistics, sum for extensive statistics)
@@ -173,13 +172,13 @@ def aggregate(data,variables,source_geography,target_geography):
         output[0] = output[0].join(output[1:])  # combine different variables' dfs
     return output[0].reset_index()  # for consistency, don't index by geography in output
 
-def map(data,variable,target_geography):
+def map(data,variable,target_geography=None):
     """Maps single variable on given geography.
 
     Args:
-        data (df): dataframe with variable of interest
+        data (df): (geo)dataframe with variable of interest
         variable (str): column of dataframe to map
-        target_geography: geographical level to map on
+        target_geography (opt): geographical level to map on if passing non-geo dataframe
     
     Future additions:
         - automatically convert to target_geography via aggregate function if needed
@@ -188,11 +187,16 @@ def map(data,variable,target_geography):
     """
 
     if 'geometry' not in data.columns:  # see if we already have a geodataframe
+        if target_geography is None:
+            raise ValueError("When passing a non-geo dataframe, must specify target geography.")
         data = geographize(data,target_geography)
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
         # For some reason, below line prints deprecation warning for some but not all geometries
         # (for example, for community_areas but not for tracts)
         # ShapelyDeprecationWarning: __len__ for multi-part geometries is deprecated and will be removed in Shapely 2.0.
-        data.plot(column=variable,legend=True)
+        try:
+            data.plot(column=variable,legend=True)
+        except KeyError:
+            raise ValueError('Specified variable not in dataframe.') from None
     plt.show()
