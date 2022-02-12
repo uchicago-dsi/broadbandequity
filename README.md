@@ -45,12 +45,15 @@ The fetched data was written into csv files found in the [data](data) folder.
 + [acs5_profile.csv](data/acs5_profile.csv) is the csv with ACS 5-year profile data 
 + [fcc_fixed.csv](data/fcc_fixed.csv) is the csv with the fetched FCC data 
 
-Note: we ran into some issues with using the API for FCC data. As a backup, we manually [downloaded](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477) the csv file for IL. Because of its large size, we narrowed it down to Cook County, IL, selected the most relevant columns, and exported it as a new csv [chi_fcc.csv](data/chi_fcc.csv). The code used to do this can be found in the [agg_data.ipynb](agg_data.ipynb). 
+Note: we ran into some issues with using the API for FCC data. As a backup, we manually [downloaded](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477) the csv file for IL. Because of its large size, we narrowed it down to Cook County, IL, selected the most relevant columns, and exported it as a new csv [chi_fcc.csv](data/chi_fcc.csv). The code used to do this can be found in the [agg_fcc.ipynb](agg_fcc.ipynb). 
 
 Additional files:
-+ [chi_tracts.csv](data/chi_tracts.csv) is the csv we used to map Census tracts to Chicago community areas provided by [Rob Paral](http://robparal.blogspot.com/2012/04/census-tracts-in-chicago-community.html). 
-+ [access_comm_area.csv](data/access_comm_area.csv) is the csv of the final table showing total population and number of households, broadband access, and sociodemographics by Chicago community area. 
-+ [agg_data.ipynb](agg_data.ipynb) is the Jupyter notebook containing the code used to wrangle, merge, analyze, and export summaries of the fetched data. 
++ [tracts_comm_areas.csv](data/tracts_comm_areas.csv) and [comm_areas.csv](data/comm_areas.csv) are the csvs we used to map Census tracts to Chicago community areas provided by the City of Chicago: [tracts](https://data.cityofchicago.org/Facilities-Geographic-Boundaries/Boundaries-Census-Tracts-2010/5jrd-6zik) and [community areas](https://data.cityofchicago.org/Facilities-Geographic-Boundaries/Boundaries-Community-Areas-current-/cauq-8yn6). 
++ [chicago_internet.csv](data/chicago_internet.csv) is the csv of the final table showing total population and number of households, broadband access, and sociodemographics by Chicago community area. 
++ [hardship_index.csv](data/hardship_index.csv) is the csv of the [Hardship Index](https://data.cityofchicago.org/Health-Human-Services/hardship-index/792q-4jtu) scores provided by the City of Chicago.
++ [covid_index.csv](covid_index.csv) is the csv of the [Chicago COVID-19 Community Vulnerability Index (CCVI)](https://data.cityofchicago.org/Health-Human-Services/Chicago-COVID-19-Community-Vulnerability-Index-CCV/xhc6-88s9) scores provided by the City of Chicago.
++ [agg_acs.ipynb](agg_acs.ipynb) is the Jupyter notebook containing the code used to wrangle, merge, analyze, and export summaries of the fetched ACS data and index scores by community area. 
++ [agg_fcc.ipynb](agg_fcc.ipynb) is the Jupyter notebook containing the code used to wrangle, merge, analyze, and export summaries of the fetched FCC data. 
 
 ---
 ### Spatial analysis 
