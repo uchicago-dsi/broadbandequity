@@ -16,8 +16,8 @@ def call_api(dataset_url,geography_url):
     """Requests data from census API.
 
     Args:
-        dataset_url: specifies which census dataset to request
-        geography_url: specifies which geographies to request
+        dataset_url (str): specifies which census dataset to request
+        geography_url (str): specifies which geographies to request
 
     Returns:
         dataframe containing requested dataset
@@ -27,7 +27,8 @@ def call_api(dataset_url,geography_url):
     """
 
     # finish constructing API request:
-    variables_url = "?get="+",".join(ast.literal_eval(config['Variables'][dataset_url]))
+    variables = ast.literal_eval(config['Variables'][dataset_url])
+    variables_url = "?get="+",".join(variables)
     key_url = "&key="+config['API Keys']['CensusAPIKey']
     request = API_URL + dataset_url + variables_url + geography_url + key_url
 
@@ -38,13 +39,13 @@ def call_api(dataset_url,geography_url):
         data = pd.DataFrame(columns=response[0], data=response[1:])
     except:
         raise Exception(response)
-    return data
+    return data.rename(columns=variables)
 
 def acs5_aggregate(force_api_call=False):
     """Returns dataframe of 5-year ACS aggregate data for tracts in Cook County.
 
     Args:
-        force_api_call (optional): When True, calls relevant API and writes local CSV.
+        force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
             Otherwise, will preferentially just read local CSV. Defaults to False.
 
     Returns:
@@ -70,7 +71,7 @@ def acs5_profile(force_api_call=False):
     """Returns dataframe of 5-year ACS aggregate data for tracts in specified county.
 
     Args:
-    force_api_call (optional): When True, calls relevant API and writes local CSV.
+    force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
         Otherwise, will preferentially just read local CSV. Defaults to False.
 
     Returns:
@@ -96,7 +97,7 @@ def acs5_individual(force_api_call=False):
     """Returns dataframe of 5-year ACS microdata for PUMAs in specified county.
 
     Args:
-    force_api_call (optional): When True, calls relevant API and writes local CSV.
+    force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
         Otherwise, will preferentially just read local CSV. Defaults to False.
 
     Returns:
@@ -122,7 +123,7 @@ def cps_individual(force_api_call=False):
     """Returns dataframe of CPS internet supplement microdata for counties in specified state.
 
     Args:
-    force_api_call (optional): When True, calls relevant API and writes local CSV.
+    force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
         Otherwise, will preferentially just read local CSV. Defaults to False.
 
     Returns:
