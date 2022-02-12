@@ -10,3 +10,6 @@ requests
 # ast
 # configparser
 # os
+# warnings
+
+# to do: add version for each requirement
