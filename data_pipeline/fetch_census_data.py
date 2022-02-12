@@ -76,8 +76,8 @@ def acs5_aggregate(force_api_call=False):
         data = read_data(csv_address)
     if force_api_call or (data is False):
         geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['State_FIPS']+"&in=county:"+config['Geography']['County_FIPS']
-        data = call_api(ACS5_AGG_URL, geography_url)
-        data.to_csv(csv_address)
+        call_api(ACS5_AGG_URL, geography_url).to_csv(csv_address)
+        data = pd.read_csv(csv_address, index_col = 0)  # make sure we can read the data
     return data
 
 def acs5_profile(force_api_call=False):
@@ -98,8 +98,8 @@ def acs5_profile(force_api_call=False):
         data = read_data(csv_address)
     if force_api_call or (data is False):
         geography_url = "&for=tract:*"+"&in=state:"+config['Geography']['State_FIPS']+"&in=county:"+config['Geography']['County_FIPS']
-        data = call_api(ACS5_PROF_URL, geography_url)
-        data.to_csv(csv_address)
+        call_api(ACS5_PROF_URL, geography_url).to_csv(csv_address)
+        data = pd.read_csv(csv_address, index_col = 0)  # make sure we can read the data
     return data
 
 def acs5_individual(force_api_call=False):
@@ -120,8 +120,8 @@ def acs5_individual(force_api_call=False):
         data = read_data(csv_address)
     if force_api_call or (data is False):
         geography_url = "&for=public%20use%20microdata%20area:*"+"&in=state:"+config['Geography']['State_FIPS']
-        data = call_api(ACS5_IND_URL, geography_url)
-        data.to_csv(csv_address, '../data/acs5_individual.csv')
+        call_api(ACS5_IND_URL, geography_url).to_csv(csv_address)
+        data = pd.read_csv(csv_address, index_col = 0)  # make sure we can read the data
     return data
 
 def cps_individual(force_api_call=False):
@@ -142,6 +142,6 @@ def cps_individual(force_api_call=False):
         data = read_data(csv_address)
     if force_api_call or (data is False):
         geography_url = "&for=county:*"+"&in=state:"+config['Geography']['State_FIPS']
-        data = call_api(CPS_IND_URL,geography_url)
-        data.to_csv(os.path.join(os.path.dirname(__file__), '../data/cps_individual.csv'))
+        call_api(CPS_IND_URL, geography_url).to_csv(csv_address)
+        data = pd.read_csv(csv_address, index_col = 0)  # make sure we can read the data
     return data

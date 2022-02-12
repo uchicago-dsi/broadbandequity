@@ -4,6 +4,7 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import pandas as pd
 from shapely.errors import ShapelyDeprecationWarning
 import warnings
 
@@ -129,10 +130,13 @@ def aggregate(data,variables,target_geography,source_geography=None):
             (use mean for intensive statistics, sum for extensive statistics)
             (use areal for areal-based weighting, use pop for population-based weighting)
         target_geography: geographical level to convert to
-        source_geography (opt): for non-geodataframes, column of data with original spatial information
+        source_geography: column of data with original spatial information
     
     Returns:
         dataframe
+
+    Future modifications:
+        - should be able to make the source_geography argument optional when data is a geodataframe
     """
 
     # References: 
