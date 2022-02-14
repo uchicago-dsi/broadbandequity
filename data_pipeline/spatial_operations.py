@@ -24,6 +24,9 @@ def get_shapefile(geography):
     
     Returns:
         geodataframe
+
+    Raises:
+        Exception if shapefiles can't be found/read.
     """
 
     with warnings.catch_warnings():
@@ -51,6 +54,10 @@ def geographize(data,target_geography):
     Returns:
         geodataframe
 
+    Raises:
+        ValueError if dataframe contains a column called "area".
+            Note: certain other columns that may appear in geodataframes may cause errors as well.
+
     Future addition: target_geography can take geography levels not in data,
         and function will call aggregate function if needed.
 
@@ -62,6 +69,10 @@ def geographize(data,target_geography):
 
     if 'geometry' in data.columns:  # see if we already have a geodataframe
         return data
+    if 'area' in data.columns: 
+        raise ValueError(
+            "Dataframe already contains an 'area' column. This will collide with the new geodataframe's area column. "
+            "Recommended action: rename the area column (eg, 'area_old') then retry.")
     geo = get_shapefile(target_geography)
     return geo.join(data.set_index(target_geography),on=target_geography)
 
@@ -207,4 +218,5 @@ def simple_map(data,variable,target_geography=None):
             data.plot(column=variable,legend=True)
         except KeyError:
             raise ValueError('Specified variable not in dataframe.') from None
+    plt.title(variable)
     plt.show()

@@ -33,7 +33,7 @@ def fcc_fixed(force_api_call=False):
             data_list = []
             offset = 0
             while True:  # have to "page" through the FCC data
-                geography_url = "?stateabbr=" + config['Geography']['State_abbr']
+                geography_url = "?stateabbr=" + config['Geography']['State_Abbr']
                 # 50,000 is the max limit per page; order is needed to ensure pages do not contain duplicate data
                 paging_url = f"&$order=logrecno&$limit=50000&$offset={offset}"
                 token_url = "&$$app_token=" + config['API Keys']['FCCAppToken']
