@@ -1,6 +1,8 @@
 ### Requirements to install ###
+# bokeh
 descartes
 geopandas
+ipyleaflet
 notebook
 pandas
 matplotlib
