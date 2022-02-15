@@ -220,3 +220,71 @@ def simple_map(data,variable,target_geography=None):
             raise ValueError('Specified variable not in dataframe.') from None
     plt.title(variable)
     plt.show()
+
+# import fetch_census_data
+# data = fetch_census_data.acs5_aggregate()
+# data = geographize(data, target_geography = 'tract')
+
+# #sum of data area: 0.06803175617115911
+# #sum of data pop: 2731881
+
+# #PRODUCES RIGHT AREAS:
+
+# community_area_data = aggregate(data,{'estimated total population' : 'areal sum'},target_geography='community_area',source_geography='tract')
+
+# # at this point, data is in DF in alphabetical order by community_area.
+
+# print('a good run')
+# community_area_data = geographize(community_area_data,'community_area')
+# #print(community_area_data.sort_values(by='community_area').community_area[0:4])
+# #print(community_area_data.sort_values(by='community_area').area[0:4])
+# #print(community_area_data.sort_values(by='community_area')['estimated total population'][0:4])
+
+# # at this point, data is in weird who-knows-what order.
+
+# #sum of data area: 0.06483326749292051
+# #sum of data pop: 2633451
+
+# # 13       ALBANY PARK
+# # 55    ARCHER HEIGHTS
+# # 34     ARMOUR SQUARE
+
+# # 13    0.000540
+# # 55    0.000563
+# # 34    0.000280
+# # 68    0.001362
+
+# data['population density']=data['estimated total population']/data.area
+
+# #PRODUCES WRONG AREAS:
+
+# new_community_area_data = aggregate(data,{'estimated total population' : 'areal sum', 'population density' : 'areal mean'}
+# ,target_geography='community_area',source_geography='tract')
+
+# # at this point, data is in DF in alphabetical order by community area.
+
+# print('a bad run')
+# import pdb
+# pdb.set_trace()
+# new_community_area_data['area'] = geographize(new_community_area_data,'community_area').sort_values(by='community_area').area
+# #print(new_community_area_data.sort_values(by='community_area').community_area[0:4])
+# #print(new_community_area_data.sort_values(by='community_area').area[0:4])
+# #print(new_community_area_data['estimated total population'][0:4])
+
+# # data and pop in alphabetical order. BUT THE AREAS ARE IN THE ORDER ABOVE!
+
+# #sum of data area: 0.06483326749292051
+# #sum of data [“area”]: 0.06483326749292051
+# #sum of data pop: 2633451
+
+# # 0       ALBANY PARK
+# # 1    ARCHER HEIGHTS
+# # 2     ARMOUR SQUARE
+# # 3           ASHBURN
+
+# # 0    0.000463
+# # 1    0.000170
+# # 2    0.000200
+# # 3    0.000488
+
+# new_community_area_data['recalculated population'] = new_community_area_data['population density']*new_community_area_data['area']
