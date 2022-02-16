@@ -8,8 +8,6 @@ import pandas as pd
 from shapely.errors import ShapelyDeprecationWarning
 import warnings
 
-import pdb
-
 current_file = os.path.dirname(__file__)
 # geo_codes = {'shapefile geography name' : 'user-facing geography name'}
 geo_codes = {'blockce10':'block',
@@ -19,6 +17,7 @@ geo_codes = {'blockce10':'block',
             }
 
 def duplicate_areas(data,geography):
+    """Returns True if data's geography column contains duplicates, else False."""
 
     return len(data[geography]) != len(set(data[geography]))
 
@@ -67,6 +66,8 @@ def geographize(data,target_geography):
     Future addition: target_geography can take geography levels not in data,
         and function will call aggregate function if needed.
 
+    Issue: Geographize won't re-geographize a dataframe to a new areal level. 
+
     Important: Note that, if passed a dataframe with geographies outside the shapefile area,
         this function will remove those rows. (For example: if we are working with a shapefile
         of Chicago tracts and we pass a df with tracts outside Chicago, those rows will not
@@ -81,6 +82,7 @@ def geographize(data,target_geography):
             "Recommended action: rename the area column (eg, 'area_old') then retry."
             )
     
+    data['current ']
     geo = get_shapefile(target_geography)
     output = geo.join(data.set_index(target_geography),on=target_geography)
 
@@ -216,9 +218,12 @@ def simple_map(data,variable,target_geography=None):
     Args:
         data (df): (geo)dataframe with variable of interest
         variable (str): column of dataframe to map
-        target_geography (opt): geographical level to map on if passing non-geo dataframe
+        target_geography: geographical level to map on
+
+    Note: You do currently have to specify target_geography even when passing a geodataframe.
     
     Future additions:
+        - optional target_geography when using geodataframe
         - automatically convert to target_geography via aggregate function if needed
         - map multiple variables at once
         - better legend etc
@@ -231,7 +236,7 @@ def simple_map(data,variable,target_geography=None):
             'Combine these data points and try again.'
             )
     if 'geometry' not in data.columns:  # see if we already have a geodataframe
-        if target_geography is None:
+        if target_geography is None:  # future validation
             raise ValueError("When passing a non-geo dataframe, must specify target geography.")
         data = geographize(data,target_geography)
 
@@ -246,7 +251,3 @@ def simple_map(data,variable,target_geography=None):
             raise ValueError('Specified variable not in dataframe.') from None
     plt.title(variable)
     plt.show()
-
-chi_fcc = pd.read_csv("data/chi_fcc.csv",index_col=0,parse_dates=[0])
-variables = {'MaxAdDown' : 'pop mean', 'MaxAdUp' : 'pop mean'}
-comm_fcc = aggregate(chi_fcc,variables,'community_area','tract')
