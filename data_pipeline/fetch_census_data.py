@@ -1,6 +1,6 @@
 """Fetchs aggregate/individual 5-year ACS data and individual CPS data."""
 
-from config import config
+from .config import config
 import ast
 import requests
 import pandas as pd

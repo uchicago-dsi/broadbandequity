@@ -1,13 +1,13 @@
 """Leaflet-based mapping (requires ipyleaflet)."""
 
 import ast
-from config import config
+from .config import config
 import geopandas as gpd
 from ipyleaflet import Map, GeoData,LayersControl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import spatial_operations 
+from . import spatial_operations 
 
 class InteractiveMap():
     """Interactive map object simplifying interaction with ipyleaflet.

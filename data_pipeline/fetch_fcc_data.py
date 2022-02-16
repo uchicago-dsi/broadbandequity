@@ -1,6 +1,6 @@
 """Fetchs December 2020 FCC fixed broadband deployment data."""
 
-from config import config
+from .config import config
 import requests
 import pandas as pd
 import os
