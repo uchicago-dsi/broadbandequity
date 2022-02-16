@@ -8,6 +8,8 @@ import pandas as pd
 from shapely.errors import ShapelyDeprecationWarning
 import warnings
 
+import pdb
+
 current_file = os.path.dirname(__file__)
 # geo_codes = {'shapefile geography name' : 'user-facing geography name'}
 geo_codes = {'blockce10':'block',
@@ -15,6 +17,10 @@ geo_codes = {'blockce10':'block',
              'community':'community_area',
              'ward':'ward'
             }
+
+def duplicate_areas(data,geography):
+
+    return len(data[geography]) != len(set(data[geography]))
 
 def get_shapefile(geography):
     """Returns geodataframe with specified geography geometries.
@@ -72,9 +78,19 @@ def geographize(data,target_geography):
     if 'area' in data.columns: 
         raise ValueError(
             "Dataframe already contains an 'area' column. This will collide with the new geodataframe's area column. "
-            "Recommended action: rename the area column (eg, 'area_old') then retry.")
+            "Recommended action: rename the area column (eg, 'area_old') then retry."
+            )
+    
     geo = get_shapefile(target_geography)
-    return geo.join(data.set_index(target_geography),on=target_geography)
+    output = geo.join(data.set_index(target_geography),on=target_geography)
+
+    if duplicate_areas(data,target_geography):
+        print(
+            'Warning: You have multiple data points for the same geographical unit. '
+            'Consider combining these data points and trying again.'
+            )
+
+    return output
 
 def aggregator(x,method,overlap,original_areas,original_pops,source_geography):
     """Returns functions for areal interpolation.
@@ -132,7 +148,7 @@ def aggregator(x,method,overlap,original_areas,original_pops,source_geography):
         return np.dot(x,weights)
 
 def aggregate(data,variables,target_geography,source_geography=None):
-    """Calculates statistic at new geographical level with areal-based weighting.
+    """Calculates statistic at new geographical level via areal interpolation.
 
     Args:
         data (df): (geo)dataframe with statistics at original geographical level
@@ -155,6 +171,11 @@ def aggregate(data,variables,target_geography,source_geography=None):
     # https://stackoverflow.com/questions/31521027/groupby-weighted-average-and-sum-in-pandas-dataframe
 
     # validate arguments
+    if duplicate_areas(data,source_geography):
+        raise ValueError(
+            'You have multiple data points for the same geographical unit. '
+            'Combine these data points and try again.'
+            )
     if 'geometry' not in data.columns:  # see if we already have a geodataframe
         if source_geography is None:
             raise ValueError("When passing a non-geo dataframe, must specify target geography.")
@@ -204,6 +225,11 @@ def simple_map(data,variable,target_geography=None):
     """
 
     # validate arguments
+    if duplicate_areas(data,target_geography):
+        raise ValueError(
+            'You have multiple data points for the same geographical unit. '
+            'Combine these data points and try again.'
+            )
     if 'geometry' not in data.columns:  # see if we already have a geodataframe
         if target_geography is None:
             raise ValueError("When passing a non-geo dataframe, must specify target geography.")
@@ -221,70 +247,6 @@ def simple_map(data,variable,target_geography=None):
     plt.title(variable)
     plt.show()
 
-# import fetch_census_data
-# data = fetch_census_data.acs5_aggregate()
-# data = geographize(data, target_geography = 'tract')
-
-# #sum of data area: 0.06803175617115911
-# #sum of data pop: 2731881
-
-# #PRODUCES RIGHT AREAS:
-
-# community_area_data = aggregate(data,{'estimated total population' : 'areal sum'},target_geography='community_area',source_geography='tract')
-
-# # at this point, data is in DF in alphabetical order by community_area.
-
-# print('a good run')
-# community_area_data = geographize(community_area_data,'community_area')
-# #print(community_area_data.sort_values(by='community_area').community_area[0:4])
-# #print(community_area_data.sort_values(by='community_area').area[0:4])
-# #print(community_area_data.sort_values(by='community_area')['estimated total population'][0:4])
-
-# # at this point, data is in weird who-knows-what order.
-
-# #sum of data area: 0.06483326749292051
-# #sum of data pop: 2633451
-
-# # 13       ALBANY PARK
-# # 55    ARCHER HEIGHTS
-# # 34     ARMOUR SQUARE
-
-# # 13    0.000540
-# # 55    0.000563
-# # 34    0.000280
-# # 68    0.001362
-
-# data['population density']=data['estimated total population']/data.area
-
-# #PRODUCES WRONG AREAS:
-
-# new_community_area_data = aggregate(data,{'estimated total population' : 'areal sum', 'population density' : 'areal mean'}
-# ,target_geography='community_area',source_geography='tract')
-
-# # at this point, data is in DF in alphabetical order by community area.
-
-# print('a bad run')
-# import pdb
-# pdb.set_trace()
-# new_community_area_data['area'] = geographize(new_community_area_data,'community_area').sort_values(by='community_area').area
-# #print(new_community_area_data.sort_values(by='community_area').community_area[0:4])
-# #print(new_community_area_data.sort_values(by='community_area').area[0:4])
-# #print(new_community_area_data['estimated total population'][0:4])
-
-# # data and pop in alphabetical order. BUT THE AREAS ARE IN THE ORDER ABOVE!
-
-# #sum of data area: 0.06483326749292051
-# #sum of data [“area”]: 0.06483326749292051
-# #sum of data pop: 2633451
-
-# # 0       ALBANY PARK
-# # 1    ARCHER HEIGHTS
-# # 2     ARMOUR SQUARE
-# # 3           ASHBURN
-
-# # 0    0.000463
-# # 1    0.000170
-# # 2    0.000200
-# # 3    0.000488
-
-# new_community_area_data['recalculated population'] = new_community_area_data['population density']*new_community_area_data['area']
+chi_fcc = pd.read_csv("data/chi_fcc.csv",index_col=0,parse_dates=[0])
+variables = {'MaxAdDown' : 'pop mean', 'MaxAdUp' : 'pop mean'}
+comm_fcc = aggregate(chi_fcc,variables,'community_area','tract')
