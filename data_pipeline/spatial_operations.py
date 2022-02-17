@@ -82,7 +82,6 @@ def geographize(data,target_geography):
             "Recommended action: rename the area column (eg, 'area_old') then retry."
             )
     
-    data['current ']
     geo = get_shapefile(target_geography)
     output = geo.join(data.set_index(target_geography),on=target_geography)
 
