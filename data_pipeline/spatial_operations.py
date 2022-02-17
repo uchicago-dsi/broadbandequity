@@ -148,11 +148,12 @@ def aggregator(x,method,overlap,original_areas,original_pops,source_geography):
             original_areas[overlap.loc[index,source_geography]] for index,items in x.items()])
         return np.dot(x,weights)
 
-def aggregate(data,variables,target_geography,source_geography=None):
+def aggregate(data,variables,target_geography,source_geography):
     """Calculates statistic at new geographical level via areal interpolation.
 
     Args:
         data (df): (geo)dataframe with statistics at original geographical level
+            MUST have an "estimated total population" column!
         variables (dict): dictionary with keys = columns in data to convert,
             values = 'areal mean', 'areal sum', 'pop mean', 'pop sum' to select aggregation method
             (use mean for intensive statistics, sum for extensive statistics)
@@ -165,6 +166,7 @@ def aggregate(data,variables,target_geography,source_geography=None):
 
     Future modifications:
         - should be able to make the source_geography argument optional when data is a geodataframe
+        - only require estimated total pop column if pop mean is selected
     """
 
     # References: 
@@ -180,6 +182,9 @@ def aggregate(data,variables,target_geography,source_geography=None):
     if 'geometry' not in data.columns:  # see if we already have a geodataframe
         if source_geography is None:
             raise ValueError("When passing a non-geo dataframe, must specify target geography.")
+    if 'estimated total population' not in data.columns:
+            raise ValueError("Data must have an 'estimated total population' column.")
+    # also needs to have area column
 
     # first, find the intersection of the source and target geometries
     source_geo = geographize(data,source_geography)
