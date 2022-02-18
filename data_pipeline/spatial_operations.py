@@ -54,10 +54,12 @@ def geographize(data,target_geography):
     Args:
         data (df): dataframe to add spatial information to
             If a geodataframe is passed, it's returned without modification
+            (Other than possibly adding an "area" column)
         target_geography (str): column of data with spatial information
     
     Returns:
         geodataframe
+            Always contains at least "geometry" and "area" columns
 
     Raises:
         ValueError if dataframe contains a column called "area".
@@ -91,9 +93,11 @@ def geographize(data,target_geography):
             'Consider combining these data points and trying again.'
             )
 
+    output['area'] = output.area
+
     return output
 
-def aggregator(x,method,overlap,original_areas,original_pops,source_geography):
+def aggregator(x,method,overlap,source_geography,original_areas,original_pops):
     """Returns functions for areal interpolation.
 
     Args:
@@ -102,9 +106,9 @@ def aggregator(x,method,overlap,original_areas,original_pops,source_geography):
             (use mean for intensive statistics, sum for extensive statistics)
             (use areal for areal-based weighting, use pop for population-based weighting)
         overlap (gdf): intersection of source and target geographies
+        source_geography (str): source geography level
         original_areas (dict): area of each source geography
         original_pops (dict): population of each source geography
-        source_geography (str): source geography level
     
     Returns:
         func: for use in pd.agg
@@ -153,7 +157,8 @@ def aggregate(data,variables,target_geography,source_geography):
 
     Args:
         data (df): (geo)dataframe with statistics at original geographical level
-            MUST have an "estimated total population" column!
+            Must have a "population" or "estimated total population" column to do population-weighted mean
+            Cannot have multiple observations per geographical unit
         variables (dict): dictionary with keys = columns in data to convert,
             values = 'areal mean', 'areal sum', 'pop mean', 'pop sum' to select aggregation method
             (use mean for intensive statistics, sum for extensive statistics)
@@ -164,9 +169,11 @@ def aggregate(data,variables,target_geography,source_geography):
     Returns:
         dataframe
 
+    Raises:
+        ValueErrors for invalid arguments
+
     Future modifications:
         - should be able to make the source_geography argument optional when data is a geodataframe
-        - only require estimated total pop column if pop mean is selected
     """
 
     # References: 
@@ -180,11 +187,17 @@ def aggregate(data,variables,target_geography,source_geography):
             'Combine these data points and try again.'
             )
     if 'geometry' not in data.columns:  # see if we already have a geodataframe
-        if source_geography is None:
+        if source_geography is None:  # only raised in future functionality
             raise ValueError("When passing a non-geo dataframe, must specify target geography.")
-    if 'estimated total population' not in data.columns:
-            raise ValueError("Data must have an 'estimated total population' column.")
-    # also needs to have area column
+    if 'pop mean' in variables.values():
+        if 'population' in data.columns:
+            pop_source = 'population'
+        elif 'estimated total population' in data.columns:
+            pop_source = 'estimated total population'
+        else:
+            raise ValueError("Data must have a population column to calculate pop-weighted mean.")
+    else:
+        pop_source = None  # no population required for areal-weighted operations
 
     # first, find the intersection of the source and target geometries
     source_geo = geographize(data,source_geography)
@@ -200,11 +213,15 @@ def aggregate(data,variables,target_geography,source_geography):
 
     # construct dictionaries with areas and populations of original geographies
     original_areas = dict(source_geo[[source_geography,'area']].values)
-    original_pops = dict(source_geo[[source_geography,'estimated total population']].values)
-    
+    if pop_source is not None:  # if we need the population dictionary
+        original_pops = dict(source_geo[[source_geography,pop_source]].values)
+    else:
+        original_pops = None  # not used
+
+    # aggregate each variable using aggregation function
     output = []
     for variable, method in variables.items():
-        aggregation_function = lambda x: aggregator(x,method,overlap,original_areas,original_pops,source_geography)
+        aggregation_function = lambda x: aggregator(x,method,overlap,source_geography,original_areas,original_pops)
         output.append(
             overlap.groupby(target_geography)
             .agg(variable=(variable,aggregation_function))
@@ -212,8 +229,10 @@ def aggregate(data,variables,target_geography,source_geography):
             .rename(columns={'variable':variable})
             .set_index(target_geography)
             )
+
+    # combine aggregated variables into single dataframe
     if len(output) > 1:  # avoid returning error if we're only aggregating one variable
-        output[0] = output[0].join(output[1:])  # combine different variables' dfs
+        output[0] = output[0].join(output[1:])
     return output[0].reset_index()  # for consistency, don't index by geography in output
 
 def simple_map(data,variable,target_geography=None):
