@@ -1,4 +1,4 @@
-,area,city code,use internet at home,household id,household size,employment,education, hispanic,race,internet service provider,high-speed service,satellite,dial-up,other internet service,mobile data plan internet,dont need internet,cant afford internet,internet not available in area,no device for internet,no internet for other reason,internet comm with doctor,research health info online,electronic health monitoring,access health records online,would buy internet if lower price,use internet for online classes,state,county
+,area,city,use_internet,hh_id,hh_size,employment,education,hispanic,race,internet_provider,high_speed_service,satellite,dial_up,other_service,mobile_plan,dont_need_internet,cant_afford_internet,internet_NA,no_device_internet,other_no_internet,doctor_internet,health_research_online,health_monitor_online,health_records_online,buy_internet_lower_price,online_classes,state,county
 0,0,0,2,004105753710374,1,1,34,2,1,-1,-1,-1,-1,-1,-1,2,2,2,2,2,-1,-1,-1,-1,2,-1,17,0
 1,0,0,1,018047772102761,2,1,41,2,1,1,1,2,2,2,1,-1,-1,-1,-1,-1,2,2,2,2,-1,2,17,0
 2,0,0,1,018047772102761,2,5,43,2,1,1,1,2,2,2,1,-1,-1,-1,-1,-1,2,2,2,2,-1,-1,17,0
