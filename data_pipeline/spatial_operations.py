@@ -235,7 +235,7 @@ def aggregate(data,variables,target_geography,source_geography):
         output[0] = output[0].join(output[1:])
     return output[0].reset_index()  # for consistency, don't index by geography in output
 
-def simple_map(data,variable,target_geography=None):
+def simple_map(data,variable,target_geography):
     """Statically maps single variable on given geography (1-var choropleth).
 
     Args:
