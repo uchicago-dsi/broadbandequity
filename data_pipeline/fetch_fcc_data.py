@@ -44,6 +44,7 @@ def fcc_fixed(force_api_call=False):
                     data_list.append(pd.DataFrame(columns=response[0], data=response[1:]))
                 except:
                     print(response)
+                    raise Exception("API Error")  # so we don't get stuck in eternal loop
                 offset += 49999  # advances to the next page
                 if data_list[-1].shape[0]<49999:  # once we don't get a full response, we've reached the last page
                     data = pd.concat(data_list)

@@ -19,7 +19,7 @@ geo_codes = {'blockce10':'block',
 def duplicate_areas(data,geography):
     """Returns True if data's geography column contains duplicates, else False."""
 
-    return len(data[geography]) != len(set(data[geography]))
+    return len(data.reset_index()[geography]) != len(set(data.reset_index()[geography]))
 
 def get_shapefile(geography):
     """Returns geodataframe with specified geography geometries.
@@ -177,6 +177,7 @@ def aggregate(data,variables,target_geography,source_geography):
     """
 
     # References: 
+    # https://pysal.org/tobler/generated/tobler.area_weighted.area_interpolate.html (mimicking core functionality)
     # https://gis.stackexchange.com/questions/326408/how-aggregate-data-in-a-geodataframe-by-the-geometry-in-a-geoseries
     # https://stackoverflow.com/questions/31521027/groupby-weighted-average-and-sum-in-pandas-dataframe
 
