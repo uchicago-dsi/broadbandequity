@@ -1,5 +1,12 @@
 """Spatial manipulations for pandas dataframes."""
 
+# shapefile sources:
+# blocks, community areas, wards: City of Chicago Data Portal https://data.cityofchicago.org
+# tracts: "Chicago Data Guy" blog http://robparal.blogspot.com/2014/01/chicago-tract-shapefile-with-acs-data.html
+# note: these tract shapefiles are same as ACS, but trimmed to city limits
+# the City of Chicago tract shapefiles include some areas outside the city limits, and more problematically, parts of the lake
+# for this reason, DO NOT rely on aggregation from tracts that uses of City of Chicago tract shapefiles
+
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,6 +19,7 @@ current_file = os.path.dirname(__file__)
 # geo_codes = {'shapefile geography name' : 'user-facing geography name'}
 geo_codes = {'blockce10':'block',
              'tractce10':'tract',
+             'TRACT':'tract',
              'community':'community_area',
              'ward':'ward'
             }
@@ -44,6 +52,7 @@ def get_shapefile(geography):
         except:
             raise Exception("Failed to find valid shapefiles.")
     geo = geo.rename(columns=geo_codes)
+
     if geography != 'community_area':  # community areas have string names
         geo[geography] = geo[geography].astype(int)
     return geo
