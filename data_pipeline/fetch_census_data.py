@@ -18,6 +18,7 @@ def call_api(dataset_url,geography_url,key=False):
     Args:
         dataset_url (str): specifies which census dataset to request
         geography_url (str): specifies which geographies to request
+        key(bool): passes API key with request
 
     Returns:
         dataframe containing requested dataset
@@ -48,6 +49,7 @@ def read_data(csv_address):
     
     Args:
         csv_address (str): CSV to read
+        key(bool): passes API key with request
 
     Returns:
         dataframe containing requested dataset OR False if read failed
@@ -66,6 +68,7 @@ def acs5_aggregate(force_api_call=False,key=False):
     Args:
         force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
             Otherwise, will preferentially just read local CSV. Defaults to False.
+        key(bool): passes API key with request
 
     Returns:
         data: pandas dataframe
@@ -88,6 +91,7 @@ def acs5_profile(force_api_call=False,key=False):
     Args:
     force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
         Otherwise, will preferentially just read local CSV. Defaults to False.
+    key(bool): passes API key with request
 
     Returns:
         data: pandas dataframe
@@ -110,6 +114,7 @@ def acs5_individual(force_api_call=False,key=False):
     Args:
     force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
         Otherwise, will preferentially just read local CSV. Defaults to False.
+    key(bool): passes API key with request
 
     Returns:
         data: pandas dataframe
@@ -132,6 +137,7 @@ def cps_individual(force_api_call=False):
     Args:
     force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
         Otherwise, will preferentially just read local CSV. Defaults to False.
+    key(bool): passes API key with request
 
     Returns:
         data: pandas dataframe

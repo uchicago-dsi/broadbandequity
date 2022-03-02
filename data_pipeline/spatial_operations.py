@@ -29,6 +29,13 @@ def duplicate_areas(data,geography):
 
     return len(data.reset_index()[geography]) != len(set(data.reset_index()[geography]))
 
+def reproject(geodataframe):
+
+    if geodataframe.crs['init'] != 'epsg:4326':
+        geodataframe = geodataframe.to_crs(epsg=4326)
+    
+    return geodataframe
+
 def get_shapefile(geography):
     """Returns geodataframe with specified geography geometries.
 
@@ -48,7 +55,7 @@ def get_shapefile(geography):
         # (for example, for community_areas but not for tracts)
         # ShapelyDeprecationWarning: __len__ for multi-part geometries is deprecated and will be removed in Shapely 2.0.
         try:
-            geo = gpd.read_file(current_file+'/../geo/'+geography+'s.shp')
+            geo = reproject(gpd.read_file(current_file+'/../geo/'+geography+'s.shp'))
         except:
             raise Exception("Failed to find valid shapefiles.")
     geo = geo.rename(columns=geo_codes)
