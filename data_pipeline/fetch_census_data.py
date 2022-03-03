@@ -1,10 +1,12 @@
 """Fetchs aggregate/individual 5-year ACS data and individual CPS data."""
 
-from .config import config
+from config import config
 import ast
 import requests
 import pandas as pd
 import os
+
+import pdb
 
 API_URL = "https://api.census.gov"
 ACS5_AGG_URL = f"/data/{config['Dates']['Census']}/acs/acs5"
@@ -34,13 +36,14 @@ def call_api(dataset_url,geography_url,key=False):
     if key:
         key_url = "&key="+config['API Keys']['CensusAPIKey']
         request += key_url
-
+    
     # send request and convert to dataframe:
     response = requests.get(request)
     try:
         response = response.json()
         data = pd.DataFrame(columns=response[0], data=response[1:])
     except:
+        print(f"\nThe API call failed and provided the following reason: {response.text}\n")
         raise Exception(response)
     return data.rename(columns=variables)
 
@@ -153,3 +156,6 @@ def cps_individual(force_api_call=False):
         call_api(CPS_IND_URL, geography_url,key=False).to_csv(csv_address)
         data = pd.read_csv(csv_address, index_col = 0)  # make sure we can read the data
     return data
+
+test = acs5_individual(force_api_call=True)
+pdb.set_trace()
