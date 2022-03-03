@@ -6,8 +6,6 @@ import requests
 import pandas as pd
 import os
 
-import pdb
-
 API_URL = "https://api.census.gov"
 ACS5_AGG_URL = f"/data/{config['Dates']['Census']}/acs/acs5"
 ACS5_PROF_URL = f"/data/{config['Dates']['Census']}/acs/acs5/profile"
@@ -66,7 +64,7 @@ def read_data(csv_address):
     return data
 
 def acs5_aggregate(force_api_call=False,key=False):
-    """Returns dataframe of 5-year ACS aggregate data for tracts in Cook County.
+    """Returns dataframe of 5-year ACS aggregate data for tracts in specified county.
 
     Args:
         force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
@@ -112,7 +110,7 @@ def acs5_profile(force_api_call=False,key=False):
     return data
 
 def acs5_individual(force_api_call=False,key=False):
-    """Returns dataframe of 5-year ACS microdata for PUMAs in specified county.
+    """Returns dataframe of 5-year ACS microdata for specified PUMAs in specified state.
 
     Args:
     force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
@@ -129,7 +127,8 @@ def acs5_individual(force_api_call=False,key=False):
     if not force_api_call:
         data = read_data(csv_address)
     if force_api_call or (data is False):
-        geography_url = "&for=public%20use%20microdata%20area:*"+"&in=state:"+config['Geography']['State_FIPS']
+        geography_url = "&for=public%20use%20microdata%20area:"+config['Geography']['PUMAs'] + \
+            "&in=state:"+config['Geography']['State_FIPS']
         call_api(ACS5_IND_URL, geography_url,key).to_csv(csv_address)
         data = pd.read_csv(csv_address, index_col = 0)  # make sure we can read the data
     return data
@@ -156,6 +155,3 @@ def cps_individual(force_api_call=False):
         call_api(CPS_IND_URL, geography_url,key=False).to_csv(csv_address)
         data = pd.read_csv(csv_address, index_col = 0)  # make sure we can read the data
     return data
-
-test = acs5_individual(force_api_call=True)
-pdb.set_trace()
