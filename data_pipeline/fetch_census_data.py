@@ -34,13 +34,14 @@ def call_api(dataset_url,geography_url,key=False):
     if key:
         key_url = "&key="+config['API Keys']['CensusAPIKey']
         request += key_url
-
+    
     # send request and convert to dataframe:
     response = requests.get(request)
     try:
         response = response.json()
         data = pd.DataFrame(columns=response[0], data=response[1:])
     except:
+        print(f"\nThe API call failed and provided the following reason: {response.text}\n")
         raise Exception(response)
     return data.rename(columns=variables)
 
@@ -63,7 +64,7 @@ def read_data(csv_address):
     return data
 
 def acs5_aggregate(force_api_call=False,key=False):
-    """Returns dataframe of 5-year ACS aggregate data for tracts in Cook County.
+    """Returns dataframe of 5-year ACS aggregate data for tracts in specified county.
 
     Args:
         force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
@@ -109,7 +110,7 @@ def acs5_profile(force_api_call=False,key=False):
     return data
 
 def acs5_individual(force_api_call=False,key=False):
-    """Returns dataframe of 5-year ACS microdata for PUMAs in specified county.
+    """Returns dataframe of 5-year ACS microdata for specified PUMAs in specified state.
 
     Args:
     force_api_call (bool, optional): When True, calls relevant API and writes local CSV.
@@ -126,7 +127,8 @@ def acs5_individual(force_api_call=False,key=False):
     if not force_api_call:
         data = read_data(csv_address)
     if force_api_call or (data is False):
-        geography_url = "&for=public%20use%20microdata%20area:*"+"&in=state:"+config['Geography']['State_FIPS']
+        geography_url = "&for=public%20use%20microdata%20area:"+config['Geography']['PUMAs'] + \
+            "&in=state:"+config['Geography']['State_FIPS']
         call_api(ACS5_IND_URL, geography_url,key).to_csv(csv_address)
         data = pd.read_csv(csv_address, index_col = 0)  # make sure we can read the data
     return data
