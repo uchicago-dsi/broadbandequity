@@ -258,7 +258,7 @@ def simple_map(data,variable,target_geography):
     Args:
         data (df): (geo)dataframe with variable of interest
         variable (str): column of dataframe to map
-        target_geography: geographical level to map on
+        target_geography (str): geographical level to map on
 
     Note: You do currently have to specify target_geography even when passing a geodataframe.
     
