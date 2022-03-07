@@ -63,6 +63,18 @@ Coming soon...
 
 
 
+<<<<<<< HEAD
+=======
+**Resources**
+- ACS survey data questions: https://www2.census.gov/programs-surveys/acs/methodology/questionnaires/2022/quest22.pdf [Q.8,9,10,11]
+- ACS broadband access questions: https://www.census.gov/acs/www/about/why-we-ask-each-question/computer/
+- CPS data: https://www.census.gov/programs-surveys/cps.html
+- Differences between ACS and CPS: https://www.census.gov/topics/income-poverty/poverty/guidance/data-sources/acs-vs-cps.html
+- Visualization/Analysis tool from the census: https://data.census.gov/mdat/
+- FCC Form 477 data: https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477
+- https://jamessaxon.github.io/broadband/equity/data/2020/12/06/public-data-on-internet-equity.html
+- https://github.com/JamesSaxon/neighborhood_broadband
+>>>>>>> main
 
 
 
