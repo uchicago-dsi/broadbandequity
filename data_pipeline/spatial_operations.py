@@ -252,13 +252,14 @@ def aggregate(data,variables,target_geography,source_geography):
         output[0] = output[0].join(output[1:])
     return output[0].reset_index()  # for consistency, don't index by geography in output
 
-def simple_map(data,variable,target_geography):
+def simple_map(data,variable,target_geography,title=None):
     """Statically maps single variable on given geography (1-var choropleth).
 
     Args:
         data (df): (geo)dataframe with variable of interest
         variable (str): column of dataframe to map
         target_geography (str): geographical level to map on
+        title (str, optional): title (defaults to variable name)
 
     Note: You do currently have to specify target_geography even when passing a geodataframe.
     
@@ -266,7 +267,6 @@ def simple_map(data,variable,target_geography):
         - optional target_geography when using geodataframe
         - automatically convert to target_geography via aggregate function if needed
         - map multiple variables at once
-        - better legend etc
     """
 
     # validate arguments
@@ -280,6 +280,7 @@ def simple_map(data,variable,target_geography):
             raise ValueError("When passing a non-geo dataframe, must specify target geography.")
         data = geographize(data,target_geography)
 
+    # plot
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
         # For some reason, below line prints deprecation warning for some but not all geometries
@@ -289,5 +290,9 @@ def simple_map(data,variable,target_geography):
             data.plot(column=variable,legend=True)
         except KeyError:
             raise ValueError('Specified variable not in dataframe.') from None
-    plt.title(variable)
+
+    # title and display
+    if title is None:
+        title = variable
+    plt.title(title)
     plt.show()
