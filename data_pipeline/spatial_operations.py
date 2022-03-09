@@ -24,18 +24,46 @@ geo_codes = {'blockce10':'individual_block',
              'community':'community_area',
              'ward':'ward'
             }
+PROJECTION = 4326  # epsg:4326
 
 def duplicate_areas(data,geography):
     """Returns True if data's geography column contains duplicates, else False."""
 
     return len(data.reset_index()[geography]) != len(set(data.reset_index()[geography]))
 
-def reproject(geodataframe):
+def reproject(geodataframe,projection):
+    """Reprojects geodataframe into specified EPSG projection."""
 
-    if geodataframe.crs['init'] != 'epsg:4326':
-        geodataframe = geodataframe.to_crs(epsg=4326)
+    if geodataframe.crs['init'] != f'epsg:{str(projection)}':
+        geodataframe = geodataframe.to_crs(epsg=projection)
     
     return geodataframe
+
+def fix_chicago_geography_types(data,geography):
+    """Chicago-specific: ensures geography columns are correct types."""
+
+    if geography != 'community_area':  # community areas have string names
+        data[geography] = data[geography].astype(int)
+    else:
+        data[geography] = data[geography].astype(str)
+
+    return data
+
+def fix_ohare_boundaries(geo):
+    """Chicago-specific: Removes non-Cook-County tract from O'Hare community area."""
+
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
+        # For some reason, below line prints deprecation warning for some but not all geometries
+        # (for example, for community_areas but not for tracts)
+        # ShapelyDeprecationWarning: __len__ for multi-part geometries is deprecated and will be removed in Shapely 2.0.
+        community_areas = geo.set_index("community_area").sort_index().reset_index()  # sort by community area
+        intersect = gpd.overlay(community_areas,get_shapefile('tract'),how="intersection")  # find overlap with tracts
+        community_areas["geometry"][56:57] = intersect[
+            intersect['community_area']=="OHARE"
+            ].dissolve(by="community_area")["geometry"][0:1]  # replace O'Hare geometry with overlapping geometries
+
+    return community_areas
 
 def get_shapefile(geography):
     """Returns geodataframe with specified geography geometries.
@@ -56,15 +84,16 @@ def get_shapefile(geography):
         # (for example, for community_areas but not for tracts)
         # ShapelyDeprecationWarning: __len__ for multi-part geometries is deprecated and will be removed in Shapely 2.0.
         try:
-            geo = reproject(gpd.read_file(current_file+'/../geo/'+geography+'s.shp'))
+            geo = reproject(gpd.read_file(current_file+'/../geo/'+geography+'s.shp'),PROJECTION)
         except:
             raise Exception("Failed to find valid shapefiles.")
     geo = geo.rename(columns=geo_codes)
+    geo = fix_chicago_geography_types(geo,geography)  # ensure column names are right types
 
-    if geography != 'community_area':  # community areas have string names
-        geo[geography] = geo[geography].astype(int)
-    else:
-        geo[geography] = geo[geography].astype(str)
+    # fix O'Hare community area - not currently using
+    #if geography == "community_area":
+    #    geo = fix_ohare_boundaries(geo)
+
     return geo
 
 def geographize(data,target_geography):
@@ -103,11 +132,7 @@ def geographize(data,target_geography):
             "Recommended action: rename the area column (eg, 'area_old') then retry."
             )
 
-    if target_geography != 'community_area':  # community areas have string names
-        data[target_geography] = data[target_geography].astype(int)
-    else:
-        data[target_geography] = data[target_geography].astype(str)
-    
+    data = fix_chicago_geography_types(data,target_geography)  # ensure column names are right types
     geo = get_shapefile(target_geography)
     output = geo.set_index(target_geography).join(data.set_index(target_geography),how='inner',rsuffix='_')
 

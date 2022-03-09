@@ -131,3 +131,4 @@ dmypy.json
 # Large data files
 .DS_Store
 chi_fcc.csv
+data_pipeline/.DS_Store
