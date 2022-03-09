@@ -17,8 +17,9 @@ import warnings
 
 current_file = os.path.dirname(__file__)
 # geo_codes = {'shapefile geography name' : 'user-facing geography name'}
-geo_codes = {'blockce10':'block',
+geo_codes = {'blockce10':'individual_block',
              'tractce10':'tract',
+             'tract_bloc' : 'block',
              'TRACT':'tract',
              'community':'community_area',
              'ward':'ward'
@@ -62,6 +63,8 @@ def get_shapefile(geography):
 
     if geography != 'community_area':  # community areas have string names
         geo[geography] = geo[geography].astype(int)
+    else:
+        geo[geography] = geo[geography].astype(str)
     return geo
 
 def geographize(data,target_geography):
@@ -99,9 +102,17 @@ def geographize(data,target_geography):
             "Dataframe already contains an 'area' column. This will collide with the new geodataframe's area column. "
             "Recommended action: rename the area column (eg, 'area_old') then retry."
             )
+
+    if target_geography != 'community_area':  # community areas have string names
+        data[target_geography] = data[target_geography].astype(int)
+    else:
+        data[target_geography] = data[target_geography].astype(str)
     
     geo = get_shapefile(target_geography)
-    output = geo.join(data.set_index(target_geography),on=target_geography)
+    output = geo.set_index(target_geography).join(data.set_index(target_geography),how='inner',rsuffix='_')
+
+    # alternate method that drops O'Hare:
+    # output = geo.join(data.set_index(target_geography),on=target_geography)
 
     if duplicate_areas(data,target_geography):
         print(
@@ -111,7 +122,7 @@ def geographize(data,target_geography):
 
     output['area'] = output.area
 
-    return output
+    return output.reset_index()
 
 def aggregator(x,method,overlap,source_geography,original_areas,original_pops):
     """Returns functions for areal interpolation.
