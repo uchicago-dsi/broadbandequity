@@ -2,6 +2,8 @@
 
 # shapefile sources:
 # blocks, community areas, wards: City of Chicago Data Portal https://data.cityofchicago.org
+# (blocks masked via tracts to remove water-only areas)
+# (community areas masked to remove non-Cook-County part of O'Hare)
 # tracts: "Chicago Data Guy" blog http://robparal.blogspot.com/2014/01/chicago-tract-shapefile-with-acs-data.html
 # note: these tract shapefiles are same as ACS, but trimmed to city limits
 # the City of Chicago tract shapefiles include some areas outside the city limits, and more problematically, parts of the lake
