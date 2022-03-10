@@ -22,6 +22,7 @@ geo_codes = {'blockce10':'individual_block',
              'tract_bloc' : 'block',
              'TRACT':'tract',
              'community':'community_area',
+             'community_' : 'community_area',
              'ward':'ward'
             }
 PROJECTION = 4326  # epsg:4326
@@ -49,22 +50,6 @@ def fix_chicago_geography_types(data,geography):
 
     return data
 
-def fix_ohare_boundaries(geo):
-    """Chicago-specific: Removes non-Cook-County tract from O'Hare community area."""
-
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
-        # For some reason, below line prints deprecation warning for some but not all geometries
-        # (for example, for community_areas but not for tracts)
-        # ShapelyDeprecationWarning: __len__ for multi-part geometries is deprecated and will be removed in Shapely 2.0.
-        community_areas = geo.set_index("community_area").sort_index().reset_index()  # sort by community area
-        intersect = gpd.overlay(community_areas,get_shapefile('tract'),how="intersection")  # find overlap with tracts
-        community_areas["geometry"][56:57] = intersect[
-            intersect['community_area']=="OHARE"
-            ].dissolve(by="community_area")["geometry"][0:1]  # replace O'Hare geometry with overlapping geometries
-
-    return community_areas
-
 def get_shapefile(geography):
     """Returns geodataframe with specified geography geometries.
 
@@ -89,10 +74,6 @@ def get_shapefile(geography):
             raise Exception("Failed to find valid shapefiles.")
     geo = geo.rename(columns=geo_codes)
     geo = fix_chicago_geography_types(geo,geography)  # ensure column names are right types
-
-    # fix O'Hare community area - not currently using
-    #if geography == "community_area":
-    #    geo = fix_ohare_boundaries(geo)
 
     return geo
 
@@ -135,9 +116,6 @@ def geographize(data,target_geography):
     data = fix_chicago_geography_types(data,target_geography)  # ensure column names are right types
     geo = get_shapefile(target_geography)
     output = geo.set_index(target_geography).join(data.set_index(target_geography),how='inner',rsuffix='_')
-
-    # alternate method that drops O'Hare:
-    # output = geo.join(data.set_index(target_geography),on=target_geography)
 
     if duplicate_areas(data,target_geography):
         print(
