@@ -11,6 +11,7 @@
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
+from numbers import Number
 import numpy as np
 import os
 import pandas as pd
@@ -191,7 +192,7 @@ def aggregate(data,variables,target_geography,source_geography):
         data (df): (geo)dataframe with statistics at original geographical level
             Must have a "population" or "estimated total population" column to do population-weighted mean
             Cannot have multiple observations per geographical unit
-        variables (dict): dictionary with keys = columns in data to convert,
+        variables (dict): dictionary with keys = numeric-type columns in data to convert,
             values = 'areal mean', 'areal sum', 'pop mean', 'pop sum' to select aggregation method
             (use mean for intensive statistics, sum for extensive statistics)
             (use areal for areal-based weighting, use pop for population-based weighting)
@@ -231,6 +232,11 @@ def aggregate(data,variables,target_geography,source_geography):
             raise ValueError("Data must have a population column to calculate pop-weighted mean.")
     else:
         pop_source = None  # no population required for areal-weighted operations
+    for variable in variables:
+        if not variable in data.columns:  # ensure all variables are actually present in the dataframe
+            raise ValueError(f'{variable} is not a column in the passed dataframe.')
+        if not isinstance(data[variable][0],Number):  # ensure all passed variables 
+            raise ValueError(f'{variable} is not a numeric-type column. Consider converting and trying again.')
 
     # first, find the intersection of the source and target geometries
     source_geo = geographize(data,source_geography)
