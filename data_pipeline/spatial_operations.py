@@ -2,6 +2,8 @@
 
 # shapefile sources:
 # blocks, community areas, wards: City of Chicago Data Portal https://data.cityofchicago.org
+# (blocks masked via tracts to remove water-only areas)
+# (community areas masked to remove non-Cook-County part of O'Hare)
 # tracts: "Chicago Data Guy" blog http://robparal.blogspot.com/2014/01/chicago-tract-shapefile-with-acs-data.html
 # note: these tract shapefiles are same as ACS, but trimmed to city limits
 # the City of Chicago tract shapefiles include some areas outside the city limits, and more problematically, parts of the lake
@@ -9,6 +11,7 @@
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
+from numbers import Number
 import numpy as np
 import os
 import pandas as pd
@@ -22,20 +25,33 @@ geo_codes = {'blockce10':'individual_block',
              'tract_bloc' : 'block',
              'TRACT':'tract',
              'community':'community_area',
+             'community_' : 'community_area',
              'ward':'ward'
             }
+PROJECTION = 4326  # epsg:4326
 
 def duplicate_areas(data,geography):
     """Returns True if data's geography column contains duplicates, else False."""
 
     return len(data.reset_index()[geography]) != len(set(data.reset_index()[geography]))
 
-def reproject(geodataframe):
+def reproject(geodataframe,projection):
+    """Reprojects geodataframe into specified EPSG projection."""
 
-    if geodataframe.crs['init'] != 'epsg:4326':
-        geodataframe = geodataframe.to_crs(epsg=4326)
+    if geodataframe.crs['init'] != f'epsg:{str(projection)}':
+        geodataframe = geodataframe.to_crs(epsg=projection)
     
     return geodataframe
+
+def fix_chicago_geography_types(data,geography):
+    """Chicago-specific: ensures geography columns are correct types."""
+
+    if geography != 'community_area':  # community areas have string names
+        data[geography] = data[geography].astype(int)
+    else:
+        data[geography] = data[geography].astype(str)
+
+    return data
 
 def get_shapefile(geography):
     """Returns geodataframe with specified geography geometries.
@@ -56,15 +72,12 @@ def get_shapefile(geography):
         # (for example, for community_areas but not for tracts)
         # ShapelyDeprecationWarning: __len__ for multi-part geometries is deprecated and will be removed in Shapely 2.0.
         try:
-            geo = reproject(gpd.read_file(current_file+'/../geo/'+geography+'s.shp'))
+            geo = reproject(gpd.read_file(current_file+'/../geo/'+geography+'s.shp'),PROJECTION)
         except:
             raise Exception("Failed to find valid shapefiles.")
     geo = geo.rename(columns=geo_codes)
+    geo = fix_chicago_geography_types(geo,geography)  # ensure column names are right types
 
-    if geography != 'community_area':  # community areas have string names
-        geo[geography] = geo[geography].astype(int)
-    else:
-        geo[geography] = geo[geography].astype(str)
     return geo
 
 def geographize(data,target_geography):
@@ -103,16 +116,9 @@ def geographize(data,target_geography):
             "Recommended action: rename the area column (eg, 'area_old') then retry."
             )
 
-    if target_geography != 'community_area':  # community areas have string names
-        data[target_geography] = data[target_geography].astype(int)
-    else:
-        data[target_geography] = data[target_geography].astype(str)
-    
+    data = fix_chicago_geography_types(data,target_geography)  # ensure column names are right types
     geo = get_shapefile(target_geography)
     output = geo.set_index(target_geography).join(data.set_index(target_geography),how='inner',rsuffix='_')
-
-    # alternate method that drops O'Hare:
-    # output = geo.join(data.set_index(target_geography),on=target_geography)
 
     if duplicate_areas(data,target_geography):
         print(
@@ -186,7 +192,7 @@ def aggregate(data,variables,target_geography,source_geography):
         data (df): (geo)dataframe with statistics at original geographical level
             Must have a "population" or "estimated total population" column to do population-weighted mean
             Cannot have multiple observations per geographical unit
-        variables (dict): dictionary with keys = columns in data to convert,
+        variables (dict): dictionary with keys = numeric-type columns in data to convert,
             values = 'areal mean', 'areal sum', 'pop mean', 'pop sum' to select aggregation method
             (use mean for intensive statistics, sum for extensive statistics)
             (use areal for areal-based weighting, use pop for population-based weighting)
@@ -226,6 +232,11 @@ def aggregate(data,variables,target_geography,source_geography):
             raise ValueError("Data must have a population column to calculate pop-weighted mean.")
     else:
         pop_source = None  # no population required for areal-weighted operations
+    for variable in variables:
+        if not variable in data.columns:  # ensure all variables are actually present in the dataframe
+            raise ValueError(f'{variable} is not a column in the passed dataframe.')
+        if not isinstance(data[variable][0],Number):  # ensure all passed variables 
+            raise ValueError(f'{variable} is not a numeric-type column. Consider converting and trying again.')
 
     # first, find the intersection of the source and target geometries
     source_geo = geographize(data,source_geography)
