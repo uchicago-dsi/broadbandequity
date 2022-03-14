@@ -63,8 +63,6 @@ Coming soon...
 
 
 
-<<<<<<< HEAD
-=======
 **Resources**
 - ACS survey data questions: https://www2.census.gov/programs-surveys/acs/methodology/questionnaires/2022/quest22.pdf [Q.8,9,10,11]
 - ACS broadband access questions: https://www.census.gov/acs/www/about/why-we-ask-each-question/computer/
@@ -74,7 +72,6 @@ Coming soon...
 - FCC Form 477 data: https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477
 - https://jamessaxon.github.io/broadband/equity/data/2020/12/06/public-data-on-internet-equity.html
 - https://github.com/JamesSaxon/neighborhood_broadband
->>>>>>> main
 
 
 
