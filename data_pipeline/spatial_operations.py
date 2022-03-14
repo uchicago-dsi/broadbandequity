@@ -5,9 +5,9 @@
 # (blocks masked via tracts to remove water-only areas)
 # (community areas masked to remove non-Cook-County part of O'Hare)
 # tracts: "Chicago Data Guy" blog http://robparal.blogspot.com/2014/01/chicago-tract-shapefile-with-acs-data.html
-# note: these tract shapefiles are same as ACS, but trimmed to city limits
+# note: these tract shapefiles are same as ACS, but masked to city limits within Cook County
 # the City of Chicago tract shapefiles include some areas outside the city limits, and more problematically, parts of the lake
-# for this reason, DO NOT rely on aggregation from tracts that uses of City of Chicago tract shapefiles
+# for this reason, DO NOT rely on aggregation from tracts that uses City of Chicago tract shapefiles directly
 
 import geopandas as gpd
 import matplotlib.pyplot as plt

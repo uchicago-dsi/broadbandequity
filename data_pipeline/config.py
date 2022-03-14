@@ -1,3 +1,5 @@
+"""This module helps other data pipeline scripts access and read the config text file."""
+
 import configparser
 import os
 

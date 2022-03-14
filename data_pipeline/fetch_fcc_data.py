@@ -27,7 +27,11 @@ def fcc_fixed(force_api_call=False):
         Exception: for responses other than 200 (OK) and 204 (empty)
     """
 
-    csv_address = os.path.join(os.path.dirname(__file__), '../data/fcc_fixed.csv')
+    csv_address = os.path.join(
+        os.path.dirname(__file__),
+        f"../data/{config['Geography']['State_Abbr']}-Fixed-Dec2020-v1.csv"
+        # naming convention chosen to match downloaded version name
+        )
     while True:
         if force_api_call:
             data_list = []
