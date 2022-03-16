@@ -1,0 +1,18 @@
+name: broadbandequity
+channels:
+  - defaults
+dependencies:
+  - python=3.8
+  - geopandas
+  - matplotlib
+  - descartes
+  - ipykernel
+  - requests
+  - shapely
+  - ipyleaflet
+  - adjusttext
+  - seaborn
+  - scikit-learn
+  - statsmodels
+# modify prefix for your system:
+prefix: 
