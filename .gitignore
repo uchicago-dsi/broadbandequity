@@ -128,8 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Large data files
+# OSX
 .DS_Store
-chi_fcc.csv
 data_pipeline/.DS_Store
-cookcounty_2020_blocks.csv
+
+# Large data files
+chi_fcc.csv
