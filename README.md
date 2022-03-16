@@ -12,13 +12,9 @@ Authors: Lena Diasti, Drew Keller, Amy Maldonado
 
 #### Goals
 
-We are looking to get creative in mapping broadband disparities.
-+ Census data is one resource we’d like to leverage further – whether creating heat maps, visualizing trends, or creating an interactive dashboard, there is potential to further bring data on inequities to light in an easy-to-use, digestible way.
-+ What other ways can we define and demonstrate the digital divide? Some examples: Ookla speed test data can tell us the level of service different communities receive from their providers. FCC Form 477 data can show us where providers formally offer wired service.
-+ Data preparation: clean and align the data from different sources, remove duplicates and impute missingness
-+ Feature extraction: retrieve important features which are able to identify the broadband disparities
-+ Spatial data science: incorporate spatial data to showcase the geopolitical and non-geographical relationships in broadband extent
-+ Data visualization: create maps, plots, and dashboards (preferably interactive) to deliver the trends and insights
++ Fetch and combine City, Census, and FCC data sources relevant to internet access in Chicago
++ Produce descriptive analysis and visualizations of state of access across the city
++ Enable continued work with datasets via reusuable functions
 
 ---
 
@@ -34,6 +30,7 @@ You will need the following packages/libraries to be able to run the main module
 + notebook
 + seaborn
 + sklearn
+
 Only some versions of the above packages may enable functional and stable code behavior. For this reason, we recommend installing version-specified dependencies from [requirements.txt](requirements.txt).
 
 This package will also run in a container via Docker (configurable via the [Dockerfile](Dockerfile)).
