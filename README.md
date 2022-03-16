@@ -88,7 +88,6 @@ This folder contains all the csv files used in our analysis.
 + [cps_individual.csv](data/cps_individual.csv) is the csv with the CPS individual data
 + [fcc_acs_combined_community_areas](data/fcc_acs_combined_community_areas) and [fcc_acs_combined_tracts](data/fcc_acs_combined_tracts) are the csvs we used to map Census tracts to Chicago community areas for FCC data analysis.
 + [fcc_fixed.csv](data/fcc_fixed.csv) is the csv with the fetched FCC data.
-+ [fetch_ookla_data.ipynb](data/fetch_ookla_data.ipynb) is the notebook used to fetch Ookla speedtest data.
 + [hardship_index.csv](data/hardship_index.csv) is the csv of the hardship scores.
 
 ---
