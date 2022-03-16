@@ -20,7 +20,7 @@ Authors: Lena Diasti, Drew Keller, Amy Maldonado
 
 #### Installation
 
-You will need the following packages/libraries to be able to run the main modules and notebooks:
+The following packages/libraries are needed to run the main modules and notebooks:
 + pandas
 + numpy
 + geopandas
@@ -35,7 +35,7 @@ Only some versions of the above packages may enable functional and stable code b
 
 This package will also run in a container via Docker (configurable via the [Dockerfile](Dockerfile)).
 
-Once installed, you can access modules from the main directory via relative imports - for example, `from data_pipeline import fetch_census_data`. If working in a subdirectory, you will need to modify `sys.path` to enable imports, such as with `sys.path[0] = os.path.join(os.path.abspath(''),'..')`. (For examples, see first code cells in analysis notebooks.)
+Once installed, access modules from the main directory via relative imports - for example, `from data_pipeline import fetch_census_data`. If working in a subdirectory, modify `sys.path` to enable imports, such as with `sys.path[0] = os.path.join(os.path.abspath(''),'..')`. (For examples, see first code cells in analysis notebooks.)
 
 ---
 
@@ -70,26 +70,26 @@ We fetched our data for analysis from the following sources:
 #### Analysis
 
 This folder contains notebooks used to analyze the data. 
-+ [acs_aggregate_analysis.ipynb](analysis/acs_aggregate_analysis.ipynb) is the Jupyter notebook containing the code used to import, clean, analyze, merge, and visualize summaries of the fetched aggregate ACS, CCVI, and Hardship data for a community area level analysis. 
-+ [acs_individual_analysis.ipynb](analysis/acs_individual_analysis.ipynb) is the Jupyter notebook containing the code used to import, clean, analyze, merge, and visualize summaries of the fetched individual ACS data for a household level analysis. 
-+ [acs_visualizations.ipynb](analysis/acs_visualizations.ipynb) is the Jupyter notebook containing the code used to import and visualize the fetched aggregate ACS data. 
-+ [cps_analysis.ipynb](analysis/cps_analysis.ipynb) is the Jupyter notebook containing the code used to import, clean, analyze, merge, and visualize summaries of the fetched Current Population Survey (CPS) data. 
-+ [fcc_analysis.ipynb](analysis/fcc_analysis.ipynb) is the Jupyter notebook containing the code used to import, clean, analyze, merge, and visualize summaries of the fetched FCC data. 
++ [acs_aggregate_analysis.ipynb](analysis/acs_aggregate_analysis.ipynb) is a Jupyter notebook used to import, clean, analyze, merge, and visualize summaries of the fetched aggregate ACS, CCVI, and Hardship data for a community area level analysis. 
++ [acs_individual_analysis.ipynb](analysis/acs_individual_analysis.ipynb) is a Jupyter notebook used to import, clean, analyze, merge, and visualize summaries of the fetched individual ACS data for a household level analysis. 
++ [acs_visualizations.ipynb](analysis/acs_visualizations.ipynb) is a Jupyter notebook used to import and visualize fetched aggregate ACS data. 
++ [cps_analysis.ipynb](analysis/cps_analysis.ipynb) is a Jupyter notebook  used to import, clean, analyze, merge, and visualize summaries of the fetched Current Population Survey (CPS) data. 
++ [fcc_analysis.ipynb](analysis/fcc_analysis.ipynb) is a Jupyter notebook used to import, clean, analyze, merge, and visualize summaries of the fetched FCC data. 
 
 ---
 
 #### Data
 
 This folder contains the raw and processed data used in our analysis. 
-+ [CMAP_2019_comm_data.csv](data/CMAP_2019_comm_data.csv) is the csv with Community Area information for spatial validation.
-+ [comm_areas.csv](data/comm_areas.csv) and [tracts_comm_areas.csv](data/tracts_comm_areas.csv) are the csvs used to crosswalk Census tracts to Chicago community areas for ACS data analysis.
-+ [acs5_aggregate.csv](data/acs5_aggregate.csv) is the csv with ACS 5-year aggregate data.
-+ [acs5_indvidual.csv](data/acs5_individual.csv) is the csv with ACS 5-year individual data.
-+ [acs5_profile.csv](data/acs5_profile.csv) is the csv with ACS 5-year profile data.
-+ [cps_individual.csv](data/cps_individual.csv) is the csv with the CPS individual data.
-+ [chicago_internet.csv](data/chicago_internet.csv) is the csv of the final table showing total populations, number of households, broadband access, and sociodemographics by Chicago community area. 
-+ [covid_index.csv](data/covid_index.csv) is the csv of the CCVI scores.
-+ [hardship_index.csv](data/hardship_index.csv) is the csv of the hardship scores.
++ [CMAP_2019_comm_data.csv](data/CMAP_2019_comm_data.csv) is a csv with Community Area information for spatial validation.
++ [comm_areas.csv](data/comm_areas.csv) and [tracts_comm_areas.csv](data/tracts_comm_areas.csv) are csvs used to crosswalk Census tracts to Chicago community areas for ACS data analysis.
++ [acs5_aggregate.csv](data/acs5_aggregate.csv) is a csv with ACS 5-year aggregate data.
++ [acs5_indvidual.csv](data/acs5_individual.csv) is a csv with ACS 5-year individual data.
++ [acs5_profile.csv](data/acs5_profile.csv) is a csv with ACS 5-year profile data.
++ [cps_individual.csv](data/cps_individual.csv) is a csv with the CPS individual data.
++ [chicago_internet.csv](data/chicago_internet.csv) is a csv of the final table showing total populations, number of households, broadband access, and sociodemographics by Chicago community area. 
++ [covid_index.csv](data/covid_index.csv) is a csv of the CCVI scores.
++ [hardship_index.csv](data/hardship_index.csv) is a csv of the hardship scores.
 + [fcc_acs_combined_community_areas](data/fcc_acs_combined_community_areas) and [fcc_acs_combined_tracts](data/fcc_acs_combined_tracts) are csvs containing combined ACS and FCC data at a community area and tract level, respectively.
 
 Note: _Raw_ FCC Form 477 data is not included in the repository due to size (`chi_fcc.csv` is .gitignore'd). Please see the code cells at the beginning of [fcc_analysis.ipynb](analysis/fcc_analysis.ipynb) to fetch, filter, and write `chi_fcc.csv` locally.
@@ -98,12 +98,12 @@ Note: _Raw_ FCC Form 477 data is not included in the repository due to size (`ch
 
 #### Data Pipeline
 
-This folder contains scripts used to fetch the data and manipulate for our analysis. 
-+ [data_pipeline_how_to.ipynb](data_pipeline/data_pipeline_how_to.ipynb) is the Jupyter notebook with a tutorial on how to use the fetching and spatial operations scripts.
-+ [fetch_census_data.py](data_pipeline/fetch_census_data.py) is the module used to fetch ACS and CPS data via API.
-+ [fetch_fcc_data.py](data_pipeline/fetch_fcc_data.py) is the module used to fetch FCC data via API.
+This folder contains scripts used to fetch and manipulate data. 
++ [data_pipeline_how_to.ipynb](data_pipeline/data_pipeline_how_to.ipynb) is a tutorial on how to use the fetching and spatial operations scripts.
++ [fetch_census_data.py](data_pipeline/fetch_census_data.py) is a module to fetch ACS and CPS data via API.
++ [fetch_fcc_data.py](data_pipeline/fetch_fcc_data.py) is a module to fetch FCC data via API.
 + [interactive_mapping.py](data_pipeline/interactive_mapping.py) is preliminary work towards producing interactive maps.
-+ [spatial_operations.py](data_pipeline/spatial_operations.py) is the module used to match geography shapefiles with 
++ [spatial_operations.py](data_pipeline/spatial_operations.py) is a module to match geography shapefiles with 
 data, carry out aggregation from one geography to another, and produce simple choropleths.
 
 ---
@@ -111,22 +111,22 @@ data, carry out aggregation from one geography to another, and produce simple ch
 #### Geo
 
 This folder contains shapefiles for spatial analysis.
-+ The "blocks" files are the block geographies.
-+ The "community_areas" files are the community area geographies.
-+ The "tracts" files are the Census tract geographies.
-+ The "wards" files are the Chciago ward geographies.
-+ [fix_block_shapes.ipynb](geo/fix_block_shapes.ipynb) is the notebook to modify the Chicago Data Portal's block shapefiles so that they do not contain parts of Lake Michigan.
-+ [fix_ohare_shape.ipynb](geo/fix_ohare_shape.ipynb) is the notebook to modify the Chicago Data Portal's community area shapefiles so that the O'Hare shapefile does not contain the single tract that it has in DuPage County.
++ The "blocks" files are block geographies.
++ The "community_areas" files are community area geographies.
++ The "tracts" files are Census tract geographies.
++ The "wards" files are Chciago ward geographies.
++ [fix_block_shapes.ipynb](geo/fix_block_shapes.ipynb) is a notebook used to modify the Chicago Data Portal's block shapefiles so that they do not contain parts of Lake Michigan.
++ [fix_ohare_shape.ipynb](geo/fix_ohare_shape.ipynb) is a notebook used to modify the Chicago Data Portal's community area shapefiles so that the O'Hare shapefile does not contain the single tract that it has in DuPage County.
 
 ---
 
 #### Tests
 
 This folder contains notebooks and shapefiles to validate areal interpolation.
-+ [neighborhood_spatial_validation.ipynb](tests/neighborhood_spatial_validation.ipynb) is the notebook previously used to inspect some of the neighborhoods that were producing outlier results via areal interpolation. This problem was resolved (we determined it was due to lake area being included in geographies) but we are leaving this notebook in the repository for documentation purposes.
-+ [spatial_operations_validation.ipynb](tests/spatial_operations_validation.ipynb) is the notebook is to demonstrate that our areal interpolation functions produce extensive and intensive statistics similar to known values.
-+ [tract_validation_and_masking.ipynb](tests/tract_validation_and_masking.ipynb) is the notebook previously used to mask tract boundaries, removing a duplicated tract number (specifically, the tract of O'Hare community area that lies in DuPage County). It no longer fully functions now that we have made the change, but we are retaining it in the repository for documentation purposes.
-+ [validation_data](tests/validation_data) is the csv with community-area population estimates to validate areal interpolation.
++ [neighborhood_spatial_validation.ipynb](tests/neighborhood_spatial_validation.ipynb) is a notebook previously used to inspect some of the neighborhoods that were producing outlier results via areal interpolation. This problem was resolved (we determined it was due to lake area being included in geographies) but we are leaving this notebook in the repository for documentation purposes.
++ [spatial_operations_validation.ipynb](tests/spatial_operations_validation.ipynb) is a notebook demonstrating that our areal interpolation functions produce extensive and intensive statistics similar to known values.
++ [tract_validation_and_masking.ipynb](tests/tract_validation_and_masking.ipynb) is a notebook previously used to mask tract boundaries, removing a duplicated tract number (specifically, the tract of O'Hare community area that lies in DuPage County). It no longer fully functions now that we have made the change, but we are retaining it in the repository for documentation purposes.
++ [validation_data](tests/validation_data) is a csv with community-area population estimates to validate areal interpolation.
 
 ---
 
