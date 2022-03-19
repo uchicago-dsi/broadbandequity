@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# OSX
+.DS_Store
+data_pipeline/.DS_Store
+
+# Large data files
+chi_fcc.csv
+IL-Fixed-Dec2020-v1.csv

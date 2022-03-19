@@ -27,7 +27,11 @@ def fcc_fixed(force_api_call=False):
         Exception: for responses other than 200 (OK) and 204 (empty)
     """
 
-    csv_address = os.path.join(os.path.dirname(__file__), '../data/fcc_fixed.csv')
+    csv_address = os.path.join(
+        os.path.dirname(__file__),
+        f"../data/{config['Geography']['State_Abbr']}-Fixed-Dec2020-v1.csv"
+        # naming convention chosen to match downloaded version name
+        )
     while True:
         if force_api_call:
             data_list = []
@@ -44,6 +48,7 @@ def fcc_fixed(force_api_call=False):
                     data_list.append(pd.DataFrame(columns=response[0], data=response[1:]))
                 except:
                     print(response)
+                    raise Exception("API Error")  # so we don't get stuck in eternal loop
                 offset += 49999  # advances to the next page
                 if data_list[-1].shape[0]<49999:  # once we don't get a full response, we've reached the last page
                     data = pd.concat(data_list)
