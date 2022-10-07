@@ -1,8 +1,8 @@
 # broadbandequity
 
-This repository contains the datasets and codebooks used in the City of Chicago Broadband Equity Project from the Data Science Clinic (Winter 2022).  
+This repository contains the datasets and codebooks used in the City of Chicago Broadband Equity Project from the Data Science Clinic (Winter 2022). Audditional work was also done during the Autumn 2022 Quarter.
 
-Authors: Lena Diasti, Drew Keller, Amy Maldonado
+Authors: Lena Diasti, Drew Keller, Amy Maldonado, Nick Ross (Autumn 2022)
 
  * [Goals](#goals)
  * [Installation](#installation)
@@ -18,13 +18,20 @@ Authors: Lena Diasti, Drew Keller, Amy Maldonado
 
 ---
 
-#### Installation
+#### Docker
 
-This package will also run in a container via Docker (configurable via the [Dockerfile](Dockerfile)).
+There is a dockerfile in the repo. To build the file, build the repository using the command:
 
-Only some versions of the above packages may enable functional and stable code behavior. For this reason, we recommend installing version-specified dependencies from [requirements.txt](requirements.txt).
+```docker build . -t broadband```
+
+Once the docker file is built, you can run the following command in order to run your jupyter notebook. This will also mount the current directory inside the container.
+
+```docker run -p 8888:8888 -v ${PWD}:/tmp broadband```
+
+If you need to add a package via pip, use the file ```requirements.txt``` which has a basic set of packages installed. Add the package and version and then rebuild the container in order to add it.
 
 
+#### Usage
 Once installed, access modules from the main directory via relative imports - for example, `from data_pipeline import fetch_census_data`. If working in a subdirectory, modify `sys.path` to enable imports, such as with `sys.path[0] = os.path.join(os.path.abspath(''),'..')`. (For examples, see first code cells in analysis notebooks.)
 
 ---
