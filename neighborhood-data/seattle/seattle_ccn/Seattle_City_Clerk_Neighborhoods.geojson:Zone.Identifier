@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://data-seattlecitygis.opendata.arcgis.com/
+HostUrl=https://opendata.arcgis.com/api/v3/datasets/b76cdd45f7b54f2a96c5e97f2dda3408_2/downloads/data?format=geojson&spatialRefId=4326&where=1%3D1
