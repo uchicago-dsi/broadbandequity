@@ -26,10 +26,13 @@ There is a dockerfile in the repo. To build the file, build the repository using
 
 Once the docker file is built, you can run the following command in order to run your jupyter notebook. This will also mount the current directory inside the container.
 
-```docker run -p 8888:8888 -v ${PWD}:/tmp broadband```
+```docker run -p 8888:8888 -v ${PWD}:/broadbandequity broadband```
+
+Once this is running you should be able to access the notebook by going to your web browser and going to 
+
+```http://127.0.0.1:8888/```
 
 If you need to add a package via pip, use the file ```requirements.txt``` which has a basic set of packages installed. Add the package and version and then rebuild the container in order to add it.
-
 
 #### Usage
 Once installed, access modules from the main directory via relative imports - for example, `from data_pipeline import fetch_census_data`. If working in a subdirectory, modify `sys.path` to enable imports, such as with `sys.path[0] = os.path.join(os.path.abspath(''),'..')`. (For examples, see first code cells in analysis notebooks.)
