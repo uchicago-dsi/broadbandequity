@@ -39,6 +39,10 @@ Once installed, access modules from the main directory via relative imports - fo
 
 ---
 
+#### Notes
+
+There are note in the notes subdirectory. These notes are not on the technical aspect, but on the research and decision-making part of the project.
+
 #### Sources
 
 We fetched our data for analysis from the following sources:
