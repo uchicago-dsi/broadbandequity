@@ -1,5 +1,5 @@
 #!/bin/bash 
-
+set -e
 # retrieve the necessary data:
 echo "Retrieving FCC Form 477 data from FCC Open Data API..."
 echo
