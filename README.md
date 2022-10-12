@@ -10,6 +10,23 @@ Authors: Lena Diasti, Drew Keller, Amy Maldonado, Nick Ross (Autumn 2022)
 
 ---
 
+#### Deliverables Autumn 2022
+
+We are looking to build a set of jupyter notebooks which generate maps, similar to what was produced last year, for the specified metro areas to demonstrate the extent of internet equity. These notebooks should rely on a standardized set of libraries (to also be written) which avoid code repetition as well as use docker for code reproducibility purposes.
+
+People Autumn 2022:
+
+Sam Pavlekovsky spavlekovsky@uchicago.edu
+Maia Boyd mboyd6@uchicago.edu
+Bruno Xie brunoxie@uchicago.edu
+Christelle Inema inema@uchicago.edu
+Kaya Borlase borlasekn@uchicago.edu
+Kamran Ahmed kamranahmed@uchicago.edu
+
+Mentors: Evelyn Campbelle and Nick Ross
+
+---
+
 #### Goals
 
 + Fetch and combine City, Census, and FCC data sources relevant to internet access in Chicago
