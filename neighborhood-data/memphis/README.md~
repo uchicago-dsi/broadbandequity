@@ -1,0 +1,15 @@
+# Overview
+
+* City Name: Memphis
+* State: TN
+* Person: Sam Pavlekovsky
+
+## Details
+
+---
+
+There are two datasets here but I am not sure if either is "correct." Both are from the Memphis Data Hub. I was unable to find a map of official neighborhoods.
+
+The first is City Council Districts. There are only 7 polygons and they are quite large. https://data.memphistn.gov/Good-Government/City-Council-Districts-Boundaries/d874-nrqr
+
+The second is just zip codes. These obviously do not necessarily align with how people perceive neighborhoods or how the city treates subdivisions to enact policies, etc. However, it does have more, smaller polygons (42) and also 
