@@ -1,0 +1,25 @@
+========================================================================
+ El Paso County, Texas Subdivisions
+------------------------------------------------------------------------
+ https://koordinates.com/layer/98659-el-paso-county-texas-subdivisions/
+========================================================================
+From: El Paso County, Texas
+
+CRS: WGS 84 / Pseudo-Mercator
+
+------------------------------------------------------------------------
+ Processing steps applied by Koordinates
+------------------------------------------------------------------------
+
+- imported to Koordinates in Esri JSON format on 26 Nov 2018 from gis.elpasotexas.gov
+- updated with new data on 02 Jul 2019
+- 15 invalid geometries fixed at import time 
+    (see https://koordinates.com/layer/98659-el-paso-county-texas-subdivisions/history/)
+- converted by Koordinates to Shapefile on 10 Oct 2022 (reference #2660663)
+
+====================
+No license specified
+====================
+
+No license was specified for this layer. This could mean default rights under copyright law for your legal jurisdiction may apply. Please check with Koordinates if you're unsure of your right to access and use this layer.
+
