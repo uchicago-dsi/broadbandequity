@@ -14,7 +14,7 @@ I found the data on a geospatial data management website. https://koordinates.co
 
 2. Are there any issues that you notice?
 
-No. 
+No. I downloaded the council district. There is no information for their neighborhoods. 
  
 
 3. Who made the data?  & Are there alternative neighborhood definitions 
