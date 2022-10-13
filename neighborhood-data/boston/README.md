@@ -1,7 +1,7 @@
 # Overview
 
-* City Name: Washington D.C.
-* State: District of Colombia
+* City Name: Boston
+* State: Massachusetts
 * Person: Maia Boyd
 
 ## Details
