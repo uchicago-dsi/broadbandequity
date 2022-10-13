@@ -15,7 +15,7 @@ I found the data on the city of Dallas GIS services. https://gis.dallascityhall.
 
 2. Are there any issues that you notice?
 
-The streetlevel data seemed more detailed than the council district data. 
+The council district data. 
 
 3. Who made the data?  & Are there alternative neighborhood definitions 
 
