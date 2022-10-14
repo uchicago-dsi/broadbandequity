@@ -55,6 +55,15 @@ If you want to run an interactive terminal, you can run the following command. N
 
 ```docker run  --platform=linux/amd64 -it -v ${PWD}:/tmp broadband /bin/bash```
 
+For example, if you want to generate the internet access data, do the following:
+
+  * Start an interactive terminal using the docker run command above
+  * Go to the internet-access-map directory (```cd internet-access-map```)
+  * Run get_data (```./get_data.sh```)
+  * Run merge_data (```./merge_data.sh```)
+
+This will create the merged dataset
+
 #### Usage
 Once installed, access modules from the main directory via relative imports - for example, `from data_pipeline import fetch_census_data`. If working in a subdirectory, modify `sys.path` to enable imports, such as with `sys.path[0] = os.path.join(os.path.abspath(''),'..')`. (For examples, see first code cells in analysis notebooks.)
 
