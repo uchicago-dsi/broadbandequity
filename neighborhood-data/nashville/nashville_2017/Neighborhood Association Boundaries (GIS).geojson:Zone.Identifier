@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://data.nashville.gov/Metro-Government/Neighborhood-Association-Boundaries-GIS-/qytv-2cu8
+HostUrl=https://data.nashville.gov/api/geospatial/qytv-2cu8?method=export&format=GeoJSON
