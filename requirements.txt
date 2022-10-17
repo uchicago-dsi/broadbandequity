@@ -106,3 +106,4 @@ wheel==0.37.1
 widgetsnbextension==3.5.2
 xyzservices==2022.2.0
 zipp==3.7.0
+contextily==1.1.0
