@@ -29,7 +29,7 @@ entrypoints==0.3
 Fiona==1.8.21
 flit_core==3.6.0
 fonttools==4.25.0
-geopandas==0.6.1
+geopandas==0.11.1
 idna==3.3
 importlib-metadata==4.11.0
 importlib-resources==5.4.0
@@ -77,7 +77,7 @@ pycparser==2.21
 Pygments==2.11.2
 pyOpenSSL==22.0.0
 pyparsing==3.0.4
-pyproj==1.9.6
+pyproj==3.4.0
 pyrsistent==0.18.1
 PySocks==1.7.1
 python-dateutil==2.8.2
