@@ -1,0 +1,4 @@
+This data has been downloaded from opendata.columbus.gov website. 
+ Columbus Communities is a boundary layer that is be used by city departments for planning and reporting purposes. The boundaries represent areas generally recognized as a "community", which often comprise a number of neighborhoods. The layer is an update to and replaces the Community Planning Areas layer. It utilizes area commission boundaries when an area commission exists, but is not intended to replace or be used in the place of them.
+
+You can download this data [here](https://opendata.columbus.gov/datasets/c4b483507f374e62bd705450e116e017_25/about)

@@ -1,0 +1,4 @@
+Warning 6: Normalized/laundered field name: 'admin_level' to 'admin_leve'
+Warning 6: Normalized/laundered field name: 'border_type' to 'border_typ'
+Warning 6: Normalized/laundered field name: 'nist:fips_code' to 'nist_fips_'
+Warning 6: Normalized/laundered field name: 'nist:state_fips' to 'nist_state'
