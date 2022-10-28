@@ -1,0 +1,1 @@
+This data has been downloaded from DataSF, an open data source. It contains data on neighborhood boundaries that were defined in 2006 by the Mayor's Office of Neighborhood Services for use You can find it [here.](https://data.sfgov.org/Geographic-Locations-and-Boundaries/SF-Find-Neighborhoods/pty2-tcw4)

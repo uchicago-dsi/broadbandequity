@@ -1,5 +1,5 @@
 #!/bin/bash 
-
+set -e
 # Run python scripts to aggregate each dataset to census tracts
 # and merge into one dataset
 
