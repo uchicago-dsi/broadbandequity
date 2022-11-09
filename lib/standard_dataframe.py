@@ -254,13 +254,14 @@ def generate_plots( city_name_str = None):
     else:
         city_name_list = GOOD_CITY_LIST
 
-    for city in city_name_list:
+    for idx, city in enumerate( city_name_list):
+        print(f"Running {city}, {idx} of {len(city_name_list)}")
         city_shapefile_df = geopandas.read_file(GOOD_CITY_SHAPEFILE_LOCATIONS[city]["location"])
         city_shapefile_df = city_shapefile_df.to_crs({'proj':'longlat', 'ellps':'WGS84', 'datum':'WGS84'})
 
         city_fcc_merge_df = merge_data(city_shapefile_df, FCC_MERGED_DF, f"/tmp/neighborhood-data/{city}/city-merged.geojson", GOOD_CITY_SHAPEFILE_LOCATIONS[city]["nhood_col"])
 
         return_dict[city] = city_fcc_merge_df
-        so.simple_map(GOOD_CITY_SHAPEFILE_LOCATIONS[city]["location"].drop_duplicates(subset='geometry'), 'f_broadband', 'geoid', f"{city.title()} broadband by census tract", output_file_name=f"/tmp/visualizations/{city}-census.png")
+        so.simple_map(city_shapefile_df.drop_duplicates(subset='geometry'), 'f_broadband', 'geoid', f"{city.title()} broadband by census tract", output_file_name=f"/tmp/visualizations/{city}-census.png")
 
     return return_dict
