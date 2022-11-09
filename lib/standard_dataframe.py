@@ -44,11 +44,12 @@ if len( [x for x in GOOD_CITY_LIST if x not in GOOD_CITY_SHAPEFILE_LOCATIONS.key
 ### internet access map directory. Takes a long time.
 ## if file doesn't exist then unzip
 if os.path.exists("/tmp/data/broadband.geojson"):
-    FCC_MERGED_DF = "/tmp/data/broadband.geojson"
+    FCC_MERGED_FILE = "/tmp/data/broadband.geojson"
 else:
     with zipfile.ZipFile('/tmp/data/broadband.zip', 'r') as zip_ref:
         zip_ref.extractall('/tmp/data/')
 
+FCC_MERGED_DF = geopandas.read_file(FCC_MERGED_FILE)
 
 def merge_data(nhood_df, ctract_df, merged_df_path, nhood_col):
     '''
