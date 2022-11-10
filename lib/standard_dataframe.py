@@ -7,6 +7,7 @@ import geopandas
 import warnings
 import pandas as pd
 import math
+import statistics
 import matplotlib.pyplot as plt
 import zipfile
 import glob
@@ -144,13 +145,13 @@ def get_helper( column_name, c_tracts, calc=None ):
     valid_ctracts = [i for i in c_tracts[column_name] if not math.isnan(i)]
     if valid_ctracts:
         if calc is None:
-            return math.mean(valid_ctracts)
+            return statistics.mean(valid_ctracts)
         else:
             return calc( valid_ctracts )
     else:
         return math.nan
 
-def standard_city_data(city_name, city_fcc_df, nhood_col):
+def standard_city_data(city_name, city_nhood_df, city_fcc_df, nhood_col):
     '''
     Function to take city neighborhood data and census tract data and prepare it to be 
     put into a standard dataframe for analyses.
@@ -182,12 +183,11 @@ def standard_city_data(city_name, city_fcc_df, nhood_col):
     perc_broadband = []
     perc_100mb_access = []
     devices_per_person = []
+    geometry = []
     #perc_below_pov_line = [] --- how should I calculate this?
     #perc_over_age65 = [] --- not in fcc_data (ACS data)
     #perc_hs_diploma = [] --- not in fcc_data (ACS data)
-    
-    print('Population of census tracts: ' + str(sum(city_fcc_df.drop_duplicates(subset='geometry')['population'])))
-    
+        
     for nhood in set(city_fcc_df[nhood_col]):
         c_tracts = city_fcc_df.loc[city_fcc_df[nhood_col] == nhood]
         city_names.append(city_name)
@@ -197,14 +197,18 @@ def standard_city_data(city_name, city_fcc_df, nhood_col):
         nhood_size.append(sum(geopandas.GeoSeries(c_tracts['geometry']).area))
         households.append(sum([i for i in c_tracts['households'] if not math.isnan(i)]))
         perc_black.append(get_helper('f_black', c_tracts))
-        perc_hispanic.append(get_helper('f_black', c_tracts))
-        perc_college_degree.append(get_helper( 'fba', c_tracts))
+        perc_hispanic.append(get_helper('f_hispanic', c_tracts))
+        perc_college_degree.append(get_helper( 'f_ba', c_tracts))
         avg_income.append(get_helper( 'mhi', c_tracts))
-        perc_broadband.append(get_helper('broadband', c_tracts))
-        perc_100mb_access.append(get_helper( '100mb', c_tracts))
-        devices_per_person.append(get_helper( 'dvc', c_tracts))
+        perc_broadband.append(get_helper('f_broadband', c_tracts))
+        perc_100mb_access.append(get_helper( 'n_fiber_100u', c_tracts))
+        devices_per_person.append(get_helper( 'devices_per_cap', c_tracts))
+        nhood_geo = city_nhood_df.loc[city_nhood_df[nhood_col] == nhood]
+        if not nhood_geo.empty:
+            geometry.append(nhood_geo['geometry'].iloc[0])
+        else:
+            geometry.append(math.nan)
     
-    print("Population of neighborhoods: " + str(sum(population)))
     standard_city_df = pd.DataFrame({
             'City Name': city_names,
             'Neighborhood Name': nhood_name,
@@ -219,6 +223,7 @@ def standard_city_data(city_name, city_fcc_df, nhood_col):
             '% Broadband Access': perc_broadband,
             '% > 100MB Access': perc_100mb_access,
             'Devices per capita': devices_per_person,
+            'geometry': geometry
         })
     
     return standard_city_df.copy()
@@ -245,7 +250,7 @@ def plot_boxplots(city_fcc_df, nhood_col, title):
     plt.suptitle('')
 
 
-def generate_plots( city_name_str = None):
+def generate_dataframe_and_plots( city_name_str = None):
 
     return_dict = {}
 
@@ -254,6 +259,7 @@ def generate_plots( city_name_str = None):
     else:
         city_name_list = GOOD_CITY_LIST
 
+    standard_city_dataframes = []
     for idx, city in enumerate( city_name_list):
         print(f"Running {city}, {idx} of {len(city_name_list)}")
         city_shapefile_df = geopandas.read_file(GOOD_CITY_SHAPEFILE_LOCATIONS[city]["location"])
@@ -263,5 +269,19 @@ def generate_plots( city_name_str = None):
 
         return_dict[city] = city_fcc_merged_df
         so.simple_map(city_fcc_merged_df.drop_duplicates(subset='geometry'), 'f_broadband', 'geoid', f"{city.title()} broadband by census tract", output_file_name=f"/tmp/visualizations/{city}-census.png")
+        
+        ## create standard_df and produce neighborhood plots
+        standard_city_df = standard_city_data(city, city_shapefile_df, city_fcc_merged_df, GOOD_CITY_SHAPEFILE_LOCATIONS[city]["nhood_col"])
+        standard_city_dataframes.append(standard_city_df)
+        
+        so.simple_map(geopandas.GeoDataFrame(standard_city_df), '% Broadband Access', 'Neighborhood Name', f'{city.title()} broadband by Neighborhood Boundary', f"/tmp/visualizations/{city}-neighborhood.png")
+        
+        print("\n")
+     
+    
+    std_neighborhood_df = pd.concat(standard_city_dataframes)
+    std_neighborhood_df.to_csv("/tmp/data/standard_neighborhood_df.csv")
+        
+       
 
-    return return_dict
+    #return return_dict
