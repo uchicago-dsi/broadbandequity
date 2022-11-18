@@ -65,8 +65,12 @@ def merge_function1(good_data, data_to_parse):
 
     for geoid in unique_geo_ids:
         # locate all rows with that geoid
+        c_tracts = data_to_parse.loc[data_to_parse['geoid'] == geoid]
         
         # do something with the rows to determine "best" neighborhood for that row -- SAM'S CODE FOR NOW
+        # get max intersection
+        max_intersection = 0
+        best_hood = ""
         
         # add add the row with the "best" neighborhood to the parsed_df
         
@@ -95,9 +99,12 @@ def merge_data(nhood_df, ctract_df, merged_df_path, nhood_col):
     merged_df = geopandas.sjoin(ctract_df, nhood_df, how="inner", op='intersects')
     print("Neighborhoods after merge: " + str(len(set(merged_df[nhood_col]))))
     merged_df.to_file(merged_df_path, driver="GeoJSON")
-    good_df = merged_df.drop_duplicates(subset='geoid', keep=False)
-    data_to_parse = merged_df.iloc[[i for i, val in enumerate(chicago.duplicated(subset='geoid', keep=False)) if val]]
-    good_df, data_to_parse = merge_function1(good_data, data_to_parse)
+    
+    # CALL TO MERGE FUNCTIONS
+    #good_df = merged_df.drop_duplicates(subset='geoid', keep=False)
+    #data_to_parse = merged_df.iloc[[i for i, val in enumerate(chicago.duplicated(subset='geoid', keep=False)) if val]]
+    #good_df, data_to_parse = merge_function1(good_data, data_to_parse)
+    
     print("Population before merge: " + str(sum(merged_df.drop_duplicates(subset='geometry')['population'])))
     print("Population after merge: " + str(sum(merged_df['population'])))
     return merged_df.copy()
