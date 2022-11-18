@@ -54,6 +54,29 @@ else:
 
 FCC_MERGED_DF = geopandas.read_file(FCC_MERGED_FILE)
 
+def merge_function1(good_data, data_to_parse):
+    '''
+    This function takes two parts of the merged data frame for a city, goes through the data_to_parse,
+    and matches duplicate census tracks to more exact neighborhoods
+    '''
+    unique_geo_ids = data_to_parse.drop_duplicates()['goeids']
+    
+    parsed_df = good_df.copy()
+
+    for geoid in unique_geo_ids:
+        # locate all rows with that geoid
+        
+        # do something with the rows to determine "best" neighborhood for that row -- SAM'S CODE FOR NOW
+        
+        # add add the row with the "best" neighborhood to the parsed_df
+        
+        # IF UNABLE TO FIND BEST NEIGHBORHOOD:
+        #     add all rows containing that geoid to "new_data_to_parse"
+        # for now, do we just add all of the rows for that geoid to the parsed_df?
+    
+    # return (parsed_df, new_data_to_parse)
+    
+
 def merge_data(nhood_df, ctract_df, merged_df_path, nhood_col):
     '''
     This function takes the neighborhood data and census level data, merges them, and writes
@@ -72,6 +95,9 @@ def merge_data(nhood_df, ctract_df, merged_df_path, nhood_col):
     merged_df = geopandas.sjoin(ctract_df, nhood_df, how="inner", op='intersects')
     print("Neighborhoods after merge: " + str(len(set(merged_df[nhood_col]))))
     merged_df.to_file(merged_df_path, driver="GeoJSON")
+    good_df = merged_df.drop_duplicates(subset='geoid', keep=False)
+    data_to_parse = merged_df.iloc[[i for i, val in enumerate(chicago.duplicated(subset='geoid', keep=False)) if val]]
+    good_df, data_to_parse = merge_function1(good_data, data_to_parse)
     print("Population before merge: " + str(sum(merged_df.drop_duplicates(subset='geometry')['population'])))
     print("Population after merge: " + str(sum(merged_df['population'])))
     return merged_df.copy()
