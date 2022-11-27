@@ -10,6 +10,69 @@ fcc = pd.read_csv("data/fcc_redux.csv.gz",
 
 print("Data loaded.\nConstructing variables...\n")
 
+# Download Speeds >= Certain threshold
+fcc.loc[:, 'max_dn_mbps_ge_1' ]   = fcc.loc[:, 'max_dn_mbps' ] >= 1
+fcc.loc[:, 'max_dn_mbps_ge_10' ]  = fcc.loc[:, 'max_dn_mbps' ] >= 10
+fcc.loc[:, 'max_dn_mbps_ge_100' ] = fcc.loc[:, 'max_dn_mbps' ] >= 100
+fcc.loc[:, 'max_dn_mbps_ge_250' ] = fcc.loc[:, 'max_dn_mbps' ] >= 250
+
+# Upload Speeds >= Certain threshold
+fcc.loc[:, 'max_up_mbps_ge_100' ] = fcc.loc[:, 'max_up_mbps' ] >= 100
+
+# Upload Speeds >= 100 & Using Fiber
+fcc.loc[:, 'fiber_100u'] = 0
+fcc.loc[(fcc.loc[:, 'max_up_mbps'] >= 100) & (fcc.loc[:, 'tech'] == 5), 'fiber_100u'] = 1
+fcc.loc[:, 'fiber_100e'] = fcc.loc[:, 'fiber_100u']
+
+# Create column with download and upload speeds >= 1 with 0s otherwise
+fcc.loc[:, 'max_dn_ge_1'] = fcc.loc[:, 'max_dn_mbps']
+fcc.loc[:, 'max_up_ge_1'] = fcc.loc[:, 'max_up_mbps']
+fcc.loc[(fcc.loc[:, 'max_dn_mbps'] < 1), 'max_dn_ge_1'] = 0
+fcc.loc[(fcc.loc[:, 'max_dn_mbps'] < 1), 'max_up_ge_1'] = 0
+
+# Aggregation
+# For each geoid, calculate the sum (total, using this technology) / max (across the available data) 
+ret_df = fcc.groupby('geoid', as_index = False).agg( {'max_dn_mbps_ge_1' : 'sum',\
+                                                    'max_dn_mbps_ge_10'  : 'sum',\
+                                                    'max_dn_mbps_ge_100' : 'sum',\
+                                                    'max_dn_mbps_ge_250' : 'sum',\
+                                                    'max_up_mbps_ge_100' : 'sum',\
+                                                    'max_dn_ge_1'        : 'max',\
+                                                    'max_up_ge_1'        : 'max',\
+                                                    'fiber_100e'         : 'max',\
+                                                    'fiber_100u'         : 'max'})
+
+
+# For each tract, calculate the mean / max of speeds
+ret_df.loc[:, 'tract'] = ret_df.loc[:, 'geoid'] // 10000
+ret_df = ret_df.groupby('tract', as_index=False).agg( {'max_dn_mbps_ge_1'   : 'mean',\
+                                                       'max_dn_mbps_ge_10'  : 'mean',\
+                                                       'max_dn_mbps_ge_100' : 'mean',\
+                                                       'max_dn_mbps_ge_250' : 'mean',\
+                                                       'max_up_mbps_ge_100' : 'mean',\
+                                                       'max_up_ge_1'        : 'mean',\
+                                                       'max_dn_ge_1'        : 'mean',\
+                                                       'fiber_100u'         : 'mean',\
+                                                       'fiber_100e'         : 'mean'})
+
+# Rename the columns for readability
+ret_df = ret_df.rename( columns = { 'max_dn_mbps_ge_1'  : 'n_isp',\
+                                   'max_dn_mbps_ge_10'  : 'n_dn10',\
+                                   'max_dn_mbps_ge_100' : 'n_dn100',\
+                                   'max_dn_mbps_ge_250' : 'n_dn250' ,\
+                                   'max_up_mbps_ge_100' : 'n_up100',\
+                                   'fiber_100u'         : 'n_fiber_100u',\
+                                   'fiber_100e'         : 'fiber_100u_exists',\
+                                   'max_up_ge_1'        : 'max_up',\
+                                   'max_dn_ge_1'        : 'max_dn'}) 
+
+ret_df.set_index(ret_df.tract, inplace = True)
+ret_df.drop(columns=['tract'], inplace=True)
+ret_df = ret_df.round(3)
+
+
+
+'''
 blocks = fcc.geoid.drop_duplicates().sort_values().reset_index(drop = True)
 blocks = pd.Series(data = np.zeros(blocks.shape[0]), index = blocks, name = "zero").astype(int)
 blocks = blocks.reset_index()
@@ -52,10 +115,14 @@ max_up = get_var(name = "max_up", varname = "max_up_mbps", agg_fn = pd.Series.ma
 
 
 constr_tracts = pd.concat([nisp, dn10, dn100, dn250, fiber_100u, fiber_exists, max_dn, max_up], axis = 1)
-print("Completed. Saving file...\n")
 constr_tracts = constr_tracts.round(3)
 constr_tracts.sort_index(inplace = True)
 constr_tracts.index.name = "geoid"
-print(f"Number of census tracts: {constr_tracts.index.nunique()}\n")
-constr_tracts.to_csv("data/fcc_constructed.csv.gz")  
+
+'''
+
+
+print("Completed. Saving file...\n")
+print(f"Number of census tracts: {ret_df.index.nunique()}\n")
+ret_df.to_csv("data/fcc_constructed.csv.gz")  
 print("Done. File saved.\n")
