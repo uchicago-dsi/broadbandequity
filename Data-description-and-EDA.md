@@ -1,7 +1,7 @@
 # Data Description and EDA
 ## Getting shape files:
-For each city, we searched shape files or geojason files on internet. Cities for which we found the shape files, we downloaded and saved it in a subdirectory in the [neighbourhood-data](https://github.com/chicago-cdac/broadbandequity/tree/main/neighborhood-data) a directory with the name of the city. We also documented what we did in a README.md file including where we found the data, what is the data source or who made it, any issues we faced while finding the data or issue in the datasets we found, and if there are any alternative neighborhood definitions for a city that may not be consistent with the other cities.
-We then merged these shape files with the combined ACS and FCC dataset and prepared a standard dataframe to plot choropleths showing broandband connectivity across neighbourhoods for each city.
+For each city, we searched shape files or geojason files on internet. Cities for which we found the shape files, we downloaded and saved it in a subdirectory in the [neighbourhood-data](/neighborhood-data) a directory with the name of the city. We also documented what we did to get this data in a README.md file for each city including where we found the data, what is the data source or who made it, noted any issues we faced while finding the data or issue in the datasets we found, and if there are any alternative neighborhood definitions for a city that may not be consistent with the other cities.
+We then merged these shape files with the combined ACS and FCC [dataset](/internet-access-map) and prepared a standard dataframe to plot choropleths showing broandband connectivity across neighbourhoods for each city.
 
 #### Below you can find the links to the shapefiles for each city
 [austin](/neighborhood-data/austin/Neighborhoods) <br />
