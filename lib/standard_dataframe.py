@@ -34,7 +34,9 @@ GOOD_CITY_SHAPEFILE_LOCATIONS = {
     "san-diego": {"location": "/tmp/neighborhood-data/san-diego/CommunityPlanningAreas/cmty_plan_datasd.shp","nhood_col": "cpname"},
     "baltimore": {"location": "/tmp/neighborhood-data/baltimore/neighborhoods/baltimore.shp","nhood_col": "Name"},
     "detroit": {"location": "/tmp/neighborhood-data/detroit/neighborhoods/detroit.shp", "nhood_col": "name"},
-    "louisville": {"location": "/tmp/neighborhood-data/louisville/neighborhoods/louisville.shp", "nhood_col": "NH_NAME"}
+    "louisville": {"location": "/tmp/neighborhood-data/louisville/neighborhoods/louisville.shp", "nhood_col": "NH_NAME"},
+    "new-york-city": {"location": "/tmp/neighborhood-data/new-york-city/nycd_22a/nycd.shp", "nhood_col": "BoroCD"},
+    "chicago": {"location": "/tmp/neighborhood-data/chicago/neighborhoods/geo_export_24517513-d42b-43b9-a525-49bfe729d213.shp", "nhood_col": "pri_neigh" }
     }
 
 
@@ -52,7 +54,35 @@ else:
 
 FCC_MERGED_DF = geopandas.read_file(FCC_MERGED_FILE)
 
-def merge_data(nhood_df, ctract_df, merged_df_path, nhood_col):
+
+def merge_function1(good_df, data_to_parse, nhood_df, nhood_col, threshold=.4):
+    '''
+    This function takes two parts of the merged data frame for a city, goes through the data_to_parse,
+    and matches duplicate census tracks to more exact neighborhoods by comparing the overlap of the neighborhood
+    with the census tract to a percentage of area of the census tract
+    '''
+    
+    unique_geo_ids = data_to_parse.drop_duplicates()['geoid']
+    
+    parsed_df = good_df.copy()
+
+    for geoid in unique_geo_ids:
+        # locate all rows with that geoid
+        c_tracts = data_to_parse.loc[data_to_parse['geoid'] == geoid]
+        
+        # go through and find census tracts within neighborhoods by threshold
+        clean_indexes = []
+        for index, ctract in c_tracts.iterrows():
+            curr_nhood = nhood_df.loc[nhood_df[nhood_col] == ctract[nhood_col]]
+            curr_intersection = curr_nhood['geometry'].buffer(0).intersection(ctract['geometry'].buffer(0))
+            if not curr_intersection.area.empty:
+                if (curr_intersection.area / ctract['geometry'].area).iloc[0] >= threshold:
+                    parsed_df = parsed_df.append(ctract, ignore_index = True)
+    
+    return parsed_df
+    
+
+def merge_data(nhood_df, ctract_df, nhood_col,  merged_df_path):
     '''
     This function takes the neighborhood data and census level data, merges them, and writes
     the merged df to a specified file location.
@@ -65,16 +95,28 @@ def merge_data(nhood_df, ctract_df, merged_df_path, nhood_col):
     Returns:
       merged_df: merged dataframe, which this functions saves as csv to file location
     '''
+    
+    # get neighborhoods into correct crs
+    nhood_df = nhood_df.to_crs({'proj':'longlat', 'ellps':'WGS84', 'datum':'WGS84'})
+    
     # should work if geographies are in the same format
     print("Neighborhoods before merge: " + str(len(set(nhood_df[nhood_col]))))
     merged_df = geopandas.sjoin(ctract_df, nhood_df, how="inner", op='intersects')
     print("Neighborhoods after merge: " + str(len(set(merged_df[nhood_col]))))
     merged_df.to_file(merged_df_path, driver="GeoJSON")
+    
+    # CALL TO MERGE FUNCTIONS
+    clean_df = merged_df.drop_duplicates(subset='geoid', keep=False)
+    data_to_parse = merged_df.iloc[[i for i, val in enumerate(merged_df.duplicated(subset='geoid', keep=False)) if val]]
+    merged_df_clean = merge_function1(clean_df, data_to_parse, nhood_df, nhood_col)
+    merged_df_clean_path = merged_df_path[:-8] + '-cleaned.geojson'
+    merged_df_clean.to_file(merged_df_clean_path, driver="GeoJSON")
+    
     print("Population before merge: " + str(sum(merged_df.drop_duplicates(subset='geometry')['population'])))
-    print("Population after merge: " + str(sum(merged_df['population'])))
-    return merged_df.copy()
-    # if not we may need to change the crs of the neighborhood data
-    # using: nhood_df.to_crs({'proj':'longlat', 'ellps':'WGS84', 'datum':'WGS84'})
+    print("Population after merge, with duplicates: " + str(sum(merged_df['population'])))
+    print("Population after merge, cleaned: " + str(sum(merged_df_clean['population'])))
+    return merged_df.copy(), merged_df_clean.copy()
+
         
 def get_nhood_avgs_nodups(city_df, city_fcc_df, nhood_col):
     '''
@@ -253,6 +295,7 @@ def plot_boxplots(city_fcc_df, nhood_col, title):
 def generate_dataframe_and_plots( city_name_str = None):
 
     return_dict = {}
+    return_dict_clean = {}
 
     if city_name_str is not None:
         city_name_list = [city_name_str]    
@@ -260,27 +303,37 @@ def generate_dataframe_and_plots( city_name_str = None):
         city_name_list = GOOD_CITY_LIST
 
     standard_city_dataframes = []
+    standard_city_dataframes_clean = []
     for idx, city in enumerate( city_name_list):
         print(f"Running {city}, {idx} of {len(city_name_list)}")
         city_shapefile_df = geopandas.read_file(GOOD_CITY_SHAPEFILE_LOCATIONS[city]["location"])
         city_shapefile_df = city_shapefile_df.to_crs({'proj':'longlat', 'ellps':'WGS84', 'datum':'WGS84'})
 
-        city_fcc_merged_df = merge_data(city_shapefile_df, FCC_MERGED_DF, f"/tmp/neighborhood-data/{city}/city-merged.geojson", GOOD_CITY_SHAPEFILE_LOCATIONS[city]["nhood_col"])
+        city_fcc_merged_df, city_fcc_merged_df_cleaned = merge_data(city_shapefile_df, FCC_MERGED_DF, GOOD_CITY_SHAPEFILE_LOCATIONS[city]["nhood_col"], f"/tmp/neighborhood-data/{city}/city-merged.geojson")
 
         return_dict[city] = city_fcc_merged_df
+        return_dict_clean[city] = city_fcc_merged_df_cleaned
         so.simple_map(city_fcc_merged_df.drop_duplicates(subset='geometry'), 'f_broadband', 'geoid', f"{city.title()} broadband by census tract", output_file_name=f"/tmp/visualizations/{city}-census.png")
+        so.simple_map(city_fcc_merged_df_cleaned.drop_duplicates(subset='geometry'), 'f_broadband', 'geoid', f"{city.title()} broadband by census tract (cleaned)", output_file_name=f"/tmp/visualizations/{city}-census-cleaned.png")
         
         ## create standard_df and produce neighborhood plots
         standard_city_df = standard_city_data(city, city_shapefile_df, city_fcc_merged_df, GOOD_CITY_SHAPEFILE_LOCATIONS[city]["nhood_col"])
         standard_city_dataframes.append(standard_city_df)
         
+        standard_city_df_cleaned = standard_city_data(city, city_shapefile_df, city_fcc_merged_df_cleaned, GOOD_CITY_SHAPEFILE_LOCATIONS[city]["nhood_col"])
+        standard_city_dataframes_clean.append(standard_city_df_cleaned)
+        
         so.simple_map(geopandas.GeoDataFrame(standard_city_df), '% Broadband Access', 'Neighborhood Name', f'{city.title()} broadband by Neighborhood Boundary', f"/tmp/visualizations/{city}-neighborhood.png")
+        so.simple_map(geopandas.GeoDataFrame(standard_city_df_cleaned), '% Broadband Access', 'Neighborhood Name', f'{city.title()} broadband by Neighborhood Boundary (cleaned)', f"/tmp/visualizations/{city}-neighborhood-cleaned.png")
         
         print("\n")
      
     
     std_neighborhood_df = pd.concat(standard_city_dataframes)
     std_neighborhood_df.to_csv("/tmp/data/standard_neighborhood_df.csv")
+    
+    std_neighborhood_df_cleaned = pd.concat(standard_city_dataframes_cleaned)
+    std_neighborhood_df_cleaned.to_csv("/tmp/data/standard_neighborhood_df_cleaned.csv")
         
        
 
