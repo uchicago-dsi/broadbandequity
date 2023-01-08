@@ -10,6 +10,12 @@ Authors: Lena Diasti, Drew Keller, Amy Maldonado, Nick Ross (Autumn 2022)
 
 ---
 
+### Winter 2023
+
+Victoria Kielb vkielb@uchicago.edu
+
+---
+
 #### Deliverables Autumn 2022
 
 We are looking to build a set of jupyter notebooks which generate maps, similar to what was produced last year, for the specified metro areas to demonstrate the extent of internet equity. These notebooks should rely on a standardized set of libraries (to also be written) which avoid code repetition as well as use docker for code reproducibility purposes.
