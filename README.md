@@ -1,5 +1,8 @@
 # broadbandequity
 
+### Winter 2023
+People: Maia Boyd mboyd6@uchicago.edu
+
 This repository contains the datasets and codebooks used in the City of Chicago Broadband Equity Project from the Data Science Clinic (Winter 2022). Additional work was also done during the Autumn 2022 Quarter.
 
 Authors: Lena Diasti, Drew Keller, Amy Maldonado, Nick Ross (Autumn 2022)
