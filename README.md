@@ -102,7 +102,14 @@ We fetched our data for analysis from the following sources:
  * [Data](#data)
  * [Data Pipeline](#data-pipeline) 
  * [Geo](#geo)
+ * [Internet Access Map](#internet-access-map)
+ * [Lib](#lib)
+ * [Neighborhood Data WIP](#neighborhood-data-wip)
+ * [Neighborhood Data](#neighborhood-data)
+ * [Notebooks](#notebooks)
+ * [Notes](#notes)
  * [Tests](#tests)
+ * [Visualizations](#visualizations)
  * [Additional Files](#additional-files)
  
 ---
@@ -132,6 +139,7 @@ This folder contains the raw and processed data used in our analysis.
 + [hardship_index.csv](data/hardship_index.csv) is a csv of the hardship scores.
 + [fcc_acs_combined_community_areas](data/fcc_acs_combined_community_areas) and [fcc_acs_combined_tracts](data/fcc_acs_combined_tracts) are csvs containing combined ACS and FCC data at a community area and tract level, respectively.
 + [chicago_block_list.csv](data/chicago_block_list.csv) is a csv containing a list of 2010s Chicago Census block numbers.
++ [standard_neighborhood_df.csv](data/standard_neighborhood_df.csv) is a dataframe containing all fcc data at the neighborhood letter. It has the following attributes: City Name, Neighborhood Name, Number of Census Tracts, Population, Households, Neighborhood Size, % Black, % Hispanic, % >25 College Degree, Avg household income, % Broadband Access, % > 100MB Access, Devices per capita, geometry
 
 Note: _Raw_ FCC Form 477 data is not included in the repository due to size (`chi_fcc.csv` is .gitignore'd). Please see the code cells at the beginning of [fcc_analysis.ipynb](analysis/fcc_analysis.ipynb) to fetch, filter, and write `chi_fcc.csv` locally.
 
@@ -161,6 +169,30 @@ This folder contains shapefiles for spatial analysis.
 
 ---
 
+#### Internet Access Map
+
+---
+
+#### Lib
+
+---
+
+#### Neighborhood Data WIP
+
+---
+
+#### Neighborhood Data
+
+---
+
+#### Notebooks
+
+---
+
+#### Notes
+
+---
+
 #### Tests
 
 This folder contains notebooks and shapefiles to validate areal interpolation.
@@ -168,6 +200,10 @@ This folder contains notebooks and shapefiles to validate areal interpolation.
 + [spatial_operations_validation.ipynb](tests/spatial_operations_validation.ipynb) is a notebook demonstrating that our areal interpolation functions produce extensive and intensive statistics similar to known values.
 + [tract_validation_and_masking.ipynb](tests/tract_validation_and_masking.ipynb) is a notebook previously used to mask tract boundaries, removing a duplicated tract number (specifically, the tract of O'Hare community area that lies in DuPage County). It no longer fully functions now that we have made the change, but we are retaining it in the repository for documentation purposes.
 + [validation_data](tests/validation_data) is a csv with community-area population estimates to validate areal interpolation.
+
+---
+
+#### Visualizations
 
 ---
 
