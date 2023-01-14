@@ -171,17 +171,57 @@ This folder contains shapefiles for spatial analysis.
 
 #### Internet Access Map
 
+This folder contains code to download FCC Form 477 data, Ookla performance data, and ACS data and merge them into on national dataset at the census tract level for Chicago. It also contains a code to create a simple website with a map displaying the integrated dataset.
+
 ---
 
 #### Lib
+
+This folder contains the libraries for the pipeline to standardize the census data from different cities. It contains the following files:
++ [standard_dataframe.py](lib/standard_dataframe.py) is code that takes the neighborhood shapefiles for different cities and merges it with the fcc data to produce Geospatial visualizations and a standard dataframe.
 
 ---
 
 #### Neighborhood Data WIP
 
+This folder contains the neighborhood geojson and/or shapefiles that were not fit for analysis. These files were incomplete, inaccurate, or had noise. The cities that were not included in the neighborhood-level standard dataframe (and thus need further inspection are):
++ Albuquerque
++ Bston
++ Charlotte
++ El Paso
++ Jacksonville
++ Las Vegas
++ Memphis
++ Milwaukee
++ Nashville
++ New York City
++ Philadelphia
++ San Antonio
+
 ---
 
 #### Neighborhood Data
+
+This folder contains the neighborhood geojson and/or shapefiles that were used in the analysis. The cities included in the analysis are:
++ Austin
++ Baltimore
++ Boston
++ Chicago
++ Dallas
++ Denver
++ Detroit
++ Houston
++ Indianapolis
++ Los Angeles
++ Louisville
++ New York City
++ Phoenix
++ Portland
++ San Diego
++ San Francisco
++ San Jose
++ Seattle
++ Washington, D.C.
 
 ---
 
