@@ -77,7 +77,11 @@ Once installed, access modules from the main directory via relative imports - fo
 
 #### Notes
 
-There are note in the notes subdirectory. These notes are not on the technical aspect, but on the research and decision-making part of the project.
+There are note in the notes subdirectory. These notes are not on the technical aspect, but on the research and decision-making part of the project. This folder contain notes on the Broadband Equity Data Science Clinic Project. It contains the following:
++ [Planning Notes](planning-notes) is a folder that contains planning notes taken over the course of the two quarters
++ [Frequently Asked Questions](faq.md) is a file that contains frequently asked questions that aid in the understanding of the analysis work
++ [Data Description and EDA](Data-description-and-EDA.md) is a file that contains information on how the data was gathered and the exploratory data analysis that was performed.
++ [Project Goals Winter 2023](goals-w23.md) is a file containing the goals for the Data Science Clinic Project Winter 2023 cohort
 
 #### Sources
 
@@ -227,16 +231,19 @@ This folder contains the neighborhood geojson and/or shapefiles that were used i
 
 #### Notebooks
 
-This folder contains notebooks for use in the broadband equity project.  These were created during Fall 2022 and Winter 2023. Each notebook contains information on running the code within it to reproduce the analysis, dataframes, and visualizations.
+This folder contains notebooks for use in the broadband equity project.  These were created during Fall 2022 and Winter 2023. Each notebook contains information on running the code within it to reproduce the analysis, dataframes, and visualizations. It contains the following:
++ [Work In Progress Folder](notebooks/wip): This folder contains code used by participants in the Data Science Clinic. It is not cleaned and is kept for archival purposes
++ [Inequality Measures](inequality_measures.ipynb): This notebook computes and produces inequality measures for each city from the standard dataframes.
++ [Neighborhood Boxplots](neighborhood_boxplots.ipynb): This notebook produces boxplots showing the range of neighborhood-level broadband access for each city
++ [Standard Dataframe Notebook](standard_df_notebook.ipynb): This notebook goes through how to run the standard_dataframe.py library and produce geospatial visualizations as well as standard dataframes.
 
----
 
-#### Notes
 
-This folder contain notes on the Broadband Equity Data Science Clinic Project. It contains the following:
-+ [Planning Notes](notes/planning-notes) is a folder that contains planning notes taken over the course of the two quarters
-+ [Frequently Asked Questions](faq.md) is a file that contains frequently asked questions that aid in the understanding of the analysis work
-+ [Data Description and EDA](notes/Data-description-and-EDA.md) is a file that contains information on how the data was gathered and the exploratory data analysis that was performed.
+inequality_measures.ipynb
+
+neighborhood_boxplots.ipynb
+
+standard_df_notebook.ipynb
 
 ---
 
