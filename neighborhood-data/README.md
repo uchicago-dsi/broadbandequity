@@ -19,4 +19,4 @@ This folder contains the neighborhood geojson and/or shapefiles that were used i
 + Seattle
 + Washington, D.C.
 
-More information on how the data was gathered can be found in the "notes" folder of the repository.
+More information on how the data was gathered can be found in the "notes" folder of the repository. Data sources can be found listed in each city's respective folder.
