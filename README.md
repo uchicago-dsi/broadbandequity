@@ -227,9 +227,16 @@ This folder contains the neighborhood geojson and/or shapefiles that were used i
 
 #### Notebooks
 
+This folder contains notebooks for use in the broadband equity project.  These were created during Fall 2022 and Winter 2023. Each notebook contains information on running the code within it to reproduce the analysis, dataframes, and visualizations.
+
 ---
 
 #### Notes
+
+This folder contain notes on the Broadband Equity Data Science Clinic Project. It contains the following:
++ [Planning Notes](notes/planning-notes) is a folder that contains planning notes taken over the course of the two quarters
++ [Frequently Asked Questions](faq.md) is a file that contains frequently asked questions that aid in the understanding of the analysis work
++ [Data Description and EDA](notes/Data-description-and-EDA.md) is a file that contains information on how the data was gathered and the exploratory data analysis that was performed.
 
 ---
 
@@ -244,6 +251,13 @@ This folder contains notebooks and shapefiles to validate areal interpolation.
 ---
 
 #### Visualizations
+
+This folder contains visualizations produced by our libraries. We have the following types of visualizations:
++ [Boxplot Visualizations](visualizations/boxplot_visualizations): This folder contains boxplots showing the range of broadband adoption at the neighborhood level within cities
++ "City-census-cleaned.png": Contains geospatial visualization for broadband access for a given city at the census tract level, controlling for overlap duplication
++ "City-census.png": Contains geospatial visualization for broadband access for a given city at the census tract level, with no control for overlap duplication
++ "City-neighborhood-cleaned.png": Contains geospatial visualization for broadband access for a given city at the neighborhood boundary level, controlling for overlap duplication
++ "City-neighborhood.png": Contains geospatial visualization for broadband access for a given city at the census tract level, with no control for overlap duplication
 
 ---
 
