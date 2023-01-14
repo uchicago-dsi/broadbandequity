@@ -10,24 +10,34 @@ Authors: Lena Diasti, Drew Keller, Amy Maldonado, Nick Ross (Autumn 2022)
 
 ---
 
-### Winter 2023
+#### Deliverables Winter 2023
 
-Kaya Borlase borlasekn@uchicago.edu
+We are looking to build a set of jupyter notebooks to generate maps for the specified metro areas. We are looking to move beyond description and look at association/causal inference analysis. We want to connect our data to sociodemographic factors and use multi-level modeling. We also want to build the pipeline to include data at the neighborhood as well as census tract. This code should be standardized, generalizeable, and reproducible. For that reason, we will use docker.
 
 
+People Winter 2023:
++ Kaya Borlase borlasekn@uchicago.edu
++ Brendon Krall bkrall36@uchicago.edu
++ Victoria Kielb vkielb@uchicago.edu
++ Maia Boyd mboyd6@uchicago.edu
+
+Mentor: James Turk
+
+TA: Kenia Godinez Nogueda
+
+---
 
 #### Deliverables Autumn 2022
 
 We are looking to build a set of jupyter notebooks which generate maps, similar to what was produced last year, for the specified metro areas to demonstrate the extent of internet equity. These notebooks should rely on a standardized set of libraries (to also be written) which avoid code repetition as well as use docker for code reproducibility purposes.
 
 People Autumn 2022:
-
-Sam Pavlekovsky spavlekovsky@uchicago.edu
-Maia Boyd mboyd6@uchicago.edu
-Bruno Xie brunoxie@uchicago.edu
-Christelle Inema inema@uchicago.edu
-Kaya Borlase borlasekn@uchicago.edu
-Kamran Ahmed kamranahmed@uchicago.edu
++ Sam Pavlekovsky spavlekovsky@uchicago.edu
++ Maia Boyd mboyd6@uchicago.edu
++ Bruno Xie brunoxie@uchicago.edu
++ Christelle Inema inema@uchicago.edu
++ Kaya Borlase borlasekn@uchicago.edu
++ Kamran Ahmed kamranahmed@uchicago.edu
 
 Mentors: Evelyn Campbelle and Nick Ross
 
