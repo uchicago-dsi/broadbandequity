@@ -26,3 +26,7 @@
   + Given that convention is to report the major “race” groups as white, black, Hispanic, Asian, American Indian, and other, it is necessary to process and report the data as: “Hispanic (of any race);” “non-Hispanic white,” “non-Hispanic black,” “non-Hispanic Asian,” etc.
   + It is also now possible to choose more than one race category, so that could be “non-Hispanic two or more races.”
 + I believe that the existing dataset on the portal does not separate out “Hispanic” from “non-Hispanic” in the various racial groups as noted in #3. So the students would need to make that change before using that codebase for the clinic project. This was done correctly for the spring clinic project in Chicago.
+
+----
+
+#### Tabled Questions
