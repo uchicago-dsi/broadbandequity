@@ -196,24 +196,6 @@ This folder contains the libraries for the pipeline to standardize the census da
 
 ---
 
-#### Neighborhood Data WIP
-
-This folder contains the neighborhood geojson and/or shapefiles that were not fit for analysis. These files were incomplete, inaccurate, or had noise. The cities that were not included in the neighborhood-level standard dataframe (and thus need further inspection are):
-+ Albuquerque
-+ Bston
-+ Charlotte
-+ El Paso
-+ Jacksonville
-+ Las Vegas
-+ Memphis
-+ Milwaukee
-+ Nashville
-+ New York City
-+ Philadelphia
-+ San Antonio
-
----
-
 #### Neighborhood Data
 
 This folder contains the neighborhood geojson and/or shapefiles that were used in the analysis. The cities included in the analysis are:
@@ -236,6 +218,24 @@ This folder contains the neighborhood geojson and/or shapefiles that were used i
 + San Jose
 + Seattle
 + Washington, D.C.
+
+---
+
+#### Neighborhood Data WIP
+
+This folder contains the neighborhood geojson and/or shapefiles that were not fit for analysis. These files were incomplete, inaccurate, or had noise. The cities that were not included in the neighborhood-level standard dataframe (and thus need further inspection are):
++ Albuquerque
++ Bston
++ Charlotte
++ El Paso
++ Jacksonville
++ Las Vegas
++ Memphis
++ Milwaukee
++ Nashville
++ New York City
++ Philadelphia
++ San Antonio
 
 ---
 
