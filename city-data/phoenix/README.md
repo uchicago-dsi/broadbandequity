@@ -1,7 +1,7 @@
 # Overview 
 
-- City Name: New York City
-- State: NY
+- City Name: Phoenix
+- State: AZ
 - Person: Victoria Kielb
 
 --- 
