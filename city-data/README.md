@@ -1,7 +1,7 @@
 This folder contains the city geojson and/or shapefiles that were used in the analysis. The cities included in the analysis are:
 
-Austin
-Baltimore
+- Austin
+- Baltimore
 Boston
 Chicago
 Dallas
