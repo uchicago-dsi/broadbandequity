@@ -1,8 +1,8 @@
 # Overview 
 
-City Name: Seattle
-State: WA
-Person: Victoria Kielb
+- City Name: Seattle
+- State: WA
+- Person: Victoria Kielb
 
 --- 
 
