@@ -4,6 +4,6 @@
 
 #### Data Info
 
-+ Source: [NYC Open Data](https://data.cityofnewyork.us/City-Government/Borough-Boundaries/tqmj-j8zm)
-+ Last Updated: December 2022
-+ This shapefile contains boundaries for the five boroughs in NYC. Together, these boundaries make up the entirety of the city.
++ Source: [City of Chicago](https://data.cityofchicago.org/Facilities-Geographic-Boundaries/Boundaries-City/ewy2-6yfk)
++ Last Updated: June 2017
+
