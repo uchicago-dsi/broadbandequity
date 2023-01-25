@@ -1,6 +1,6 @@
 This folder contains the city geojson and/or shapefiles that were used in the analysis. The cities included in the analysis are:
 
-- Austin
+- Austin (*)
 - Baltimore
 - Boston
 - Chicago
@@ -15,7 +15,7 @@ This folder contains the city geojson and/or shapefiles that were used in the an
 - Phoenix
 - Portland
 - San Diego
-- San Francisco
+- San Francisco (*)
 - San Jose
 - Seattle
 - Washington, D.C.
