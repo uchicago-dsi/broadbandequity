@@ -225,7 +225,6 @@ This folder contains the neighborhood geojson and/or shapefiles that were used i
 
 This folder contains the neighborhood geojson and/or shapefiles that were not fit for analysis. These files were incomplete, inaccurate, or had noise. The cities that were not included in the neighborhood-level standard dataframe (and thus need further inspection are):
 + Albuquerque
-+ Bston
 + Charlotte
 + El Paso
 + Jacksonville
@@ -233,7 +232,6 @@ This folder contains the neighborhood geojson and/or shapefiles that were not fi
 + Memphis
 + Milwaukee
 + Nashville
-+ New York City
 + Philadelphia
 + San Antonio
 
