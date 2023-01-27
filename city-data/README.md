@@ -1,19 +1,23 @@
 This folder contains the city geojson and/or shapefiles that were used in the analysis. The cities included in the analysis are:
 
-- Austin*
+- Austin
 - Baltimore
 - Boston
 - Chicago
 - Dallas
 - Denver
 - Detroit
+- El Paso
 - Houston
 - Indianapolis
 - Los Angeles
 - Louisville
+- Memphis
 - New York City
+- Philadelphia
 - Phoenix
 - Portland
+- San Antonio
 - San Diego
 - San Francisco*
 - San Jose
