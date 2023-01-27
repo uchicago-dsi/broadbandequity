@@ -17,14 +17,17 @@ import data_pipeline.spatial_operations as so
 
 ### use glob to create a list of cities which are in the neighborhoo-data directory
 #GOOD_CITY_LIST = [x.split('/')[2] for x in glob.glob('../city-data/*/')]
-GOOD_CITY_LIST = ['chicago', 'louisville','phoenix','portland','san-jose','seattle','washington-dc']
+GOOD_CITY_LIST = ['chicago', 'los-angeles','louisville','new-york-city','phoenix','portland','san-diego','san-jose','seattle','washington-dc']
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
     "chicago": { "location" : "/tmp/city-data/chicago/chicago_boundaries.shp", "state": "illinois"},
+    "los-angeles": { "location" : "/tmp/city-data/los-angeles/los-angeles-boundaries/los-angeles-boundaries.shp", "state": "california"},
     "louisville": { "location" : "/tmp/city-data/louisville/louisville boundaries/louisville_boundaries.shp", "state": "kentucky"},
+    "new-york-city": { "location" : "/tmp/city-data/new-york-city/nyc borough boundaries/nyc borough boundaries.shp", "state": "new york"},
     "phoenix": { "location" : "/tmp/city-data/phoenix/phoenix boundaries/phoenix boundaries.shp", "state": "arizona"},
     "portland": { "location" : "/tmp/city-data/portland/portland-boundaries/portland-boundaries.shp", "state": "oregon"},
+    "san-diego": { "location" : "/tmp/city-data/san-diego/san-diego-boundaries/san-diego-boundaries.shp", "state": "california"},
     "san-jose": { "location" : "/tmp/city-data/san-jose/san-jose-boundaries/san-jose-boundaries.shp", "state": "california"},
-    "seattle": { "location" : "/tmp/city-data/seattle/seattle-boundaries/seattle-boundaries.shp", "state": "washington"},
+    "seattle": { "location" : "/tmp/city-data/seattle/seattle-boundaries/seattle-boundaries-v3.shp", "state": "washington"},
     "washington-dc": { "location" : "/tmp/city-data/washington-dc/washington-dc-boundaries/washington-dc-boundaries.shp", "state": "district of columbia"},
     
 }
