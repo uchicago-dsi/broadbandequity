@@ -7,7 +7,7 @@
 ---
 1. Where you found the data?
 
-I found the data on the [Analyze Boston website](https://data.boston.gov/dataset/city-of-boston-boundary/)., the City of Boston's open data hub. 
+I found the data on the [Analyze Boston website](https://data.boston.gov/dataset/city-of-boston-boundary/) , the City of Boston's open data hub. 
 
 2. Are there any issues that you notice?
 
