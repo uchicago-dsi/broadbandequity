@@ -17,3 +17,5 @@ Topological Faces (Polygons With All Geocodes) County-based Shapefile
 3. Who made the data?
 
 The U.S. Census Bureau Department of Commerce.
+
+To explore shapefiles provided by the City of Baltimore go [here](https://planning.baltimorecity.gov/maps-data/gis/).
