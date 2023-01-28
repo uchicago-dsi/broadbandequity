@@ -18,8 +18,10 @@ The shapefile includes the jurisdiction outline for the City of Memphis, located
 
 The City of Memphis.
 
-## Details (Updated shapefile - VK)
 ---
-- + Source: [State of Tennessee STS GIS Downloadable Data](https://tn-tnmap.opendata.arcgis.com/datasets/cf079cf338ab4910ab7765da40a11a06/explore?filters=eyJOQU1FIjpbIk1lbXBoaXMiXX0%3D&location=35.169302%2C-88.996469%2C8.75)
+
+## Details (Updated shapefile - VK)
+
++ Source: [State of Tennessee STS GIS Downloadable Data](https://tn-tnmap.opendata.arcgis.com/datasets/cf079cf338ab4910ab7765da40a11a06/explore?filters=eyJOQU1FIjpbIk1lbXBoaXMiXX0%3D&location=35.169302%2C-88.996469%2C8.75)
 + Last Updated: October 2018
 + This shapefile originally contained the boundaries of each city in Tennessee. I filtered the data to only include Memphis boundaries. 
