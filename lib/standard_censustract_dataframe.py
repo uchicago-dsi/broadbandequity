@@ -9,6 +9,7 @@ import pandas as pd
 import math
 import statistics
 import matplotlib.pyplot as plt
+import contextily as cx
 import zipfile
 import glob
 warnings.filterwarnings('ignore')
@@ -17,10 +18,18 @@ import data_pipeline.spatial_operations as so
 
 ### use glob to create a list of cities which are in the neighborhoo-data directory
 #GOOD_CITY_LIST = [x.split('/')[2] for x in glob.glob('../city-data/*/')]
-GOOD_CITY_LIST = ['chicago']
+GOOD_CITY_LIST = ['chicago', 'los-angeles','louisville','new-york-city','phoenix','portland','san-diego','san-jose','seattle']
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
-    "chicago": { "location" : "/tmp/city-data/chicago/chicago_boundaries.shp", "state": "illinois"},
-    }
+    "chicago": { "location" : "/tmp/city-data/chicago/chicago-boundaries/chicago_boundaries.shp", "state": "illinois"},
+    "los-angeles": { "location" : "/tmp/city-data/los-angeles/los-angeles-boundaries/los-angeles-boundaries.shp", "state": "california"},
+    "louisville": { "location" : "/tmp/city-data/louisville/louisville boundaries/louisville_boundaries.shp", "state": "kentucky"},
+    "new-york-city": { "location" : "/tmp/city-data/new-york-city/nyc borough boundaries/nyc borough boundaries.shp", "state": "new-york"},
+    "phoenix": { "location" : "/tmp/city-data/phoenix/phoenix boundaries/phoenix boundaries.shp", "state": "arizona"},
+    "portland": { "location" : "/tmp/city-data/portland/portland-boundaries/portland-boundaries.shp", "state": "oregon"},
+    "san-diego": { "location" : "/tmp/city-data/san-diego/san-diego-boundaries/san-diego-boundaries.shp", "state": "california"},
+    "san-jose": { "location" : "/tmp/city-data/san-jose/san-jose-boundaries/san-jose-boundaries.shp", "state": "california"},
+    "seattle": { "location" : "/tmp/city-data/seattle/seattle-boundaries/seattle-boundaries-v3.shp", "state": "washington"},    
+}
 
 
 #if len( [x for x in GOOD_CITY_LIST if x not in GOOD_CITY_SHAPEFILE_LOCATIONS.keys()] ) > 0:
@@ -57,6 +66,7 @@ def merge_data(city_df, ctract_df,  merged_df_path):
     
     # should work if geographies are in the same format
     merged_df = geopandas.sjoin(ctract_df, city_df, how="inner", op='intersects')
+    merged_df = merged_df.drop_duplicates(subset='GEOID', keep=False)
     merged_df.to_file(merged_df_path, driver="GeoJSON")
     
     return merged_df.copy()
@@ -178,6 +188,7 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
         # produce plot
         ### so.simple_map(city_fcc_merged_df.drop_duplicates(subset='geometry'), 'f_broadband', 'geoid', f"{city.title()} broadband by census tract", output_file_name=f"/tmp/visualizations/{city}-census.png")                 
         city_tiger_vis = city_tiger_merge.plot(figsize=(10, 10), alpha=0.5, edgecolor='k')
+        cx.add_basemap(city_tiger_vis, crs=city_tiger_merge.crs, source=cx.providers.Stamen.TonerLite, zoom=12)
 
         print("\n")
      
