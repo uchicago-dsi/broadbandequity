@@ -17,7 +17,7 @@ import data_pipeline.spatial_operations as so
 
 ### use glob to create a list of cities which are in the neighborhoo-data directory
 #GOOD_CITY_LIST = [x.split('/')[2] for x in glob.glob('../city-data/*/')]
-GOOD_CITY_LIST = ['austin', 'baltimore', 'boston', 'chicago', 'dallas', 'denver', 'detroit', 'el-paso', 'houston', 'indianapolos', 'los-angeles','louisville','new-york-city','phoenix','portland','san-antonio', 'san-diego','san-jose','seattle','washington-dc']
+GOOD_CITY_LIST = ['austin', 'baltimore', 'boston', 'chicago', 'dallas', 'denver', 'detroit', 'el-paso', 'houston', 'indianapolis', 'los-angeles','louisville','new-york-city','phoenix','portland','san-antonio', 'san-diego','san-jose','seattle','washington-dc']
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
     "austin": { "location" : "/tmp/city-data/austin/texas-boundaries/Cities.shp", "state": "texas"},
     "baltimore": { "location" : "/tmp/city-data/baltimore/baltimore-boundaries/tl_2019_24510_faces.shp", "state": "maryland"},
