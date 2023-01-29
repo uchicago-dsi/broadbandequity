@@ -18,9 +18,14 @@ import data_pipeline.spatial_operations as so
 
 ### use glob to create a list of cities which are in the neighborhoo-data directory
 #GOOD_CITY_LIST = [x.split('/')[2] for x in glob.glob('../city-data/*/')]
-GOOD_CITY_LIST = ['chicago', 'los-angeles','louisville','new-york-city','phoenix','portland','san-diego','san-jose','seattle']
+GOOD_CITY_LIST = [ 'boston', 'chicago', 'denver', 'detroit', 'houston', 'indianapolis', 'los-angeles', 'louisville','new-york-city','phoenix','portland','san-diego','san-jose','seattle','washington-dc']
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
+    "boston": { "location" : "/tmp/city-data/boston/boston-boundaries/City_of_Boston_Boundary.shp", "state": "massachussetts"},
     "chicago": { "location" : "/tmp/city-data/chicago/chicago-boundaries/chicago_boundaries.shp", "state": "illinois"},
+    "denver": { "location" : "/tmp/city-data/denver/denver-boundaries/county_boundary.shp", "state": "colorado"},
+    "detroit": { "location" : "/tmp/city-data/detroit/detroit-boundaries/City_of_Detroit_Boundary.shp", "state": "michigan"},
+    "houston": { "location" : "/tmp/city-data/houston/houston-boundaries/City_of_Houston_City_Limits_(Full_and_Limited_Purpose_Areas).shp", "state": "texas"},
+    "indianapolis": { "location" : "/tmp/city-data/indianapolis/indianapolis-boundaries/Cities_and_Towns.shp", "state": "indiana"},
     "los-angeles": { "location" : "/tmp/city-data/los-angeles/los-angeles-boundaries/los-angeles-boundaries.shp", "state": "california"},
     "louisville": { "location" : "/tmp/city-data/louisville/louisville boundaries/louisville_boundaries.shp", "state": "kentucky"},
     "new-york-city": { "location" : "/tmp/city-data/new-york-city/nyc borough boundaries/nyc borough boundaries.shp", "state": "new-york"},
@@ -28,7 +33,7 @@ GOOD_CITY_SHAPEFILE_LOCATIONS = {
     "portland": { "location" : "/tmp/city-data/portland/portland-boundaries/portland-boundaries.shp", "state": "oregon"},
     "san-diego": { "location" : "/tmp/city-data/san-diego/san-diego-boundaries/san-diego-boundaries.shp", "state": "california"},
     "san-jose": { "location" : "/tmp/city-data/san-jose/san-jose-boundaries/san-jose-boundaries.shp", "state": "california"},
-    "seattle": { "location" : "/tmp/city-data/seattle/seattle-boundaries/seattle-boundaries-v3.shp", "state": "washington"},  
+    "seattle": { "location" : "/tmp/city-data/seattle/seattle-boundaries/seattle-boundaries-v3.shp", "state": "washington"},
     "washington-dc": { "location" : "/tmp/city-data/washington-dc/washington-dc-boundaries/washington-dc-boundaries.shp", "state": "dc"},
 }
 
@@ -177,7 +182,7 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
         # "middle merge"
         # read in state data:
         state = GOOD_CITY_SHAPEFILE_LOCATIONS[city]["state"]
-        state_tiger_shapefile_path = f"{state_tiger_path}/{state}/{state}.shp"
+        state_tiger_shapefile_path = f"{state_tiger_path}{state}/{state}.shp"
         state_tiger_data = geopandas.read_file(state_tiger_shapefile_path)
         city_tiger_merge = merge_data(city_shapefile_df, state_tiger_data, f"/tmp/city-data/{city}/city-tiger-merge.geojson")
         return_dict[city] = city_tiger_merge
