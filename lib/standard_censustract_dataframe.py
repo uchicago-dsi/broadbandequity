@@ -19,14 +19,14 @@ import data_pipeline.spatial_operations as so
 #GOOD_CITY_LIST = [x.split('/')[2] for x in glob.glob('../city-data/*/')]
 GOOD_CITY_LIST = ['austin', 'baltimore', 'boston', 'chicago', 'dallas', 'denver', 'detroit', 'el-paso', 'houston', 'indianapolis', 'los-angeles','louisville','new-york-city','phoenix','portland','san-antonio', 'san-diego','san-jose','seattle','washington-dc']
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
-    "austin": { "location" : "/tmp/city-data/austin/texas-boundaries/Cities.shp", "state": "texas"},
+    "austin": { "location" : "/tmp/city-data/austin/austin-boundaries/austin.shp", "state": "texas"},
     "baltimore": { "location" : "/tmp/city-data/baltimore/baltimore-boundaries/tl_2019_24510_faces.shp", "state": "maryland"},
     "boston": { "location" : "/tmp/city-data/boston/boston-boundaries/City_of_Boston_Boundary.shp", "state": "massachusetts"},
     "chicago": { "location" : "/tmp/city-data/chicago/chicago_boundaries.shp", "state": "illinois"},
-    "dallas": { "location" : "/tmp/city-data/dallas/texas-boundaries/Cities.shp", "state": "texas"},
+    "dallas": { "location" : "/tmp/city-data/dallas/dallas-boundaries/dallas.shp", "state": "texas"},
     "denver": { "location" : "/tmp/city-data/denver/denver-boundaries/county_boundary.shp", "state": "colorado"},
     "detroit": { "location" : "/tmp/city-data/detroit/detroit-boundaries/City_of_Detroit_Boundary.shp", "state": "michigan"},
-    "el-paso": { "location" : "/tmp/city-data/el-paso/texas-boundaries/Cities.shp", "state": "texas"},
+    "el-paso": { "location" : "/tmp/city-data/el-paso/el-paso-boundaries/el_paso.shp", "state": "texas"},
     "houston": { "location" : "/tmp/city-data/houston/houston-boundaries/City_of_Houston_City_Limits_(Full_and_Limited_Purpose_Areas).shp", "state": "texas"},
     "indianapolis": { "location" : "/tmp/city-data/indianapolis/indianapolis-boundaries/Cities_and_Towns.shp", "state": "indiana"},
     "los-angeles": { "location" : "/tmp/city-data/los-angeles/los-angeles-boundaries/los-angeles-boundaries.shp", "state": "california"},
@@ -34,7 +34,7 @@ GOOD_CITY_SHAPEFILE_LOCATIONS = {
     "new-york-city": { "location" : "/tmp/city-data/new-york-city/nyc borough boundaries/nyc borough boundaries.shp", "state": "new york"},
     "phoenix": { "location" : "/tmp/city-data/phoenix/phoenix boundaries/phoenix boundaries.shp", "state": "arizona"},
     "portland": { "location" : "/tmp/city-data/portland/portland-boundaries/portland-boundaries.shp", "state": "oregon"},
-    "san-antonio": { "location" : "/tmp/city-data/san-antonio/texas-boundaries/Cities.shp", "state": "texas"},
+    "san-antonio": { "location" : "/tmp/city-data/san-antonio/san-antonio-boundaries/san_antonio.shp", "state": "texas"},
     "san-diego": { "location" : "/tmp/city-data/san-diego/san-diego-boundaries/san-diego-boundaries.shp", "state": "california"},
     "san-jose": { "location" : "/tmp/city-data/san-jose/san-jose-boundaries/san-jose-boundaries.shp", "state": "california"},
     "seattle": { "location" : "/tmp/city-data/seattle/seattle-boundaries/seattle-boundaries-v3.shp", "state": "washington"},
