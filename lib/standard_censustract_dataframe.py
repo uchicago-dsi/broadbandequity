@@ -65,7 +65,7 @@ def merge_data(city_df, ctract_df,  merged_df_path):
     city_df = city_df.to_crs({'proj':'longlat', 'ellps':'WGS84', 'datum':'WGS84'})
     
     # should work if geographies are in the same format
-    merged_df = geopandas.sjoin(ctract_df, city_df, how="inner", op='intersects')
+    merged_df = geopandas.sjoin(ctract_df, city_df, how="inner", op='within')
     #merged_df = merged_df.drop_duplicates(subset='GEOID', keep=False)
     merged_df.to_file(merged_df_path, driver="GeoJSON")
     
@@ -166,7 +166,7 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
     state_tiger_path = f"/tmp/state-data/{year}/"
     
     for idx, city in enumerate( city_name_list):
-        print(f"Running {city}, {idx} of {len(city_name_list)}")
+        print(f"Running {city}, {idx+1} of {len(city_name_list)}")
         city_shapefile_df = geopandas.read_file(GOOD_CITY_SHAPEFILE_LOCATIONS[city]["location"])
         city_shapefile_df = city_shapefile_df.to_crs({'proj':'longlat', 'ellps':'WGS84', 'datum':'WGS84'})
 
@@ -187,8 +187,9 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
         
         # produce plot
         ### so.simple_map(city_fcc_merged_df.drop_duplicates(subset='geometry'), 'f_broadband', 'geoid', f"{city.title()} broadband by census tract", output_file_name=f"/tmp/visualizations/{city}-census.png")                 
-        city_tiger_vis = city_tiger_merge.plot(figsize=(10, 10), alpha=0.5, edgecolor='k')
+        city_tiger_vis = city_tiger_merge.plot(figsize=(10, 10), alpha=0.5, edgecolor='k', )
         cx.add_basemap(city_tiger_vis, crs=city_tiger_merge.crs, source=cx.providers.Stamen.TonerLite, zoom=12)
+        city_tiger_vis.set_title(f"{city} {year} TIGER merge visualization")
 
         print("\n")
      
