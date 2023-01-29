@@ -20,7 +20,7 @@ import data_pipeline.spatial_operations as so
 GOOD_CITY_LIST = ['austin', 'baltimore', 'boston', 'chicago', 'dallas', 'denver', 'detroit', 'el-paso', 'houston', 'indianapolis', 'los-angeles','louisville','new-york-city','phoenix','portland','san-antonio', 'san-diego','san-jose','seattle','washington-dc']
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
     "austin": { "location" : "/tmp/city-data/austin/austin-boundaries/austin.shp", "state": "texas"},
-    "baltimore": { "location" : "/tmp/city-data/baltimore/baltimore-boundaries/tl_2019_24510_faces.shp", "state": "maryland"},
+    "baltimore": { "location" : "/tmp/city-data/baltimore/baltimore-boundaries/baltimore.shp", "state": "maryland"},
     "boston": { "location" : "/tmp/city-data/boston/boston-boundaries/City_of_Boston_Boundary.shp", "state": "massachusetts"},
     "chicago": { "location" : "/tmp/city-data/chicago/chicago_boundaries.shp", "state": "illinois"},
     "dallas": { "location" : "/tmp/city-data/dallas/dallas-boundaries/dallas.shp", "state": "texas"},
