@@ -65,8 +65,8 @@ def merge_data(city_df, ctract_df,  merged_df_path):
     city_df = city_df.to_crs({'proj':'longlat', 'ellps':'WGS84', 'datum':'WGS84'})
     
     # should work if geographies are in the same format
-    merged_df = geopandas.sjoin(ctract_df, city_df, how="left", op='intersects')
-    merged_df = merged_df.drop_duplicates(subset='GEOID', keep=False)
+    merged_df = geopandas.sjoin(ctract_df, city_df, how="inner", op='intersects')
+    #merged_df = merged_df.drop_duplicates(subset='GEOID', keep=False)
     merged_df.to_file(merged_df_path, driver="GeoJSON")
     
     return merged_df.copy()
