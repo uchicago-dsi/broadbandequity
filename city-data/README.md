@@ -1,7 +1,6 @@
 This folder contains the city geojson and/or shapefiles that were used in the analysis. The cities included in the analysis are:
 
 - Austin
-- Baltimore
 - Boston
 - Chicago
 - Dallas
@@ -29,6 +28,7 @@ More information on how the data was gathered can be found in the "notes" folder
 
 This folder contains the city geojson and/or shapefiles that were used in the analysis. The WIP cities are:
 - Albuquerque
+- Baltimore
 - Charlotte
 - Jacksonville
 - Las Vegas
