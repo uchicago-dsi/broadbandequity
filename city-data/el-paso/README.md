@@ -11,7 +11,7 @@ I found the data on the Texas Department of Transportation [open data portal](ht
 
 2. Are there any issues that you notice?
 
-The shapefile includes all Texas cities and will need to be filtered to El Paso.  
+The shapefile included all Texas cities and needed to be filtered to El Paso. The El Paso shapefile used in this analysis was created from the Texas DoT masterfile.
 
 3. Who made the data?
 

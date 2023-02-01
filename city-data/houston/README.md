@@ -7,12 +7,12 @@
 ---
 1. Where you found the data?
 
-I found the data on the City of Houston's [Geographic Information System](https://cohgis-mycity.opendata.arcgis.com/datasets/f67fe01244ce4d60add8e99e8e2f3a8c/). 
+I found the data on the Texas Department of Transportation [open data portal](https://gis-txdot.opendata.arcgis.com/datasets/09cd5b6811c54857bd3856b5549e34f0_0/explore?location=30.921114%2C-100.168292%2C6.75/). 
 
 2. Are there any issues that you notice?
 
-The shapefile are the for the City of Houston "Houston City Limit."
+The shapefile included all Texas cities and needed to be filtered to Houston. The Houston shapefile used in this analysis was created from the Texas DoT masterfile.
 
 3. Who made the data?
 
-The City of Houston Geographic Information System (COHGIS).
+The Texas Department of Transportation made (powered by Esri).

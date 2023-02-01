@@ -10,18 +10,34 @@ Authors: Lena Diasti, Drew Keller, Amy Maldonado, Nick Ross (Autumn 2022)
 
 ---
 
+#### Deliverables Winter 2023
+
+We are looking to build a set of jupyter notebooks to generate maps for the specified metro areas. We are looking to move beyond description and look at association/causal inference analysis. We want to connect our data to sociodemographic factors and use multi-level modeling. We also want to build the pipeline to include data at the neighborhood as well as census tract. This code should be standardized, generalizeable, and reproducible. For that reason, we will use docker.
+
+
+People Winter 2023:
++ Kaya Borlase borlasekn@uchicago.edu
++ Brendon Krall bkrall36@uchicago.edu
++ Victoria Kielb vkielb@uchicago.edu
++ Maia Boyd mboyd6@uchicago.edu
+
+Mentor: James Turk
+
+TA: Kenia Godinez Nogueda
+
+---
+
 #### Deliverables Autumn 2022
 
 We are looking to build a set of jupyter notebooks which generate maps, similar to what was produced last year, for the specified metro areas to demonstrate the extent of internet equity. These notebooks should rely on a standardized set of libraries (to also be written) which avoid code repetition as well as use docker for code reproducibility purposes.
 
 People Autumn 2022:
-
-Sam Pavlekovsky spavlekovsky@uchicago.edu
-Maia Boyd mboyd6@uchicago.edu
-Bruno Xie brunoxie@uchicago.edu
-Christelle Inema inema@uchicago.edu
-Kaya Borlase borlasekn@uchicago.edu
-Kamran Ahmed kamranahmed@uchicago.edu
++ Sam Pavlekovsky spavlekovsky@uchicago.edu
++ Maia Boyd mboyd6@uchicago.edu
++ Bruno Xie brunoxie@uchicago.edu
++ Christelle Inema inema@uchicago.edu
++ Kaya Borlase borlasekn@uchicago.edu
++ Kamran Ahmed kamranahmed@uchicago.edu
 
 Mentors: Evelyn Campbelle and Nick Ross
 
@@ -71,7 +87,11 @@ Once installed, access modules from the main directory via relative imports - fo
 
 #### Notes
 
-There are note in the notes subdirectory. These notes are not on the technical aspect, but on the research and decision-making part of the project.
+There are note in the notes subdirectory. These notes are not on the technical aspect, but on the research and decision-making part of the project. This folder contain notes on the Broadband Equity Data Science Clinic Project. It contains the following:
++ [Planning Notes](planning-notes) is a folder that contains planning notes taken over the course of the two quarters
++ [Frequently Asked Questions](faq.md) is a file that contains frequently asked questions that aid in the understanding of the analysis work
++ [Data Description and EDA](Data-description-and-EDA.md) is a file that contains information on how the data was gathered and the exploratory data analysis that was performed.
++ [Project Goals Winter 2023](goals-w23.md) is a file containing the goals for the Data Science Clinic Project Winter 2023 cohort
 
 #### Sources
 
@@ -96,7 +116,14 @@ We fetched our data for analysis from the following sources:
  * [Data](#data)
  * [Data Pipeline](#data-pipeline) 
  * [Geo](#geo)
+ * [Internet Access Map](#internet-access-map)
+ * [Lib](#lib)
+ * [Neighborhood Data WIP](#neighborhood-data-wip)
+ * [Neighborhood Data](#neighborhood-data)
+ * [Notebooks](#notebooks)
+ * [Notes](#notes)
  * [Tests](#tests)
+ * [Visualizations](#visualizations)
  * [Additional Files](#additional-files)
  
 ---
@@ -126,6 +153,7 @@ This folder contains the raw and processed data used in our analysis.
 + [hardship_index.csv](data/hardship_index.csv) is a csv of the hardship scores.
 + [fcc_acs_combined_community_areas](data/fcc_acs_combined_community_areas) and [fcc_acs_combined_tracts](data/fcc_acs_combined_tracts) are csvs containing combined ACS and FCC data at a community area and tract level, respectively.
 + [chicago_block_list.csv](data/chicago_block_list.csv) is a csv containing a list of 2010s Chicago Census block numbers.
++ [standard_neighborhood_df.csv](data/standard_neighborhood_df.csv) is a dataframe containing all fcc data at the neighborhood letter. It has the following attributes: City Name, Neighborhood Name, Number of Census Tracts, Population, Households, Neighborhood Size, % Black, % Hispanic, % >25 College Degree, Avg household income, % Broadband Access, % > 100MB Access, Devices per capita, geometry
 
 Note: _Raw_ FCC Form 477 data is not included in the repository due to size (`chi_fcc.csv` is .gitignore'd). Please see the code cells at the beginning of [fcc_analysis.ipynb](analysis/fcc_analysis.ipynb) to fetch, filter, and write `chi_fcc.csv` locally.
 
@@ -155,6 +183,78 @@ This folder contains shapefiles for spatial analysis.
 
 ---
 
+#### Internet Access Map
+
+This folder contains code to download FCC Form 477 data, Ookla performance data, and ACS data and merge them into on national dataset at the census tract level for Chicago. It also contains a code to create a simple website with a map displaying the integrated dataset.
+
+---
+
+#### Lib
+
+This folder contains the libraries for the pipeline to standardize the census data from different cities. It contains the following files:
++ [standard_dataframe.py](lib/standard_dataframe.py) is code that takes the neighborhood shapefiles for different cities and merges it with the fcc data to produce Geospatial visualizations and a standard dataframe.
+
+---
+
+#### Neighborhood Data
+
+This folder contains the neighborhood geojson and/or shapefiles that were used in the analysis. The cities included in the analysis are:
++ Austin
++ Baltimore
++ Boston
++ Chicago
++ Dallas
++ Denver
++ Detroit
++ Houston
++ Indianapolis
++ Los Angeles
++ Louisville
++ New York City
++ Phoenix
++ Portland
++ San Diego
++ San Francisco
++ San Jose
++ Seattle
++ Washington, D.C.
+
+---
+
+#### Neighborhood Data WIP
+
+This folder contains the neighborhood geojson and/or shapefiles that were not fit for analysis. These files were incomplete, inaccurate, or had noise. The cities that were not included in the neighborhood-level standard dataframe (and thus need further inspection are):
++ Albuquerque
++ Charlotte
++ El Paso
++ Jacksonville
++ Las Vegas
++ Memphis
++ Milwaukee
++ Nashville
++ Philadelphia
++ San Antonio
+
+---
+
+#### Notebooks
+
+This folder contains notebooks for use in the broadband equity project.  These were created during Fall 2022 and Winter 2023. Each notebook contains information on running the code within it to reproduce the analysis, dataframes, and visualizations. It contains the following:
++ [Work In Progress Folder](notebooks/wip): This folder contains code used by participants in the Data Science Clinic. It is not cleaned and is kept for archival purposes
++ [Inequality Measures](inequality_measures.ipynb): This notebook computes and produces inequality measures for each city from the standard dataframes.
++ [Neighborhood Boxplots](neighborhood_boxplots.ipynb): This notebook produces boxplots showing the range of neighborhood-level broadband access for each city
++ [Standard Dataframe Notebook](standard_df_notebook.ipynb): This notebook goes through how to run the standard_dataframe.py library and produce geospatial visualizations as well as standard dataframes.
+
+
+
+inequality_measures.ipynb
+
+neighborhood_boxplots.ipynb
+
+standard_df_notebook.ipynb
+
+---
+
 #### Tests
 
 This folder contains notebooks and shapefiles to validate areal interpolation.
@@ -162,6 +262,17 @@ This folder contains notebooks and shapefiles to validate areal interpolation.
 + [spatial_operations_validation.ipynb](tests/spatial_operations_validation.ipynb) is a notebook demonstrating that our areal interpolation functions produce extensive and intensive statistics similar to known values.
 + [tract_validation_and_masking.ipynb](tests/tract_validation_and_masking.ipynb) is a notebook previously used to mask tract boundaries, removing a duplicated tract number (specifically, the tract of O'Hare community area that lies in DuPage County). It no longer fully functions now that we have made the change, but we are retaining it in the repository for documentation purposes.
 + [validation_data](tests/validation_data) is a csv with community-area population estimates to validate areal interpolation.
+
+---
+
+#### Visualizations
+
+This folder contains visualizations produced by our libraries. We have the following types of visualizations:
++ [Boxplot Visualizations](visualizations/boxplot_visualizations): This folder contains boxplots showing the range of broadband adoption at the neighborhood level within cities
++ "City-census-cleaned.png": Contains geospatial visualization for broadband access for a given city at the census tract level, controlling for overlap duplication
++ "City-census.png": Contains geospatial visualization for broadband access for a given city at the census tract level, with no control for overlap duplication
++ "City-neighborhood-cleaned.png": Contains geospatial visualization for broadband access for a given city at the neighborhood boundary level, controlling for overlap duplication
++ "City-neighborhood.png": Contains geospatial visualization for broadband access for a given city at the census tract level, with no control for overlap duplication
 
 ---
 
