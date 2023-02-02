@@ -73,6 +73,8 @@ def merge_data(city_df, ctract_df,  merged_df_path):
     # should work if geographies are in the same format
     merged_df = geopandas.sjoin(ctract_df, city_df, how="inner", op='intersects')
     #merged_df = merged_df.drop_duplicates(subset='GEOID', keep=False)
+    merged_df.rename(columns={"TRACTCE":"tract"}, inplace = True)
+    merged_df['tract'] = merged_df['tract'].astype(int)
     merged_df.to_file(merged_df_path, driver="GeoJSON")
     
     return merged_df.copy()
@@ -170,26 +172,30 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
     standard_city_dataframes = []
     
     state_tiger_path = f"/tmp/state-data/{year}/"
+    acs_data = pd.read_csv(f'/tmp/acs_data/acs_5yr_{year}.csv')
     
     for idx, city in enumerate( city_name_list):
         print(f"Running {city}, {idx+1} of {len(city_name_list)}")
         city_shapefile_df = geopandas.read_file(GOOD_CITY_SHAPEFILE_LOCATIONS[city]["location"])
         city_shapefile_df = city_shapefile_df.to_crs({'proj':'longlat', 'ellps':'WGS84', 'datum':'WGS84'})
 
-        # create merged dataframe
-        ### TO MERGE WITH BROADBAND DATA: city_fcc_merged_df = merge_data(city_shapefile_df, FCC_MERGED_DF, 
-        ### f"/tmp/city-data/{city}/city-merged.geojson")
-        # "middle merge"
+        ### CREATE MERGED DATAFRAME
+        ## "middle merge"
         # read in state data:
         state = GOOD_CITY_SHAPEFILE_LOCATIONS[city]["state"]
         state_tiger_shapefile_path = f"{state_tiger_path}{state}/{state}.shp"
         state_tiger_data = geopandas.read_file(state_tiger_shapefile_path)
-        city_tiger_merge = merge_data(city_shapefile_df, state_tiger_data, f"/tmp/city-data/{city}/city-tiger-merge.geojson")
+        city_tiger_merge = merge_data(city_shapefile_df, state_tiger_data, f"/tmp/city-data/{city}/city-tiger-merge-{year}.geojson")
+        
+        ## Initial Merge with ACS data
+        city_acs_merge_df = city_tiger_merge.merge(acs_data, how='left', on='tract')
+        city_acs_merge_df.to_file(f"/tmp/city-data/{city}/city-acs-merge-{year}.geojson", driver="GeoJSON")
+        
         return_dict[city] = city_tiger_merge
         
         # create standard dataframe
         #standard_city_df = get_standard_df(city_fcc_merged_df, city)
-        standard_city_dataframes.append(city_tiger_merge)
+        standard_city_dataframes.append(city_acs_merge_df)
         
         # produce plot
         ### so.simple_map(city_fcc_merged_df.drop_duplicates(subset='geometry'), 'f_broadband', 'geoid', f"{city.title()} broadband by census tract", output_file_name=f"/tmp/visualizations/{city}-census.png")                 
@@ -199,7 +205,7 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
 
         print("\n")
      
-    #std_censustract_df = pd.concat(standard_city_dataframes)
-    #std_censustract_df.to_csv("/tmp/data/standard_censustract_df.csv")
+    std_acs_censustract_df = pd.concat(standard_city_dataframes)
+    std_acs_censustract_df.to_csv(f"/tmp/data/standard_acs_censustract_df_{year}.csv")
 
     #return return_dict
