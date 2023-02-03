@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import contextily as cx
 import zipfile
 import glob
+import json
 warnings.filterwarnings('ignore')
 
 import data_pipeline.spatial_operations as so
@@ -37,6 +38,8 @@ GOOD_CITY_SHAPEFILE_LOCATIONS = {
     "washington-dc": { "location" : "/tmp/city-data/washington-dc/washington-dc-boundaries/washington-dc-boundaries.shp", "state": "dc"},
 }
 
+FILE_2021 = open("/tmp/acs_data/2021_columns.json", "r")
+COL_2021 = list(json.load(FILE_2021).values())
     
 
 def merge_data(city_df, ctract_df,  merged_df_path):
@@ -78,122 +81,9 @@ def get_standard_df(city_merged_df, year, city):
       city_standard_df
     '''
     if year == '2021':
-        city_merged_df_copy = city_merged_df[['state',
-                                             'county',
-                                             'STATEFP',
-                                             'COUNTYFP',
-                                             'geometry',
-                                             "Estimate!!Total: TOTAL POPULATION",
-                                             "Estimate!!Total: SEX BY AGE",
-                                             "Estimate!!Total:!!Male: SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!Under 5 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!5 to 9 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!10 to 14 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!15 to 17 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!18 and 19 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!20 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!21 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!22 to 24 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!25 to 29 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!30 to 34 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!35 to 39 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!40 to 44 years SEX BY AGE",
-                                             "Estimate!!Total:!!Male:!!45 to 49 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Male:!!50 to 54 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Male:!!55 to 59 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Male:!!60 and 61 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Male:!!62 to 64 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Male:!!65 and 66 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Male:!!67 to 69 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Male:!!70 to 74 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Male:!!75 to 79 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Male:!!80 to 84 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Male:!!85 years and over SEX BY AGE", 
-                                             "Estimate!!Total:!!Female: SEX BY AGE", 
-                                             "Estimate!!Total:!!Female:!!Under 5 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Female:!!5 to 9 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Female:!!10 to 14 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Female:!!15 to 17 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Female:!!18 and 19 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!20 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!21 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!22 to 24 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!25 to 29 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!30 to 34 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!35 to 39 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!40 to 44 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!45 to 49 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!50 to 54 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!55 to 59 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!60 and 61 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!62 to 64 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!65 and 66 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!67 to 69 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!70 to 74 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!75 to 79 years SEX BY AGE",
-                                             "Estimate!!Total:!!Female:!!80 to 84 years SEX BY AGE", 
-                                             "Estimate!!Total:!!Female:!!85 years and over SEX BY AGE",
-                                             "Estimate!!Total:!!Not Hispanic or Latino: HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Not Hispanic or Latino:!!White alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Not Hispanic or Latino:!!Black or African American alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Not Hispanic or Latino:!!American Indian and Alaska Native alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Not Hispanic or Latino:!!Asian alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Not Hispanic or Latino:!!Native Hawaiian and Other Pacific Islander alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Not Hispanic or Latino:!!Some other race alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Not Hispanic or Latino:!!Two or more races: HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Not Hispanic or Latino:!!Two or more races:!!Two races including Some other race HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Not Hispanic or Latino:!!Two or more races:!!Two races excluding Some other race, and three or more races HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Hispanic or Latino: HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Hispanic or Latino:!!White alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Hispanic or Latino:!!Black or African American alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Hispanic or Latino:!!American Indian and Alaska Native alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Hispanic or Latino:!!Asian alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Hispanic or Latino:!!Native Hawaiian and Other Pacific Islander alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Hispanic or Latino:!!Some other race alone HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Hispanic or Latino:!!Two or more races: HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Hispanic or Latino:!!Two or more races:!!Two races including Some other race HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total:!!Hispanic or Latino:!!Two or more races:!!Two races excluding Some other race, and three or more races HISPANIC OR LATINO ORIGIN BY RACE",
-                                             "Estimate!!Total: HISPANIC OR LATINO ORIGIN",
-                                             "Estimate!!Total:!!Not Hispanic or Latino HISPANIC OR LATINO ORIGIN",
-                                             "Estimate!!Total:!!Hispanic or Latino HISPANIC OR LATINO ORIGIN",
-                                             "Estimate!!Total living in area 1 year ago: GEOGRAPHICAL MOBILITY IN THE PAST YEAR (NATIVE HAWAIIAN AND OTHER PACIFIC ISLANDER ALONE) FOR RESIDENCE 1 YEAR AGO IN THE UNITED STATES",
-                                             "Estimate!!Total: PLACE OF BIRTH BY YEAR OF ENTRY FOR THE FOREIGN-BORN POPULATION",
-                                             "Estimate!!Median household income in the past 12 months (in 2020 inflation-adjusted dollars) MEDIAN HOUSEHOLD INCOME IN THE PAST 12 MONTHS (IN 2020 INFLATION-ADJUSTED DOLLARS)",
-                                             "Estimate!!Median family income in the past 12 months--!!Total: MEDIAN FAMILY INCOME FOR FAMILIES WITH GRANDPARENT HOUSEHOLDERS AND/OR SPOUSES LIVING WITH OWN GRANDCHILDREN UNDER 18 YEARS BY RESPONSIBILITY FOR OWN GRANDCHILDREN AND PRESENCE OF PARENT OF GRANDCHILDREN",
-                                             "Estimate!!Median family income in the past 12 months (in 2020 inflation-adjusted dollars) MEDIAN FAMILY INCOME IN THE PAST 12 MONTHS (IN 2020 INFLATION-ADJUSTED DOLLARS)",
-                                             "Estimate!!Total: RECEIPT OF SUPPLEMENTAL SECURITY INCOME (SSI), CASH PUBLIC ASSISTANCE INCOME, OR FOOD STAMPS/SNAP IN THE PAST 12 MONTHS BY HOUSEHOLD TYPE FOR CHILDREN UNDER 18 YEARS IN HOUSEHOLDS",
-                                             "Estimate!!Gini Index GINI INDEX OF INCOME INEQUALITY",
-                                             "Estimate!!Median gross rent MEDIAN GROSS RENT (DOLLARS)",
-                                             "Estimate!!Total:!!Car, truck, or van - drove alone: MEANS OF TRANSPORTATION TO WORK BY AGE FOR WORKPLACE GEOGRAPHY",
-                                             "Estimate!!Total:!!Car, truck, or van - carpooled: MEANS OF TRANSPORTATION TO WORK BY AGE FOR WORKPLACE GEOGRAPHY",
-                                             "Estimate!!Total:!!Public transportation (excluding taxicab): MEANS OF TRANSPORTATION TO WORK BY AGE FOR WORKPLACE GEOGRAPHY",
-                                             "Estimate!!Total:!!Walked: MEANS OF TRANSPORTATION TO WORK BY AGE FOR WORKPLACE GEOGRAPHY",
-                                             "Estimate!!Total:!!Taxicab, motorcycle, bicycle, or other means: MEANS OF TRANSPORTATION TO WORK BY AGE FOR WORKPLACE GEOGRAPHY",
-                                             "Estimate!!Total:!!Worked from home: MEANS OF TRANSPORTATION TO WORK BY AGE FOR WORKPLACE GEOGRAPHY",
-                                             "Estimate!!Aggregate travel time to work (in minutes): AGGREGATE TRAVEL TIME TO WORK (IN MINUTES) OF WORKERS BY PLACE OF WORK--STATE AND COUNTY LEVEL",
-                                             "Estimate!!Total: MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Car, truck, or van: MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Car, truck, or van:!!Drove alone MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Car, truck, or van:!!Carpooled: MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Car, truck, or van:!!Carpooled:!!In 2-person carpool MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Car, truck, or van:!!Carpooled:!!In 3-person carpool MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Car, truck, or van:!!Carpooled:!!In 4-person carpool MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Car, truck, or van:!!Carpooled:!!In 5- or 6-person carpool MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Car, truck, or van:!!Carpooled:!!In 7-or-more-person carpool MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Public transportation (excluding taxicab): MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Public transportation (excluding taxicab):!!Bus MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Public transportation (excluding taxicab):!!Subway or elevated rail MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Public transportation (excluding taxicab):!!Long-distance train or commuter rail MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Public transportation (excluding taxicab):!!Light rail, streetcar or trolley (carro público in Puerto Rico) MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Public transportation (excluding taxicab):!!Ferryboat MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Taxicab MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Motorcycle MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Bicycle MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Walked MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Other means MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total:!!Worked from home MEANS OF TRANSPORTATION TO WORK",
-                                             "Estimate!!Total: ALLOCATION OF SCHOOL ENROLLMENT FOR THE POPULATION 3 YEARS AND OVER",
-                                             "Estimate!!Total:!!Not allocated ALLOCATION OF SCHOOL ENROLLMENT FOR THE POPULATION 3 YEARS AND OVER"]]
+        cols_of_int = ['state', 'county', 'STATEFP', 'COUNTYFP', 'geometry'] + COL_2021
+        cols_of_int.remove('census_name')
+        city_merged_df_copy = city_merged_df[cols_of_int]
     
     city_merged_df_copy['City'] = city
     
@@ -233,6 +123,7 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
     
     state_tiger_path = f"/tmp/state-data/{year}/"
     acs_data = pd.read_csv(f'/tmp/acs_data/acs_5yr_{year}.csv')
+    acs_data = acs_data.groupby('tract').mean().reset_index()
     
     for idx, city in enumerate( city_name_list):
         print(f"Running {city}, {idx+1} of {len(city_name_list)}")
