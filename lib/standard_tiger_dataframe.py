@@ -68,7 +68,35 @@ def merge_data(city_df, ctract_df,  merged_df_path):
     merged_df.to_file(merged_df_path, driver="GeoJSON")
     return merged_df.copy()
 
+
+def get_percentages(city_df):
+    '''
+    This function prepares a merged dataframe with ACS columns and computes
+    the percentages of total households in each of the columns of interest
+    
+    Inputs:
+      city_df: the standard city dataframe merge with ACS data
+    
+    Outputs:
+      city_df_copy: The dataframe with columns for percentages added on
+    '''
+    
+    percentages = {}
+    
+    city_df_copy = city_df.copy()
+    
+    for col in COL_2021:
+        if col == "Estimate!!Total: TOTAL POPULATION":
+            continue
+        curr_col_perc = []
+        for i in city_df[col]:
+            curr_col_perc = i / city_df["Estimate!!Total: TOTAL POPULATION"]
+        perc_key = f"PERC {col}"
+        city_df_copy.insert(7, perc_key, curr_col_perc)
         
+    return city_df_copy
+
+    
 def get_standard_df(city_merged_df, year, city):
     '''
     This function prepares a merged dataframe into the standard format so it 
@@ -82,10 +110,11 @@ def get_standard_df(city_merged_df, year, city):
     '''
     if year == '2021':
         cols_of_int = ['state', 'county', 'STATEFP', 'COUNTYFP', 'geometry'] + COL_2021
-        cols_of_int.remove('census_name')
         city_merged_df_copy = city_merged_df[cols_of_int]
+
+    city_merged_df_copy.insert(0, 'City', city)
     
-    city_merged_df_copy['City'] = city
+    city_merged_df_copy = get_percentages(city_merged_df_copy)
     
     return city_merged_df_copy
 
