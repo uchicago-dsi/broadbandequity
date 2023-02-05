@@ -96,7 +96,7 @@ def get_percentages(city_df, year):
             for i in city_df[col]:
                 curr_col_perc = i / city_df["Estimate!!Total: TOTAL POPULATION"]
             perc_key = f"PERC {col}"
-            city_df_copy.insert(7, perc_key, curr_col_perc)
+            city_df_copy.insert(8, perc_key, curr_col_perc)
     else:
         for col in COL_2017:
             if col == "Estimate!!Total: TOTAL POPULATION":
@@ -105,7 +105,7 @@ def get_percentages(city_df, year):
             for i in city_df[col]:
                 curr_col_perc = i / city_df["Estimate!!Total: TOTAL POPULATION"]
             perc_key = f"PERC {col}"
-            city_df_copy.insert(7, perc_key, curr_col_perc)
+            city_df_copy.insert(8, perc_key, curr_col_perc)
         
     return city_df_copy
 
@@ -122,9 +122,9 @@ def get_standard_df(city_merged_df, year, city):
       city_standard_df
     '''
     if year == '2021':
-        cols_of_int = ['state', 'county', 'STATEFP', 'COUNTYFP', 'geometry'] + COL_2021
+        cols_of_int = ['tract', 'state', 'county', 'STATEFP', 'COUNTYFP'] + ['geometry'] + COL_2021
     else:
-        cols_of_int = ['state', 'county', 'STATEFP', 'COUNTYFP', 'geometry'] + COL_2017
+        cols_of_int = ['tract', 'state', 'county', 'STATEFP', 'COUNTYFP'] + ['geometry'] + COL_2017
 
     city_merged_df_copy = city_merged_df[cols_of_int]
 
@@ -201,3 +201,4 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
      
     std_acs_censustract_df = pd.concat(standard_city_dataframes)
     std_acs_censustract_df.to_csv(f"/tmp/data/standard_acs_censustract_df_{year}.csv")
+    std_acs_censustract_df.to_file(f"/tmp/data/standard_acs_censustract_df_{year}.geojson", driver="GeoJSON")
