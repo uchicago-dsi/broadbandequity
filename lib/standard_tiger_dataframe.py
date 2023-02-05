@@ -40,6 +40,9 @@ GOOD_CITY_SHAPEFILE_LOCATIONS = {
 
 FILE_2021 = open("/tmp/acs_data/2021_columns.json", "r")
 COL_2021 = list(json.load(FILE_2021).values())
+
+FILE_2017 = open("/tmp/acs_data/2017_columns.json", "r")
+COL_2017 = list(json.load(FILE_2017).values())
     
 
 def merge_data(city_df, ctract_df,  merged_df_path):
@@ -69,7 +72,7 @@ def merge_data(city_df, ctract_df,  merged_df_path):
     return merged_df.copy()
 
 
-def get_percentages(city_df):
+def get_percentages(city_df, year):
     '''
     This function prepares a merged dataframe with ACS columns and computes
     the percentages of total households in each of the columns of interest
@@ -85,14 +88,24 @@ def get_percentages(city_df):
     
     city_df_copy = city_df.copy()
     
-    for col in COL_2021:
-        if col == "Estimate!!Total: TOTAL POPULATION":
-            continue
-        curr_col_perc = []
-        for i in city_df[col]:
-            curr_col_perc = i / city_df["Estimate!!Total: TOTAL POPULATION"]
-        perc_key = f"PERC {col}"
-        city_df_copy.insert(7, perc_key, curr_col_perc)
+    if year == '2021':
+        for col in COL_2021:
+            if col == "Estimate!!Total: TOTAL POPULATION":
+                continue
+            curr_col_perc = []
+            for i in city_df[col]:
+                curr_col_perc = i / city_df["Estimate!!Total: TOTAL POPULATION"]
+            perc_key = f"PERC {col}"
+            city_df_copy.insert(7, perc_key, curr_col_perc)
+    else:
+        for col in COL_2017:
+            if col == "Estimate!!Total: TOTAL POPULATION":
+                continue
+            curr_col_perc = []
+            for i in city_df[col]:
+                curr_col_perc = i / city_df["Estimate!!Total: TOTAL POPULATION"]
+            perc_key = f"PERC {col}"
+            city_df_copy.insert(7, perc_key, curr_col_perc)
         
     return city_df_copy
 
@@ -110,11 +123,14 @@ def get_standard_df(city_merged_df, year, city):
     '''
     if year == '2021':
         cols_of_int = ['state', 'county', 'STATEFP', 'COUNTYFP', 'geometry'] + COL_2021
-        city_merged_df_copy = city_merged_df[cols_of_int]
+    else:
+        cols_of_int = ['state', 'county', 'STATEFP', 'COUNTYFP', 'geometry'] + COL_2017
+
+    city_merged_df_copy = city_merged_df[cols_of_int]
 
     city_merged_df_copy.insert(0, 'City', city)
     
-    city_merged_df_copy = get_percentages(city_merged_df_copy)
+    city_merged_df_copy = get_percentages(city_merged_df_copy, year)
     
     return city_merged_df_copy
 
