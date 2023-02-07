@@ -92,18 +92,14 @@ def get_percentages(city_df, year):
         for col in COL_2021:
             if col == "Estimate!!Total: TOTAL POPULATION":
                 continue
-            curr_col_perc = []
-            for i in city_df[col]:
-                curr_col_perc = i / city_df["Estimate!!Total: TOTAL POPULATION"]
+            curr_col_perc = city_df[col] / city_df['Estimate!!Total: TOTAL POPULATION']
             perc_key = f"PERC {col}"
             city_df_copy.insert(8, perc_key, curr_col_perc)
     else:
         for col in COL_2017:
             if col == "Estimate!!Total: TOTAL POPULATION":
                 continue
-            curr_col_perc = []
-            for i in city_df[col]:
-                curr_col_perc = i / city_df["Estimate!!Total: TOTAL POPULATION"]
+            curr_col_perc = city_df[col] / city_df['Estimate!!Total: TOTAL POPULATION']
             perc_key = f"PERC {col}"
             city_df_copy.insert(8, perc_key, curr_col_perc)
         
