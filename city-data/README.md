@@ -18,7 +18,6 @@ This folder contains the city geojson and/or shapefiles that were used in the an
 - Portland
 - San Antonio
 - San Diego
-- San Francisco*
 - San Jose
 - Seattle
 - Washington, D.C.
@@ -34,3 +33,4 @@ This folder contains the city geojson and/or shapefiles that were used in the an
 - Las Vegas
 - Milwaukee
 - Nashville 
+- San Francisco
