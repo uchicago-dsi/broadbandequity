@@ -65,6 +65,9 @@ COL_2021 = list(json.load(FILE_2021).values())
 
 FILE_2017 = open("/tmp/acs_data/2017_columns.json", "r")
 COL_2017 = list(json.load(FILE_2017).values())
+
+ACS_CAT_FILE = open("/tmp/acs_data/acs_categories.json", "r")
+ACS_CAT = json.load(ACS_CAT_FILE)
     
 
 def merge_data(city_df, ctract_df,  merged_df_path):
@@ -114,16 +117,20 @@ def get_percentages(city_df, year):
         for col in COL_2021:
             if col == "Estimate!!Total: TOTAL POPULATION":
                 continue
-            curr_col_perc = city_df[col] / city_df['Estimate!!Total: TOTAL POPULATION']
-            perc_key = f"PERC {col}"
-            city_df_copy.insert(8, perc_key, curr_col_perc)
+            if col in ACS_CAT.keys():
+                total_est = ACS_CAT[col]
+                curr_col_perc = city_df[col] / city_df[total_est]
+                perc_key = f"PERC {col}"
+                city_df_copy.insert(8, perc_key, curr_col_perc)
     else:
         for col in COL_2017:
-            if col == "Estimate!!Total: TOTAL POPULATION":
+            if col == "Estimate!!Total: TOTAL POPULATION": #potentially skip over race columns here
                 continue
-            curr_col_perc = city_df[col] / city_df['Estimate!!Total: TOTAL POPULATION']
-            perc_key = f"PERC {col}"
-            city_df_copy.insert(8, perc_key, curr_col_perc)
+            if col in ACS_CAT.keys():
+                total_est = ACS_CAT[col]
+                curr_col_perc = city_df[col] / city_df[total_est]
+                perc_key = f"PERC {col}"
+                city_df_copy.insert(8, perc_key, curr_col_perc)
         
     return city_df_copy
 
@@ -148,8 +155,9 @@ def get_standard_df(city_merged_df, year, city):
 
     city_merged_df_copy.insert(0, 'City', city)
     
+    # CALL TO RACE FUNCTION HERE!!
     #need to solve percentages issue still
-    #city_merged_df_copy = get_percentages(city_merged_df_copy, year)
+    city_merged_df_copy = get_percentages(city_merged_df_copy, year)
     
     return city_merged_df_copy
 
