@@ -121,7 +121,7 @@ def get_percentages(city_df, year):
                 total_est = ACS_CAT[col]
                 curr_col_perc = city_df[col] / city_df[total_est]
                 perc_key = f"PERC {col}"
-                city_df_copy.insert(8, perc_key, curr_col_perc)
+                city_df_copy[perc_key] = curr_col_perc
     else:
         for col in COL_2017:
             if col == "Estimate!!Total: TOTAL POPULATION": #potentially skip over race columns here
@@ -130,10 +130,38 @@ def get_percentages(city_df, year):
                 total_est = ACS_CAT[col]
                 curr_col_perc = city_df[col] / city_df[total_est]
                 perc_key = f"PERC {col}"
-                city_df_copy.insert(8, perc_key, curr_col_perc)
+                city_df_copy[perc_key] = curr_col_perc
         
     return city_df_copy
 
+
+def get_race_percentages(city_df):
+    # cleaning column names
+    RACE_CAT_FILE = open("/tmp/lib/race_categories.json", "r")
+    RACE_CAT = json.load(RACE_CAT_FILE)
+    acs_df_clean = city_df.rename(columns=RACE_CAT)
+    # applying cleaned column names to original dataset
+    acs_df = acs_df_clean.copy()
+    # cleaning column names v2 and conglomerating "Other" race
+    acs_df['Hispanic (of any race)'] = acs_df['H/L']
+    acs_df['Non-Hispanic White'] = acs_df['Not H/L: White alone']
+    acs_df['Non-Hispanic Black'] = acs_df['Not H/L: Black alone']
+    acs_df['Non-Hispanic Asian'] = acs_df['Not H/L: Asian alone']
+    acs_df['Non-Hispanic American Indian'] = acs_df['Not H/L: American Indian/Native alone']
+    acs_df['Non-Hispanic Other'] = acs_df['Not H/L: Native Hawaiian / PI alone'] + acs_df['Not H/L: Other race alone'] + acs_df['Not H/L: Two or more races']
+    
+    # creating total population column
+    acs_df['Total Race Population'] = acs_df['H/L'] + acs_df['Not H/L: White alone'] + acs_df['Not H/L: Black alone'] + acs_df['Not H/L: Asian alone'] + acs_df['Not H/L: American Indian/Native alone'] + acs_df['Non-Hispanic Other']
+    
+    # creating race pct columns per census tract
+    acs_df['% Hispanic (of any race)'] = ((acs_df['Hispanic (of any race)']/acs_df['Total Race Population']))
+    acs_df['% Non-Hispanic White'] = ((acs_df['Non-Hispanic White']/acs_df['Total Race Population']))
+    acs_df['% Non-Hispanic Black'] = ((acs_df['Non-Hispanic Black']/acs_df['Total Race Population']))
+    acs_df['% Non-Hispanic Asian'] = ((acs_df['Non-Hispanic Asian']/acs_df['Total Race Population']))
+    acs_df['% Non-Hispanic American Indian'] = ((acs_df['Non-Hispanic American Indian']/acs_df['Total Race Population']))
+    acs_df['% Non-Hispanic Other'] = ((acs_df['Non-Hispanic Other']/acs_df['Total Race Population']))
+    
+    return acs_df
     
 def get_standard_df(city_merged_df, year, city):
     '''
@@ -156,6 +184,8 @@ def get_standard_df(city_merged_df, year, city):
     city_merged_df_copy.insert(0, 'City', city)
     
     # CALL TO RACE FUNCTION HERE!!
+    city_merged_df_copy = get_race_percentages(city_merged_df_copy)
+    
     #need to solve percentages issue still
     city_merged_df_copy = get_percentages(city_merged_df_copy, year)
     
