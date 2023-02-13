@@ -1,4 +1,4 @@
-Cities included in our expansion (to hit Top 50 Cities) are the following:
+Cities in our expansion (to hit Top 50 Cities) include:
 - Fort Worth *(VK)*
 - Columbus
 - Oklahoma City
