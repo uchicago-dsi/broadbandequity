@@ -1,0 +1,22 @@
+Cities included in our expansion (to hit Top 50 Cities) are the following:
+- Fort Worth (VK)
+- Columbus
+- Oklahoma City
+- Fresno
+- Tucson
+- Sacramento
+- Mesa
+- Kansas City
+- Atlanta
+- Omaha
+- Colorado Springs (BK)
+- Raleigh
+- Virginia Beach
+- Long Beach
+- Miami
+- Oakland
+- Minneapolis
+- Tulsa
+- Bakersfield
+- Wichita
+- Arlington
