@@ -1,5 +1,5 @@
 Cities included in our expansion (to hit Top 50 Cities) are the following:
-- Fort Worth (VK)
+- Fort Worth *(VK)*
 - Columbus
 - Oklahoma City
 - Fresno
@@ -9,7 +9,7 @@ Cities included in our expansion (to hit Top 50 Cities) are the following:
 - Kansas City
 - Atlanta
 - Omaha
-- Colorado Springs (BK)
+- Colorado Springs *(BK)*
 - Raleigh
 - Virginia Beach
 - Long Beach
