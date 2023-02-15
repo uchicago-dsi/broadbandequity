@@ -6,5 +6,5 @@
 
 ### Details 
 
-+ Source: [Louisville (LOJIC) Open GeoSpatial Data](https://data.lojic.org/datasets/kentucky-city-boundaries/explore?location=38.094926%2C-85.685800%2C7.87)
-+ Last Updated: May 2022
++ Source: [City of Oklahoma City](https://data.okc.gov/portal/page/viewer?datasetName=City%20Boundaries&view=map)
++ Last Updated: January 2023
