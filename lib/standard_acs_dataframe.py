@@ -20,54 +20,54 @@ import data_pipeline.spatial_operations as so
 ## This good city list are the cities that we want to complete the merge on
 GOOD_CITY_LIST = [ 'boston', 'chicago', 'denver', 'detroit', 'houston', 'indianapolis', 'los-angeles', 'louisville','new-york-city','phoenix','portland','san-diego','san-jose','seattle','washington-dc']
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
-    "boston": { "location" : "/tmp/city-data/boston/boston-boundaries/City_of_Boston_Boundary.shp", "state": "massachussetts"},
-    "chicago": { "location" : "/tmp/city-data/chicago/chicago-boundaries/chicago_boundaries.shp", "state": "illinois"},
-    "denver": { "location" : "/tmp/city-data/denver/denver-boundaries/county_boundary.shp", "state": "colorado"},
-    "detroit": { "location" : "/tmp/city-data/detroit/detroit-boundaries/City_of_Detroit_Boundary.shp", "state": "michigan"},
-    "houston": { "location" : "/tmp/city-data/houston/houston-boundaries/City_of_Houston_City_Limits_(Full_and_Limited_Purpose_Areas).shp", "state": "texas"},
-    "indianapolis": { "location" : "/tmp/city-data/indianapolis/indianapolis-boundaries/Cities_and_Towns.shp", "state": "indiana"},
-    "los-angeles": { "location" : "/tmp/city-data/los-angeles/los-angeles-boundaries/los-angeles-boundaries.shp", "state": "california"},
-    "louisville": { "location" : "/tmp/city-data/louisville/louisville boundaries/louisville_boundaries.shp", "state": "kentucky"},
-    "new-york-city": { "location" : "/tmp/city-data/new-york-city/nyc borough boundaries/nyc borough boundaries.shp", "state": "new-york"},
-    "phoenix": { "location" : "/tmp/city-data/phoenix/phoenix boundaries/phoenix boundaries.shp", "state": "arizona"},
-    "portland": { "location" : "/tmp/city-data/portland/portland-boundaries/portland-boundaries.shp", "state": "oregon"},
-    "san-diego": { "location" : "/tmp/city-data/san-diego/san-diego-boundaries/san-diego-boundaries.shp", "state": "california"},
-    "san-jose": { "location" : "/tmp/city-data/san-jose/san-jose-boundaries/san-jose-boundaries.shp", "state": "california"},
-    "seattle": { "location" : "/tmp/city-data/seattle/seattle-boundaries/seattle-boundaries-v3.shp", "state": "washington"},
-    "washington-dc": { "location" : "/tmp/city-data/washington-dc/washington-dc-boundaries/washington-dc-boundaries.shp", "state": "dc"},
+    "boston": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/boston/boston-boundaries/City_of_Boston_Boundary.shp", "state": "massachussetts"},
+    "chicago": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/chicago/chicago-boundaries/chicago_boundaries.shp", "state": "illinois"},
+    "denver": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/denver/denver-boundaries/county_boundary.shp", "state": "colorado"},
+    "detroit": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/detroit/detroit-boundaries/City_of_Detroit_Boundary.shp", "state": "michigan"},
+    "houston": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/houston/houston-boundaries/City_of_Houston_City_Limits_(Full_and_Limited_Purpose_Areas).shp", "state": "texas"},
+    "indianapolis": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/indianapolis/indianapolis-boundaries/Cities_and_Towns.shp", "state": "indiana"},
+    "los-angeles": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/los-angeles/los-angeles-boundaries/los-angeles-boundaries.shp", "state": "california"},
+    "louisville": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/louisville/louisville boundaries/louisville_boundaries.shp", "state": "kentucky"},
+    "new-york-city": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/new-york-city/nyc borough boundaries/nyc borough boundaries.shp", "state": "new-york"},
+    "phoenix": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/phoenix/phoenix boundaries/phoenix boundaries.shp", "state": "arizona"},
+    "portland": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/portland/portland-boundaries/portland-boundaries.shp", "state": "oregon"},
+    "san-diego": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/san-diego/san-diego-boundaries/san-diego-boundaries.shp", "state": "california"},
+    "san-jose": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/san-jose/san-jose-boundaries/san-jose-boundaries.shp", "state": "california"},
+    "seattle": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/seattle/seattle-boundaries/seattle-boundaries-v3.shp", "state": "washington"},
+    "washington-dc": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/washington-dc/washington-dc-boundaries/washington-dc-boundaries.shp", "state": "dc"},
 }
 
 # These city neighborhood shapefiles allow us to merge with the neighborhood boundary data
 GOOD_CITY_NHOOD_SHAPEFILE_LOCATIONS = {
-    "seattle": { "location" : "/tmp/neighborhood-data/seattle/seattle_ccn/City_Clerk_Neighborhoods.shp", "nhood_col" : 'HOODS_'},
-    "denver": {"location": "/tmp/neighborhood-data/denver/denver_1.0.32/statistical_neighborhoods.shp", "nhood_col": "NBHD_NAME"},
-    "washington-dc": {"location": "/tmp/neighborhood-data/washington-dc/DC_shapefile/Neighborhood_Clusters.shp", "nhood_col": "NAME"},
-    "boston": {"location": "/tmp/neighborhood-data/boston/Boston_Neighborhoods/Boston_Neighborhoods.shp", "nhood_col": "Name"},
-     "portland": {"location": "/tmp/neighborhood-data/portland/portland-neighborhood-boundaries/Neighborhood_Boundaries.shp", "nhood_col": "ID"},
-    "houston": {"location": "/tmp/neighborhood-data/houston/Houston/Houston.shp", "nhood_col": "SNBNAME"},
-    "indianapolis": { "location": "/tmp/neighborhood-data/indianapolis/Indy_Neighborhoods/Indy_Neighborhoods.shp", "nhood_col": "NAME"},
-    "los-angeles": {"location": "/tmp/neighborhood-data/los-angeles/Los Angeles/Los Angeles.shp", "nhood_col": "display_na"},
-    "phoenix": {"location": "/tmp/neighborhood-data/phoenix/phoenix/Villages.shp", "nhood_col": "NAME"},
-    "san-francisco": { "location": "/tmp/neighborhood-data/san-francisco/SF Find Neighborhoods/geo_export_f62da660-837f-478c-9ba4-ceb40e9ed8eb.shp", "nhood_col": "name"},
-    "austin": {"location": "/tmp/neighborhood-data/austin/Neighborhoods/geo_export_81d98617-c469-49e1-9bf6-3ef25c07d0c6.shp", "nhood_col": "neighname"},
-    "dallas": { "location": "/tmp/neighborhood-data/dallas/Councils/Councils.shp", "nhood_col": "COUNCIL"},
-    "san-jose": { "location": "/tmp/neighborhood-data/san-jose/Zip_Code_Boundary/Zip_Code_Boundary.shp","nhood_col": "ZIPCODE"},
-    "san-diego": {"location": "/tmp/neighborhood-data/san-diego/CommunityPlanningAreas/cmty_plan_datasd.shp","nhood_col": "cpname"},
-    "baltimore": {"location": "/tmp/neighborhood-data/baltimore/neighborhoods/baltimore.shp","nhood_col": "Name"},
-    "detroit": {"location": "/tmp/neighborhood-data/detroit/neighborhoods/detroit.shp", "nhood_col": "name"},
-    "louisville": {"location": "/tmp/neighborhood-data/louisville/neighborhoods/louisville.shp", "nhood_col": "NH_NAME"},
-    "new-york-city": {"location": "/tmp/neighborhood-data/new-york-city/nycd_22a/nycd.shp", "nhood_col": "BoroCD"},
-    "chicago": {"location": "/tmp/neighborhood-data/chicago/neighborhoods/geo_export_24517513-d42b-43b9-a525-49bfe729d213.shp", "nhood_col": "pri_neigh" }
+    "seattle": { "location" : "/tmp/data/boundary-shapefiles/neighborhood-boundaries/seattle/seattle_ccn/City_Clerk_Neighborhoods.shp", "nhood_col" : 'HOODS_'},
+    "denver": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/denver/denver_1.0.32/statistical_neighborhoods.shp", "nhood_col": "NBHD_NAME"},
+    "washington-dc": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/washington-dc/DC_shapefile/Neighborhood_Clusters.shp", "nhood_col": "NAME"},
+    "boston": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/boston/Boston_Neighborhoods/Boston_Neighborhoods.shp", "nhood_col": "Name"},
+     "portland": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/portland/portland-neighborhood-boundaries/Neighborhood_Boundaries.shp", "nhood_col": "ID"},
+    "houston": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/houston/Houston/Houston.shp", "nhood_col": "SNBNAME"},
+    "indianapolis": { "location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/indianapolis/Indy_Neighborhoods/Indy_Neighborhoods.shp", "nhood_col": "NAME"},
+    "los-angeles": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/los-angeles/Los Angeles/Los Angeles.shp", "nhood_col": "display_na"},
+    "phoenix": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/phoenix/phoenix/Villages.shp", "nhood_col": "NAME"},
+    "san-francisco": { "location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/san-francisco/SF Find Neighborhoods/geo_export_f62da660-837f-478c-9ba4-ceb40e9ed8eb.shp", "nhood_col": "name"},
+    "austin": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/austin/Neighborhoods/geo_export_81d98617-c469-49e1-9bf6-3ef25c07d0c6.shp", "nhood_col": "neighname"},
+    "dallas": { "location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/dallas/Councils/Councils.shp", "nhood_col": "COUNCIL"},
+    "san-jose": { "location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/san-jose/Zip_Code_Boundary/Zip_Code_Boundary.shp","nhood_col": "ZIPCODE"},
+    "san-diego": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/san-diego/CommunityPlanningAreas/cmty_plan_datasd.shp","nhood_col": "cpname"},
+    "baltimore": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/baltimore/neighborhoods/baltimore.shp","nhood_col": "Name"},
+    "detroit": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/detroit/neighborhoods/detroit.shp", "nhood_col": "name"},
+    "louisville": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/louisville/neighborhoods/louisville.shp", "nhood_col": "NH_NAME"},
+    "new-york-city": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/new-york-city/nycd_22a/nycd.shp", "nhood_col": "BoroCD"},
+    "chicago": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/chicago/neighborhoods/geo_export_24517513-d42b-43b9-a525-49bfe729d213.shp", "nhood_col": "pri_neigh" }
     }
 
 # Read in the ACS columns of interest
-FILE_2021 = open("/tmp/acs_data/2021_columns.json", "r")
+FILE_2021 = open("/tmp/data/acs_data/2021_columns.json", "r")
 COL_2021 = list(json.load(FILE_2021).values())
-FILE_2017 = open("/tmp/acs_data/2017_columns.json", "r")
+FILE_2017 = open("/tmp/data/acs_data/2017_columns.json", "r")
 COL_2017 = list(json.load(FILE_2017).values())
 
 # Read in the ACS_categories file for percentage calculation
-ACS_CAT_FILE = open("/tmp/acs_data/acs_categories.json", "r")
+ACS_CAT_FILE = open("/tmp/data/acs_data/acs_categories.json", "r")
 ACS_CAT = json.load(ACS_CAT_FILE)
     
 
@@ -253,8 +253,8 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
     standard_city_dataframes = []
     
     # read in the data to be merged
-    state_tiger_path = f"/tmp/state-data/{year}/"
-    acs_data = pd.read_csv(f'/tmp/acs_data/acs_5yr_{year}.csv')
+    state_tiger_path = f"/tmp/data/TIGER-census-data/{year}/"
+    acs_data = pd.read_csv(f'/tmp/data/acs_data/acs_5yr_{year}.csv')
     acs_data = acs_data.groupby('tract').mean().reset_index()
     
     # go through each city and compute the standard_city_df
@@ -271,7 +271,7 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
         state_tiger_shapefile_path = f"{state_tiger_path}{state}/{state}.shp"
         state_tiger_data = geopandas.read_file(state_tiger_shapefile_path)
         # merge city boundary data with TIGER data
-        city_tiger_merge = merge_data(city_shapefile_df, state_tiger_data, f"/tmp/city-data/{city}/city-tiger-merge-{year}.geojson")
+        city_tiger_merge = merge_data(city_shapefile_df, state_tiger_data, f"/tmp/data/boundary-shapefiles/city-boundaries/{city}/city-tiger-merge-{year}.geojson")
         
         ## Initial Merge with ACS data
         # merge with ACS data
@@ -289,7 +289,7 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
             standard_city_df['Neighborhood'] = pd.NA
         
         ## save city merged dataframe to a file
-        standard_city_df.to_file(f"/tmp/city-data/{city}/city-acs-merge-{year}.geojson", driver="GeoJSON")
+        standard_city_df.to_file(f"/tmp/data/boundary-shapefiles/city-boundaries/{city}/city-acs-merge-{year}.geojson", driver="GeoJSON")
         
         
         ## add to the list of standard city dataframes
@@ -304,5 +304,5 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
     
     # concatenate all of the standard city level dataframes into a single dataframe
     std_acs_censustract_df = pd.concat(standard_city_dataframes)
-    std_acs_censustract_df.to_csv(f"/tmp/data/standard_acs_censustract_df_{year}.csv")
-    std_acs_censustract_df.to_file(f"/tmp/data/standard_acs_censustract_df_{year}.geojson", driver="GeoJSON")
+    std_acs_censustract_df.to_csv(f"/tmp/data/standard_dataframes/standard_acs_censustract_df_{year}.csv")
+    std_acs_censustract_df.to_file(f"/tmp/data/standard_dataframes/standard_acs_censustract_df_{year}.geojson", driver="GeoJSON")
