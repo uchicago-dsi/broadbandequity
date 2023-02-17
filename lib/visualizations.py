@@ -6,6 +6,7 @@ import os
 import pandas as pd
 from shapely.errors import ShapelyDeprecationWarning
 import warnings
+import seaborn as sns
 
 def duplicate_areas(data,geography):
     """Returns True if data's geography column contains duplicates, else False."""
@@ -62,3 +63,20 @@ def simple_map(data,variable,target_geography,title=None,output_file_name=None):
         plt.savefig(output_file_name)
     else:
         plt.show()
+
+def plot_scatter(data, x, y, by, title, x_lab, y_lab, line=False):
+    '''
+    Plot a scatterplot or regression plot for a given variable
+    '''
+    if not line:
+        plt.figure()
+        sns.scatterplot(data=data, x=x, y=y, hue=by, alpha=0.5)
+        plt.title(title)
+        plt.xlabel(x_lab)
+        plt.ylabel(y_lab);
+    else:
+        plt.figure()
+        sns.regplot(data=data, x=x, y=y)
+        plt.title(title)
+        plt.xlabel(x_lab)
+        plt.ylabel(y_lab);
