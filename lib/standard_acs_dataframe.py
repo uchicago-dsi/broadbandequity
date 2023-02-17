@@ -15,15 +15,18 @@ import glob
 import json
 warnings.filterwarnings('ignore')
 
-import data_pipeline.spatial_operations as so
-
 ## This good city list are the cities that we want to complete the merge on
-GOOD_CITY_LIST = [ 'boston', 'chicago', 'denver', 'detroit', 'houston', 'indianapolis', 'los-angeles', 'louisville','new-york-city','phoenix','portland','san-diego','san-jose','seattle','washington-dc']
+GOOD_CITY_LIST = ['austin', 'boston', 'chicago', 'dallas', 'denver', 'detroit', 'el-paso', 'houston', 'indianapolis', 'los-angeles','louisville','new-york-city','phoenix','portland','san-antonio', 'san-diego','san-jose','seattle','washington-dc']
+
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
+    "austin": {"location" : "/tmp/data/boundary-shapefiles/city-boundaries/austin/austin-boundaries/austin.shp", "state": "texas"},
+    "baltimore": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/baltimore/baltimore-boundaries/tl_2019_24510_faces.shp", "state": "maryland"},
     "boston": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/boston/boston-boundaries/City_of_Boston_Boundary.shp", "state": "massachussetts"},
     "chicago": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/chicago/chicago-boundaries/chicago_boundaries.shp", "state": "illinois"},
+    "dallas": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/dallas/dallas-boundaries/dallas.shp", "state": "texas"},
     "denver": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/denver/denver-boundaries/county_boundary.shp", "state": "colorado"},
     "detroit": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/detroit/detroit-boundaries/City_of_Detroit_Boundary.shp", "state": "michigan"},
+    "el-paso": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/el-paso/el-paso-boundaries/el_paso.shp", "state": "texas"},
     "houston": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/houston/houston-boundaries/City_of_Houston_City_Limits_(Full_and_Limited_Purpose_Areas).shp", "state": "texas"},
     "indianapolis": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/indianapolis/indianapolis-boundaries/Cities_and_Towns.shp", "state": "indiana"},
     "los-angeles": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/los-angeles/los-angeles-boundaries/los-angeles-boundaries.shp", "state": "california"},
@@ -31,6 +34,7 @@ GOOD_CITY_SHAPEFILE_LOCATIONS = {
     "new-york-city": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/new-york-city/nyc borough boundaries/nyc borough boundaries.shp", "state": "new-york"},
     "phoenix": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/phoenix/phoenix boundaries/phoenix boundaries.shp", "state": "arizona"},
     "portland": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/portland/portland-boundaries/portland-boundaries.shp", "state": "oregon"},
+    "san-antonio": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/san-antonio/san-antonio-boundaries/san_antonio.shp", "state": "texas"},
     "san-diego": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/san-diego/san-diego-boundaries/san-diego-boundaries.shp", "state": "california"},
     "san-jose": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/san-jose/san-jose-boundaries/san-jose-boundaries.shp", "state": "california"},
     "seattle": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/seattle/seattle-boundaries/seattle-boundaries-v3.shp", "state": "washington"},
@@ -282,9 +286,14 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
         ## Merge with neighborhood boundaries (if we have data for them)
         if city in GOOD_CITY_NHOOD_SHAPEFILE_LOCATIONS.keys():
             city_nhood = geopandas.read_file(GOOD_CITY_NHOOD_SHAPEFILE_LOCATIONS[city]['location'])
+            city_nhood.to_crs({'proj':'longlat', 'ellps':'WGS84', 'datum':'WGS84'})
             city_nhood = city_nhood[[GOOD_CITY_NHOOD_SHAPEFILE_LOCATIONS[city]['nhood_col'], 'geometry']]
             city_nhood = city_nhood.rename({GOOD_CITY_NHOOD_SHAPEFILE_LOCATIONS[city]['nhood_col']: 'Neighborhood'}, axis='columns')
+            if 'index_right' in standard_city_df.columns:
+                standard_city_df.drop('index_right', axis=1)
             standard_city_df = geopandas.sjoin(standard_city_df, city_nhood, how="inner", op='intersects')
+            if 'index_right' in standard_city_df.columns:
+                standard_city_df = standard_city_df.drop('index_right', axis=1)
         else:
             standard_city_df['Neighborhood'] = pd.NA
         
