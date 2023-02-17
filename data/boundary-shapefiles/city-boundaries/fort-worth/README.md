@@ -1,11 +1,18 @@
 # Overview
+* City Name: Fort Worth
+* State: TX
+* Person: Brendon Krall
 
-- City Name: Fort Worth
-- State: TX
-- Person: Victoria Kielb
+## Details
+---
+1. Where you found the data?
 
---- 
+I found the data on the Texas Department of Transportation [open data portal](https://gis-txdot.opendata.arcgis.com/datasets/09cd5b6811c54857bd3856b5549e34f0_0/explore?location=30.921114%2C-100.168292%2C6.75/). 
 
-### Details
+2. Are there any issues that you notice?
 
-+ Source: [City of Fort Worth](https://mapitwest.fortworthtexas.gov/Html5Viewer/?viewer=fwgisdata)
+The shapefile includes all Texas cities and will need to be filtered to Austin.  
+
+3. Who made the data?
+
+The Texas Department of Transportation made (powered by Esri).
