@@ -1,7 +1,7 @@
 # Overview
 
 - City Name: Atlanta
-- State: AZ
+- State: GA
 - Person: Victoria Kielb
 
 ---
