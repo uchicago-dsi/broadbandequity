@@ -16,6 +16,7 @@ import json
 warnings.filterwarnings('ignore')
 
 ## This good city list are the cities that we want to complete the merge on
+
 GOOD_CITY_LIST = ['austin', 'boston', 'chicago', 'dallas', 'denver', 'detroit', 'el-paso', 'houston', 'indianapolis', 'los-angeles','louisville','new-york-city','phoenix','portland','san-antonio', 'san-diego','san-jose','seattle','washington-dc']
 
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
@@ -287,11 +288,13 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
         if city in GOOD_CITY_NHOOD_SHAPEFILE_LOCATIONS.keys():
             city_nhood = geopandas.read_file(GOOD_CITY_NHOOD_SHAPEFILE_LOCATIONS[city]['location'])
             city_nhood.to_crs({'proj':'longlat', 'ellps':'WGS84', 'datum':'WGS84'})
+            standard_city_df.to_crs({'proj':'longlat', 'ellps':'WGS84', 'datum':'WGS84'})
             city_nhood = city_nhood[[GOOD_CITY_NHOOD_SHAPEFILE_LOCATIONS[city]['nhood_col'], 'geometry']]
             city_nhood = city_nhood.rename({GOOD_CITY_NHOOD_SHAPEFILE_LOCATIONS[city]['nhood_col']: 'Neighborhood'}, axis='columns')
             if 'index_right' in standard_city_df.columns:
-                standard_city_df.drop('index_right', axis=1)
-            standard_city_df = geopandas.sjoin(standard_city_df, city_nhood, how="inner", op='intersects')
+                standard_city_df = standard_city_df.drop('index_right', axis=1)
+            standard_city_df = geopandas.sjoin(standard_city_df, city_nhood, how="left", op='intersects')
+            print(standard_city_df.shape[0])
             if 'index_right' in standard_city_df.columns:
                 standard_city_df = standard_city_df.drop('index_right', axis=1)
         else:
