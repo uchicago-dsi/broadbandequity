@@ -17,30 +17,46 @@ warnings.filterwarnings('ignore')
 
 ## This good city list are the cities that we want to complete the merge on
 
-GOOD_CITY_LIST = ['austin', 'boston', 'chicago', 'dallas', 'denver', 'detroit', 'el-paso', 'houston', 'indianapolis', 'los-angeles','louisville','new-york-city','phoenix','portland','san-antonio', 'san-diego','san-jose','seattle','washington-dc']
+GOOD_CITY_LIST = ['atlanta','austin', 'bakersfield', 'baltimore', 'boston', 'chicago', 'dallas', 'denver', 'detroit', 'el-paso', 'fort-worth', 'fresno', 'houston', 'indianapolis', 'kansas-city', 'los-angeles', 'louisville', 'memphis', 'mesa', 'minneapolis', 'new-york-city', 'oklahoma-city', 'omaha', 'philadelphia', 'phoenix', 'portland', 'sacramento', 'san-antonio', 'san-diego', 'san-jose', 'seattle', 'tulsa', 'tuscon', 'washington-dc', 'wichita']
 
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
-    "austin": {"location" : "/tmp/data/boundary-shapefiles/city-boundaries/austin/austin-boundaries/austin.shp", "state": "texas"},
+    "atlanta": {"location" : "/tmp/data/boundary-shapefiles/city-boundaries/atlanta/atlanta-boundaries/austin.shp", "state": "georgia"},
+"austin": {"location" : "/tmp/data/boundary-shapefiles/city-boundaries/austin/austin-boundaries/austin.shp", "state": "texas"},
+"bakersfield": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/bakersfield/bakersfield-boundaries/bakersfield-boundaries.shp", "state": "california"},
     "baltimore": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/baltimore/baltimore-boundaries/tl_2019_24510_faces.shp", "state": "maryland"},
-    "boston": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/boston/boston-boundaries/City_of_Boston_Boundary.shp", "state": "massachussetts"},
+    "boston": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/boston/boston-boundaries/City_of_Boston_Boundary.shp", "state": "massachusetts"},
     "chicago": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/chicago/chicago-boundaries/chicago_boundaries.shp", "state": "illinois"},
     "dallas": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/dallas/dallas-boundaries/dallas.shp", "state": "texas"},
     "denver": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/denver/denver-boundaries/county_boundary.shp", "state": "colorado"},
     "detroit": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/detroit/detroit-boundaries/City_of_Detroit_Boundary.shp", "state": "michigan"},
     "el-paso": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/el-paso/el-paso-boundaries/el_paso.shp", "state": "texas"},
-    "houston": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/houston/houston-boundaries/City_of_Houston_City_Limits_(Full_and_Limited_Purpose_Areas).shp", "state": "texas"},
+    "fort-worth": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/fort-worth/fort-worth-boundaries/fort-worth-boundaries.shp", "state": "texas"},
+"fresno": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/fresno/fresno-boundaries/fresno-boundaries.shp", "state": "california"},
+    "houston": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/houston/houston-boundaries/houston.shp", "state": "texas"},
     "indianapolis": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/indianapolis/indianapolis-boundaries/Cities_and_Towns.shp", "state": "indiana"},
+    "kansas-city": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/kansas-city/kansas-city-boundaries/kansas-city-boundaries.shp", "state": "missouri"},
     "los-angeles": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/los-angeles/los-angeles-boundaries/los-angeles-boundaries.shp", "state": "california"},
     "louisville": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/louisville/louisville boundaries/louisville_boundaries.shp", "state": "kentucky"},
+    "memphis": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/memphis/memphis-boundaries/geo_export_8955b821-8b16-46ef-98ec-8ffbe9f68861.shp", "state": "tennessee"},
+    "mesa": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/mesa/mesa-boundaries/mesa-boundaries.shp", "state": "arizona"},
+    "minneapolis": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/minneapolis/minneapolis-boundaries/minneapolis-boundaries.shp", "state": "minnesota"},
     "new-york-city": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/new-york-city/nyc borough boundaries/nyc borough boundaries.shp", "state": "new-york"},
+    "oklahoma-city": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/oklahoma-city/oklahoma-city-boundaries/oklahoma-city-boundaries.shp", "state": "oklahoma"},
+    "omaha": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/omaha/omaha-boundaries/omaha-boundaries.shp", "state": "nebraska"},
+    "philadelphia": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/philadelphia/philadelphia-boundaries/philadelphia-boundaries.shp", "state": "pennsylvania"},
     "phoenix": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/phoenix/phoenix boundaries/phoenix boundaries.shp", "state": "arizona"},
     "portland": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/portland/portland-boundaries/portland-boundaries.shp", "state": "oregon"},
+    "sacramento": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/sacramento/sacramento-boundaries/sacramento-boundaries.shp", "state": "california"},
     "san-antonio": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/san-antonio/san-antonio-boundaries/san_antonio.shp", "state": "texas"},
     "san-diego": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/san-diego/san-diego-boundaries/san-diego-boundaries.shp", "state": "california"},
     "san-jose": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/san-jose/san-jose-boundaries/san-jose-boundaries.shp", "state": "california"},
     "seattle": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/seattle/seattle-boundaries/seattle-boundaries-v3.shp", "state": "washington"},
+    "tulsa": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/tulsa/tulsa-boundaries/tulsa-boundaries.shp", "state": "oklahoma"},
+    "tuscon": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/tuscon/tuscon-boundaries/tuscon-boundaries.shp", "state": "oklahoma"},
     "washington-dc": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/washington-dc/washington-dc-boundaries/washington-dc-boundaries.shp", "state": "dc"},
+    "wichita": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/wichita/wichita-boundaries/wichita-boundaries.shp", "state": "kansas"}
 }
+
 
 # These city neighborhood shapefiles allow us to merge with the neighborhood boundary data
 GOOD_CITY_NHOOD_SHAPEFILE_LOCATIONS = {
