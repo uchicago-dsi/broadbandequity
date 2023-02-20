@@ -1,6 +1,6 @@
 # Overview
 
-- City Name: Tuscon
+- City Name: Tucson
 - State: AZ
 - Person: Victoria Kielb
 
