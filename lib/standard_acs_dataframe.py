@@ -17,9 +17,10 @@ warnings.filterwarnings('ignore')
 
 ## This good city list are the cities that we want to complete the merge on
 
-GOOD_CITY_LIST = ['atlanta','austin', 'bakersfield', 'baltimore', 'boston', 'chicago', 'dallas', 'denver', 'detroit', 'el-paso', 'fort-worth', 'fresno', 'houston', 'indianapolis', 'kansas-city', 'los-angeles', 'louisville', 'memphis', 'mesa', 'minneapolis', 'new-york-city', 'oklahoma-city', 'omaha', 'philadelphia', 'phoenix', 'portland', 'sacramento', 'san-antonio', 'san-diego', 'san-jose', 'seattle', 'tulsa', 'tuscon', 'washington-dc', 'wichita']
+GOOD_CITY_LIST = ['arlington', 'atlanta','austin', 'bakersfield', 'baltimore', 'boston', 'chicago', 'dallas', 'denver', 'detroit', 'el-paso', 'fort-worth', 'fresno', 'houston', 'indianapolis', 'kansas-city', 'los-angeles', 'louisville', 'memphis', 'mesa', 'minneapolis', 'new-york-city', 'oklahoma-city', 'omaha', 'philadelphia', 'phoenix', 'portland', 'sacramento', 'san-antonio', 'san-diego', 'san-jose', 'seattle', 'tulsa', 'tuscon', 'washington-dc', 'wichita']
 
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
+    "arlington": {"location" : "/tmp/data/boundary-shapefiles/city-boundaries/arlington/arlington-boundaries/arlington-boundaries.shp", "state": "texas"},
     "atlanta": {"location" : "/tmp/data/boundary-shapefiles/city-boundaries/atlanta/atlanta-boundaries/austin.shp", "state": "georgia"},
 "austin": {"location" : "/tmp/data/boundary-shapefiles/city-boundaries/austin/austin-boundaries/austin.shp", "state": "texas"},
 "bakersfield": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/bakersfield/bakersfield-boundaries/bakersfield-boundaries.shp", "state": "california"},
