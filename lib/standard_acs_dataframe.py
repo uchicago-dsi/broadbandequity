@@ -53,7 +53,7 @@ GOOD_CITY_SHAPEFILE_LOCATIONS = {
     "san-jose": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/san-jose/san-jose-boundaries/san-jose-boundaries.shp", "state": "california"},
     "seattle": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/seattle/seattle-boundaries/seattle-boundaries-v3.shp", "state": "washington"},
     "tulsa": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/tulsa/tulsa-boundaries/tulsa-boundaries.shp", "state": "oklahoma"},
-    "tuscon": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/tuscon/tuscon-boundaries/tuscon-boundaries.shp", "state": "oklahoma"},
+    "tuscon": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/tuscon/tuscon-boundaries/tuscon-boundaries.shp", "state": "arizona"},
     "washington-dc": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/washington-dc/washington-dc-boundaries/washington-dc-boundaries.shp", "state": "dc"},
     "wichita": { "location" : "/tmp/data/boundary-shapefiles/city-boundaries/wichita/wichita-boundaries/wichita-boundaries.shp", "state": "kansas"}
 }
