@@ -89,8 +89,10 @@ FILE_2017 = open("/tmp/data/acs_data/2017_columns.json", "r")
 COL_2017 = list(json.load(FILE_2017).values())
 
 # Read in the ACS_categories file for percentage calculation
-ACS_CAT_FILE = open("/tmp/data/acs_data/acs_categories.json", "r")
-ACS_CAT = json.load(ACS_CAT_FILE)
+ACS_CAT_FILE_2017 = open("/tmp/data/acs_data/acs_categories_2017.json", "r")
+ACS_CAT_2017 = json.load(ACS_CAT_FILE_2017)
+ACS_CAT_FILE_2021 = open("/tmp/data/acs_data/acs_categories_2021.json", "r")
+ACS_CAT_2021 = json.load(ACS_CAT_FILE_2021)
     
 
 def merge_data(city_df, ctract_df,  merged_df_path):
@@ -140,8 +142,8 @@ def get_percentages(city_df, year):
         for col in COL_2021:
             if col == "Estimate!!Total: TOTAL POPULATION":
                 continue
-            if col in ACS_CAT.keys():
-                total_est = ACS_CAT[col]
+            if col in ACS_CAT_2021.keys():
+                total_est = ACS_CAT_2021[col]
                 curr_col_perc = city_df[col] / city_df[total_est]
                 perc_key = f"PERC {col}"
                 city_df_copy[perc_key] = curr_col_perc
@@ -149,8 +151,8 @@ def get_percentages(city_df, year):
         for col in COL_2017:
             if col == "Estimate!!Total: TOTAL POPULATION": #potentially skip over race columns here
                 continue
-            if col in ACS_CAT.keys():
-                total_est = ACS_CAT[col]
+            if col in ACS_CAT_2017.keys():
+                total_est = ACS_CAT_2017[col]
                 curr_col_perc = city_df[col] / city_df[total_est]
                 perc_key = f"PERC {col}"
                 city_df_copy[perc_key] = curr_col_perc
@@ -158,7 +160,7 @@ def get_percentages(city_df, year):
     return city_df_copy
 
 
-def get_race_percentages(city_df):
+def get_race_percentages(city_df, year):
     '''
     This function computes the proper percentages for the race columns and adds
     percentage columns to the dataframe
@@ -170,29 +172,29 @@ def get_race_percentages(city_df):
       acs_df: The ACS merged city-level dataframe with race percentages
     '''
     # cleaning column names
-    RACE_CAT_FILE = open("/tmp/lib/race_categories.json", "r")
+    if year == '2021':
+        RACE_CAT_FILE = open("/tmp/lib/race_categories_2021.json", "r")
+        str_yr = "_tct21"
+    else:
+        RACE_CAT_FILE = open("/tmp/lib/race_categories_2017.json", "r")
+        str_yr = "_tct17"
     RACE_CAT = json.load(RACE_CAT_FILE)
     acs_df_clean = city_df.rename(columns=RACE_CAT)
     # applying cleaned column names to original dataset
     acs_df = acs_df_clean.copy()
     # cleaning column names v2 and conglomerating "Other" race
-    acs_df['Hispanic (of any race)'] = acs_df['H/L']
-    acs_df['Non-Hispanic White'] = acs_df['Not H/L: White alone']
-    acs_df['Non-Hispanic Black'] = acs_df['Not H/L: Black alone']
-    acs_df['Non-Hispanic Asian'] = acs_df['Not H/L: Asian alone']
-    acs_df['Non-Hispanic American Indian'] = acs_df['Not H/L: American Indian/Native alone']
-    acs_df['Non-Hispanic Other'] = acs_df['Not H/L: Native Hawaiian / PI alone'] + acs_df['Not H/L: Other race alone'] + acs_df['Not H/L: Two or more races']
+    acs_df[f'Non-Hispanic Other{str_yr}'] = acs_df[f'Not H/L: Native Hawaiian / PI alone{str_yr}'] + acs_df[f'Not H/L: Other race alone{str_yr}'] + acs_df[f'Not H/L: Two or more races{str_yr}']
     
     # creating total population column
-    acs_df['Total Race Population'] = acs_df['H/L'] + acs_df['Not H/L: White alone'] + acs_df['Not H/L: Black alone'] + acs_df['Not H/L: Asian alone'] + acs_df['Not H/L: American Indian/Native alone'] + acs_df['Non-Hispanic Other']
+    acs_df[f'Total Race Population{str_yr}'] = acs_df[f'Hispanic (of any race){str_yr}'] + acs_df[f'Non-Hispanic White{str_yr}'] + acs_df[f'Non-Hispanic Black{str_yr}'] + acs_df[f'Non-Hispanic Asian{str_yr}'] + acs_df[f'Non-Hispanic American Indian{str_yr}'] + acs_df[f'Non-Hispanic Other{str_yr}']
     
     # creating race pct columns per census tract
-    acs_df['% Hispanic (of any race)'] = ((acs_df['Hispanic (of any race)']/acs_df['Total Race Population']))
-    acs_df['% Non-Hispanic White'] = ((acs_df['Non-Hispanic White']/acs_df['Total Race Population']))
-    acs_df['% Non-Hispanic Black'] = ((acs_df['Non-Hispanic Black']/acs_df['Total Race Population']))
-    acs_df['% Non-Hispanic Asian'] = ((acs_df['Non-Hispanic Asian']/acs_df['Total Race Population']))
-    acs_df['% Non-Hispanic American Indian'] = ((acs_df['Non-Hispanic American Indian']/acs_df['Total Race Population']))
-    acs_df['% Non-Hispanic Other'] = ((acs_df['Non-Hispanic Other']/acs_df['Total Race Population']))
+    acs_df[f'% Hispanic (of any race){str_yr}'] = ((acs_df[f'Hispanic (of any race){str_yr}']/acs_df[f'Total Race Population{str_yr}']))
+    acs_df[f'% Non-Hispanic White{str_yr}'] = ((acs_df[f'Non-Hispanic White{str_yr}']/acs_df[f'Total Race Population{str_yr}']))
+    acs_df[f'% Non-Hispanic Black{str_yr}'] = ((acs_df[f'Non-Hispanic Black{str_yr}']/acs_df[f'Total Race Population{str_yr}']))
+    acs_df[f'% Non-Hispanic Asian{str_yr}'] = ((acs_df[f'Non-Hispanic Asian{str_yr}']/acs_df[f'Total Race Population{str_yr}']))
+    acs_df[f'% Non-Hispanic American Indian{str_yr}'] = ((acs_df[f'Non-Hispanic American Indian{str_yr}']/acs_df[f'Total Race Population{str_yr}']))
+    acs_df[f'% Non-Hispanic Other{str_yr}'] = ((acs_df[f'Non-Hispanic Other{str_yr}']/acs_df[f'Total Race Population{str_yr}']))
     
     return acs_df
     
@@ -208,16 +210,17 @@ def get_standard_df(city_merged_df, year, city):
       city_standard_df
     '''
     if year == '2021':
-        cols_of_int = ['tract', 'state', 'county', 'STATEFP', 'COUNTYFP'] + ['geometry'] + COL_2021
+        cols_of_int = ['tract', 'STATEFP', 'COUNTYFP', 'GEOID'] + ['geometry'] + COL_2021
     else:
-        cols_of_int = ['tract', 'state', 'county', 'STATEFP', 'COUNTYFP'] + ['geometry'] + COL_2017
+        cols_of_int = ['tract', 'STATEFP', 'COUNTYFP', 'GEOID'] + ['geometry'] + COL_2017
 
     city_merged_df_copy = city_merged_df[cols_of_int]
 
     city_merged_df_copy.insert(0, 'City', city)
+    city_merged_df_copy = city_merged_df_copy.rename({'STATEFP': 'State ID', 'COUNTYFP': 'County ID'}, axis='columns')
     
     # CALL TO RACE FUNCTION HERE!!
-    city_merged_df_copy = get_race_percentages(city_merged_df_copy)
+    city_merged_df_copy = get_race_percentages(city_merged_df_copy, year)
     
     #need to solve percentages issue still
     city_merged_df_copy = get_percentages(city_merged_df_copy, year)
@@ -245,6 +248,35 @@ def plot_boxplots(city_fcc_df, nhood_col, title):
     plt.xlabel('Neighborhood Indicator')
     plt.title(title)
     plt.suptitle('')
+    
+
+def get_neighborhood_proportions(standard_city_df, city_nhood):
+    '''
+    Compute proportion of census tracts that overlap neighborhood and
+    add a new column to the dataframe
+    
+    Inputs:
+      standard_city_df (dataframe)
+      city_nhood (dataframe)
+      
+    Outputs:
+      ctract_overlaps (list)
+    '''
+    ctract_overlaps = []
+    for index, ctract in standard_city_df.iterrows():
+        if ctract['Neighborhood']:
+            curr_nhood = city_nhood.loc[city_nhood['Neighborhood'] == ctract['Neighborhood']]
+            curr_intersection = curr_nhood['geometry'].buffer(0).intersection(ctract['geometry'].buffer(0))
+            overlap = curr_intersection.area / ctract['geometry'].area
+            try:
+                ctract_overlaps.append(overlap.item())
+            except:
+                ctract_overlaps.append(pd.NA)
+        else:
+            ctract_overlaps.append(pd.NA)
+    
+    return ctract_overlaps
+    
 
 
 def generate_dataframe_and_plots( city_name_str = None, year='2021'):
@@ -311,11 +343,13 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
             if 'index_right' in standard_city_df.columns:
                 standard_city_df = standard_city_df.drop('index_right', axis=1)
             standard_city_df = geopandas.sjoin(standard_city_df, city_nhood, how="left", op='intersects')
-            print(standard_city_df.shape[0])
+            nhood_overlaps = get_neighborhood_proportions(standard_city_df, city_nhood)
+            standard_city_df['% of Tract within Neighborhood'] = nhood_overlaps
             if 'index_right' in standard_city_df.columns:
                 standard_city_df = standard_city_df.drop('index_right', axis=1)
         else:
             standard_city_df['Neighborhood'] = pd.NA
+            standard_city_df['% of Tract within Neighborhood'] = pd.NA
         
         ## save city merged dataframe to a file
         standard_city_df.to_file(f"/tmp/data/boundary-shapefiles/city-boundaries/{city}/city-acs-merge-{year}.geojson", driver="GeoJSON")
@@ -333,5 +367,5 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
     
     # concatenate all of the standard city level dataframes into a single dataframe
     std_acs_censustract_df = pd.concat(standard_city_dataframes)
-    std_acs_censustract_df.to_csv(f"/tmp/data/standard_dataframes/standard_acs_censustract_df_{year}.csv")
+    std_acs_censustract_df.to_csv(f"/tmp/data/standard_dataframes/standard_acs_censustract_df_{year}.csv", index=False)
     std_acs_censustract_df.to_file(f"/tmp/data/standard_dataframes/standard_acs_censustract_df_{year}.geojson", driver="GeoJSON")
