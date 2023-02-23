@@ -115,7 +115,7 @@ def merge_data(city_df, ctract_df,  merged_df_path):
     # should work if geographies are in the same format
     merged_df = geopandas.sjoin(ctract_df, city_df, how="inner", op='intersects')
     #merged_df = merged_df.drop_duplicates(subset='GEOID', keep=False)
-    merged_df.rename(columns={"TRACTCE":"tract"}, inplace = True)
+    merged_df.rename(columns={"TRACTCE":"tract", "STATEFP":"state", "COUNTYFP":"county"}, inplace = True)
     merged_df['tract'] = merged_df['tract'].astype(int)
     merged_df = merged_df.drop_duplicates(subset='GEOID', keep='first')
     merged_df.to_file(merged_df_path, driver="GeoJSON")
@@ -210,14 +210,14 @@ def get_standard_df(city_merged_df, year, city):
       city_standard_df
     '''
     if year == '2021':
-        cols_of_int = ['tract', 'STATEFP', 'COUNTYFP', 'GEOID'] + ['geometry'] + COL_2021
+        cols_of_int = ['tract', 'state', 'county', 'GEOID'] + ['geometry'] + COL_2021
     else:
-        cols_of_int = ['tract', 'STATEFP', 'COUNTYFP', 'GEOID'] + ['geometry'] + COL_2017
+        cols_of_int = ['tract', 'state', 'county', 'GEOID'] + ['geometry'] + COL_2017
 
     city_merged_df_copy = city_merged_df[cols_of_int]
 
     city_merged_df_copy.insert(0, 'City', city)
-    city_merged_df_copy = city_merged_df_copy.rename({'STATEFP': 'State ID', 'COUNTYFP': 'County ID'}, axis='columns')
+    #city_merged_df_copy = city_merged_df_copy.rename({'STATEFP': 'State ID', 'COUNTYFP': 'County ID'}, axis='columns')
     
     # CALL TO RACE FUNCTION HERE!!
     city_merged_df_copy = get_race_percentages(city_merged_df_copy, year)
@@ -309,7 +309,7 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
     # read in the data to be merged
     state_tiger_path = f"/tmp/data/TIGER-census-data/{year}/"
     acs_data = pd.read_csv(f'/tmp/data/acs_data/acs_5yr_{year}.csv')
-    acs_data = acs_data.groupby('tract').mean().reset_index()
+    acs_data = acs_data.groupby(['tract', 'county', 'state']).mean().reset_index()
     
     # go through each city and compute the standard_city_df
     for idx, city in enumerate( city_name_list):
@@ -329,7 +329,14 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
         
         ## Initial Merge with ACS data
         # merge with ACS data
-        city_acs_merge_df = city_tiger_merge.merge(acs_data, how='left', on='tract')
+        acs_data['tract'] = acs_data['tract'].astype(int)
+        acs_data['state'] = acs_data['state'].astype(int)
+        acs_data['county'] = acs_data['county'].astype(int)
+        city_tiger_merge['tract'] = city_tiger_merge['tract'].astype(int)
+        city_tiger_merge['state'] = city_tiger_merge['state'].astype(int)
+        city_tiger_merge['county'] = city_tiger_merge['county'].astype(int)
+        city_acs_merge_df = pd.merge(city_tiger_merge, acs_data,  how='left', 
+                                                   left_on=['tract','county', 'state'], right_on=['tract','county', 'state'])
         # clean up standard dataframe data
         standard_city_df = get_standard_df(city_acs_merge_df, year, city)
         
