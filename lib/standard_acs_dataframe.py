@@ -15,10 +15,10 @@ import glob
 import json
 warnings.filterwarnings('ignore')
 
-## This good city list are the cities that we want to complete the merge on
-
+## This good city list are the cities that we want to complete the merge on - we have 35 cities currently
 GOOD_CITY_LIST = ['arlington', 'atlanta','austin', 'bakersfield', 'boston', 'chicago', 'dallas', 'denver', 'detroit', 'el-paso', 'fort-worth', 'fresno', 'houston', 'indianapolis', 'kansas-city', 'los-angeles', 'louisville', 'memphis', 'mesa', 'minneapolis', 'new-york-city', 'oklahoma-city', 'omaha', 'philadelphia', 'phoenix', 'portland', 'sacramento', 'san-antonio', 'san-diego', 'san-jose', 'seattle', 'tulsa', 'tuscon', 'washington-dc', 'wichita']
 
+## these are the shapefile locations for the city boundary shapefiles pulled from city websites
 GOOD_CITY_SHAPEFILE_LOCATIONS = {
     "arlington": {"location" : "/tmp/data/boundary-shapefiles/city-boundaries/arlington/arlington-boundaries/arlington-boundaries.shp", "state": "texas"},
     "atlanta": {"location" : "/tmp/data/boundary-shapefiles/city-boundaries/atlanta/atlanta-boundaries/atlanta-boundaries.shp", "state": "georgia"},
@@ -59,7 +59,7 @@ GOOD_CITY_SHAPEFILE_LOCATIONS = {
 }
 
 
-# These city neighborhood shapefiles allow us to merge with the neighborhood boundary data
+# These are the directory locations of the city neighborhood shapefiles allow us to merge with the neighborhood boundary data
 GOOD_CITY_NHOOD_SHAPEFILE_LOCATIONS = {
     "seattle": { "location" : "/tmp/data/boundary-shapefiles/neighborhood-boundaries/seattle/seattle_ccn/City_Clerk_Neighborhoods.shp", "nhood_col" : 'HOODS_'},
     "denver": {"location": "/tmp/data/boundary-shapefiles/neighborhood-boundaries/denver/denver_1.0.32/statistical_neighborhoods.shp", "nhood_col": "NBHD_NAME"},
@@ -198,6 +198,7 @@ def get_race_percentages(city_df, year):
     
     return acs_df
     
+
 def get_standard_df(city_merged_df, year, city):
     '''
     This function prepares a merged dataframe into the standard format so it 
@@ -249,6 +250,7 @@ def plot_boxplots(city_fcc_df, nhood_col, title):
     plt.title(title)
     plt.suptitle('')
     
+
 
 def get_neighborhood_proportions(standard_city_df, city_nhood):
     '''
@@ -365,7 +367,7 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
         ## add to the list of standard city dataframes
         standard_city_dataframes.append(standard_city_df)
         
-        # produce plot of TIGER level data for error checkings               
+        # produce plot of TIGER level data for error checking            
         city_tiger_vis = city_tiger_merge.plot(figsize=(10, 10), alpha=0.5, edgecolor='k', )
         cx.add_basemap(city_tiger_vis, crs=city_tiger_merge.crs, source=cx.providers.Stamen.TonerLite, zoom=12)
         city_tiger_vis.set_title(f"{city} {year} TIGER merge visualization")
@@ -374,5 +376,8 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
     
     # concatenate all of the standard city level dataframes into a single dataframe
     std_acs_censustract_df = pd.concat(standard_city_dataframes)
+    
+    # CALL TO ID CHECK FUNCTION
+    
     std_acs_censustract_df.to_csv(f"/tmp/data/standard_dataframes/standard_acs_censustract_df_{year}.csv", index=False)
     std_acs_censustract_df.to_file(f"/tmp/data/standard_dataframes/standard_acs_censustract_df_{year}.geojson", driver="GeoJSON")
