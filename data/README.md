@@ -20,11 +20,10 @@ This folder contains city boundary and neighborhood boundary shapfiles that are 
 + [neighborhood-boundaries/](data/boundary-shapefiles/neighborhood-boundaries/) This folder contains neighborhood boundary shapefiles for ___ citites.
 
 ### STANDARD_DATAFRAMES
-This folder contains ...
-+ [standard_acs_censustract_df_2016.zip](data/standard_acs_censustract_df_2016.zip) TODO
-+ [standard_acs_censustract_df_2017.zip](data/standard_acs_censustract_df_2017.zip) TODO
-+ [standard_acs_censustract_df_2021.zip](data/standard_acs_censustract_df_2021.zip) TODO
-+ [standard_neighborhood_df.csv](data/standard_neighborhood_df.csv) TODO
+This folder contains standard dataframes that include ACS data, TIGER data, city shapefiles and neighborhood boundaries. 
++ [standard_acs_censustract_df_2017.zip](data/standard_acs_censustract_df_2017.zip) This folder contains the standard dataframe at the census tract and neighborhood level for all relevant cities for the 2013-2017 data.
++ [standard_acs_censustract_df_2021.zip](data/standard_acs_censustract_df_2021.zip) This folder contains the standard dataframe at the census tract and neighborhood level for all relevant cities for the 2017-2021 data.
++ [standard_neighborhood_df.csv](data/standard_neighborhood_df.csv) This csv file contains the standard dataframe at the neighborhood level from Autumn 2022 quarter.
 
 ### TIGER-CENSUS-DATA
 This folder contains TIGER census tract shapefile data for three different years which is used to merge with ACS data in order to create standard dataframes at census tract level.
