@@ -438,5 +438,9 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
     # CALL TO ID CHECK FUNCTION
     std_acs_censustract_df = checking_ids(std_acs_censustract_df)
     
+    # replace implausibly small numbers
+    num = std_acs_censustract_df._get_numeric_data()
+    num[num < 0] = pd.NA
+    
     std_acs_censustract_df.to_csv(f"/tmp/data/standard_dataframes/standard_acs_censustract_df_{year}.csv", index=False)
     std_acs_censustract_df.to_file(f"/tmp/data/standard_dataframes/standard_acs_censustract_df_{year}.geojson", driver="GeoJSON")
