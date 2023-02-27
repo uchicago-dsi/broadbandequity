@@ -278,7 +278,65 @@ def get_neighborhood_proportions(standard_city_df, city_nhood):
             ctract_overlaps.append(pd.NA)
     
     return ctract_overlaps
-    
+
+
+def checking_ids(standard_df):
+    checking_ids = {
+        "arlington": {"state": 48, "county": [439]}, # Tarrant
+        "atlanta": {"state": 13, "county": [121, 89]}, # Fulton, DeKalb
+        "austin": {"state": 48, "county": [209, 453, 491]}, # Hays, Travis, Williamson
+        "bakersfield": {"state": 6, "county": [29]}, # Kern
+        "baltimore": {"state": 24, "county": [510]}, # Baltimore city (independent; not in Baltimore County)
+        "boston": {"state": 25, "county": [25]}, # Suffolk
+        "chicago": {"state": 17, "county": [31, 43]}, # Cook, DuPage
+        "colorado-city": {"state": 8, "county": [101]}, # Pueblo
+        "dallas": {"state": 48, "county": [113, 85, 121]}, # Dallas, Collin, Denton
+        "denver": {"state": 8, "county": [31]}, # Denver
+        "detroit": {"state": 26, "county": [163]}, # Wayne
+        "el-paso": {"state": 48, "county": [141]}, # El Paso
+        "fort-worth": {"state": 48, "county": [121, 367, 439]}, # Denton, Parker, Tarrant
+        "fresno": {"state": 6, "county": [19]}, # Fresno
+        "houston": {"state": 48, "county": [201, 157, 339]}, # Harris, Fort Bend, Montgomery
+        "indianapolis": {"state": 18, "county": [97]}, # Marion
+        "kansas-city": {"state": 29, "county": [95, 47, 165, 37]}, # Jackson, Clay, Platte, Cass
+        "long-beach": {"state": 6, "county": [37]}, # Los Angeles
+        "los-angeles": {"state": 6, "county": [37]}, # Los Angeles
+        "louisville": {"state": 21, "county": [111]}, # Jefferson
+        "memphis": {"state": 47, "county": [157]}, # Shelby
+        "mesa": {"state": 4, "county": [13]}, # Maricopa
+        "miami": {"state": 12, "county": [86]}, # Miami-Dade
+        "minneapolis": {"state": 27, "county": [53]}, # Hennepin
+        "new-york-city": {"state": 36, "county": [47, 81, 61, 5, 85]}, # Kings, Queens, New York, Bronx, Richmond
+        "oakland": {"state": 6, "county": [1]}, # Alameda
+        "oklahoma-city": {"state": 40, "county": [109, 27, 17, 125]}, # Oklahoma, Cleveland, Canadian, Pottawatomie
+        "omaha": {"state": 31, "county": [55]}, # Douglas
+        "philadelphia": {"state": 42, "county": [101]}, # Philadelphia
+        "phoenix": {"state": 4, "county": [13]}, # Maricopa
+        "portland": {"state": 41, "county": [51, 5, 67]}, # Multnomah, Clackamas, Washington
+        "raleigh": {"state": 37, "county": [183, 63]}, # Wake, Durham
+        "sacramento": {"state": 6, "county": [67]}, # Sacramento
+        "san-antonio": {"state": 48, "county": [29, 325]}, # Bexar, Medina
+        "san-diego": {"state": 6, "county": [73]}, # San Diego
+        "san-jose": {"state": 6, "county": [85]}, # Santa Clara
+        "seattle": {"state": 53, "county": [33]}, # King
+        "tulsa": {"state": 40, "county": [143, 113, 131, 145]}, # Tulsa, Osage, Rogers, Wagoner
+        "tuscon": {"state": 4, "county": [19]}, # Pima
+        "virginia-beach": {"state": 51, "county": [810]}, # Virginia Beach city (independent)
+        "washington-dc": {"state": 11, "county": [1]}, # DC
+        "wichita": {"state": 20, "county": [173]} # Sedgwick
+    }
+
+    id_check = []
+
+    for index, row in standard_df.iterrows():
+        curr_city = row['City']
+        if (row['state'] == checking_ids[curr_city]['state']) & (row['county'] in checking_ids[curr_city]['county']):
+            id_check.append(1)
+        else:
+            id_check.append(0)
+
+    standard_df['Correct tract and county?'] = id_check
+    return standard_df
 
 
 def generate_dataframe_and_plots( city_name_str = None, year='2021'):
@@ -378,6 +436,7 @@ def generate_dataframe_and_plots( city_name_str = None, year='2021'):
     std_acs_censustract_df = pd.concat(standard_city_dataframes)
     
     # CALL TO ID CHECK FUNCTION
+    std_acs_censustract_df = checking_ids(std_acs_censustract_df)
     
     std_acs_censustract_df.to_csv(f"/tmp/data/standard_dataframes/standard_acs_censustract_df_{year}.csv", index=False)
     std_acs_censustract_df.to_file(f"/tmp/data/standard_dataframes/standard_acs_censustract_df_{year}.geojson", driver="GeoJSON")
