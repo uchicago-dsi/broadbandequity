@@ -18,7 +18,7 @@ This folder contains the city geojson and/or shapefiles that were used in the an
 - Portland
 - San Antonio
 - San Diego
-- San Francisco*
+- San Francisco
 - San Jose
 - Seattle
 - Washington, D.C.
@@ -26,7 +26,7 @@ This folder contains the city geojson and/or shapefiles that were used in the an
 More information on how the data was gathered can be found in the "notes" folder of the repository. Data sources can be found listed in each city's respective folder. Cities with asteriks can be found under the `city-data-wip` folder because their boundary shapefiles could not be found. 
 
 
-This folder contains the city geojson and/or shapefiles that were used in the analysis. The WIP cities are:
+The `city-data-wip` folder consists of cities for which their boundary shapefiles could not be found. The WIP cities are:
 - Albuquerque
 - Baltimore
 - Charlotte
@@ -34,3 +34,4 @@ This folder contains the city geojson and/or shapefiles that were used in the an
 - Las Vegas
 - Milwaukee
 - Nashville 
+- San Francisco
