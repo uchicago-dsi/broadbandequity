@@ -12,3 +12,4 @@ It contains the following:
 + [ACS Data Notebooks](acs_data.ipynb): This notebook goes through and pull the ACS columns of interest from the ACS census data for 2021 and 2017 5 yr estimates
 + [ACS Race Percentage Notebook](acs_race_pct_final.ipynb): This notebook contains code to clean the race columns in the dataframe. This is not necessary to use when running to create the standard dataframe as the code has been merged into lib/standard_tiger_df.py
 + [ACS Visualizations Notebook](ACS_Visualizations.ipynb): This notebook exhibits how to display cloropleth maps for a given column of interest in our dataframes
++ [ACS Policy Memos Notebook](ACS_policymemo_visualizations.ipynb): This notebook produces visualizations of interest for the policy memo that can be sent out to policy stakeholders
