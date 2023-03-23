@@ -22,6 +22,7 @@ Bruno Xie brunoxie@uchicago.edu
 Christelle Inema inema@uchicago.edu
 Kaya Borlase borlasekn@uchicago.edu
 Kamran Ahmed kamranahmed@uchicago.edu
+Chandler Hall cgwhall@uchicago.edu
 
 Mentors: Evelyn Campbelle and Nick Ross
 
