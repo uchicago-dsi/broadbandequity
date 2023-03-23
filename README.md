@@ -146,6 +146,114 @@ This folder contains the libraries for the pipeline to standardize and visualize
 
 ---
 
+#### Census Tract Data
+
+This folder contains the census tract geojson and/or shapefiles that were used in the analysis. The cities included in the analysis are:
++ Arlington
++ Atlanta
++ Austin
++ Bakersfield
++ Baltimore
++ Boston
++ Chicago
++ Colorado City
++ Dallas
++ Denver
++ Detroit
++ El Paso
++ Fort Worth
++ Fresno
++ Houston
++ Indianapolis
++ Kansas City
++ Long Beach
++ Los Angeles
++ Louisville
++ Memphis
++ Mesa
++ Miami
++ Minneapolis
++ New York City
++ Oakland
++ Oklahoma City
++ Omaha
++ Philadelphia
++ Phoenix
++ Portland
++ Raleigh
++ Sacramento
++ San Antonio
++ San Diego
++ San Francisco
++ San Jose
++ Seattle
++ Tulsa
++ Tucson
++ Virginia Beach
++ Washington, D.C.
++ Wichita
+
+---
+
+#### Census Tract Data WIP
+
+This folder contains the census tract geojson and/or shapefiles that were not fit for analysis. These files were incomplete, inaccurate, or had noise. The cities that were not included in the census-tract-level standard dataframe (and thus need further inspection are):
++ Baltimore
++ San Francisco
+
+---
+
+#### Neighborhood Data
+
+This folder contains the neighborhood geojson and/or shapefiles that were used in the analysis. The cities included in the analysis are:
++ Atlanta
++ Austin
++ Baltimore
++ Chicago
++ Dallas
++ Denver
++ Detroit
++ Houston
++ Indianapolis
++ Kansas City
++ Long Beach
++ Los Angeles
++ Louisville
++ Miami
++ Minneapolis
++ Oakland
++ Phoenix
++ Portland
++ Raleigh
++ Sacramento
++ San Diego
++ San Francisco
++ San Jose
++ Seattle
++ Tucson
++ Washington, D.C.
+
+---
+
+#### Neighborhood Data WIP
+
+This folder contains the neighborhood geojson and/or shapefiles that were not fit for analysis. These files were incomplete, inaccurate, or had noise. The cities that were not included in the neighborhood-level standard dataframe (and thus need further inspection are):
++ Albuquerque
++ Boston
++ Charlotte
++ Columbus
++ El Paso
++ Jacksonville
++ Las Vegas
++ Memphis
++ Milwaukee
++ Nashville
++ New York City
++ Philadelphia
++ San Antonio
+
+---
+
 #### Notebooks
 
 This folder contains notebooks for use in the broadband equity project.  These were created during Fall 2022 and Winter 2023. Each notebook contains information on running the code within it to reproduce the analysis, dataframes, and visualizations. It contains the following:
