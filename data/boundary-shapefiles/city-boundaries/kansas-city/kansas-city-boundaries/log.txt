@@ -1,0 +1,7 @@
+Warning 6: Normalized/laundered field name: 'admin_level' to 'admin_leve'
+Warning 6: Normalized/laundered field name: 'border_type' to 'border_typ'
+Warning 6: Normalized/laundered field name: 'is_in:country' to 'is_in_coun'
+Warning 6: Normalized/laundered field name: 'is_in:country_code' to 'is_in_co_1'
+Warning 6: Normalized/laundered field name: 'is_in:iso_3166_2' to 'is_in_iso_'
+Warning 6: Normalized/laundered field name: 'is_in:state' to 'is_in_stat'
+Warning 6: Normalized/laundered field name: 'is_in:state_code' to 'is_in_st_1'

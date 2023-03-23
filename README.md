@@ -1,6 +1,6 @@
 # broadbandequity
 
-This repository contains the datasets and codebooks used in the City of Chicago Broadband Equity Project from the Data Science Clinic (Winter 2022). Additional work was also done during the Autumn 2022 Quarter.
+This repository contains the datasets and codebooks used in the City of Chicago Broadband Equity Project from the Data Science Clinic (Winter 2023). Additional work was also done during the Autumn 2022 Quarter.
 
 Authors: Lena Diasti, Drew Keller, Amy Maldonado, Nick Ross (Autumn 2022)
 
@@ -10,18 +10,34 @@ Authors: Lena Diasti, Drew Keller, Amy Maldonado, Nick Ross (Autumn 2022)
 
 ---
 
+#### Deliverables Winter 2023
+
+We are looking to build a set of jupyter notebooks to generate maps for the specified metro areas. We are looking to move beyond description and look at association/causal inference analysis. We want to connect our data to sociodemographic factors and use multi-level modeling. We also want to build the pipeline to include data at the neighborhood as well as census tract. This code should be standardized, generalizeable, and reproducible. For that reason, we will use docker.
+
+
+People Winter 2023:
++ Kaya Borlase borlasekn@uchicago.edu
++ Brendon Krall bkrall36@uchicago.edu
++ Victoria Kielb vkielb@uchicago.edu
++ Maia Boyd mboyd6@uchicago.edu
+
+Mentor: James Turk
+
+TA: Kenia Godinez Nogueda
+
+---
+
 #### Deliverables Autumn 2022
 
 We are looking to build a set of jupyter notebooks which generate maps, similar to what was produced last year, for the specified metro areas to demonstrate the extent of internet equity. These notebooks should rely on a standardized set of libraries (to also be written) which avoid code repetition as well as use docker for code reproducibility purposes.
 
 People Autumn 2022:
-
-Sam Pavlekovsky spavlekovsky@uchicago.edu
-Maia Boyd mboyd6@uchicago.edu
-Bruno Xie brunoxie@uchicago.edu
-Christelle Inema inema@uchicago.edu
-Kaya Borlase borlasekn@uchicago.edu
-Kamran Ahmed kamranahmed@uchicago.edu
++ Sam Pavlekovsky spavlekovsky@uchicago.edu
++ Maia Boyd mboyd6@uchicago.edu
++ Bruno Xie brunoxie@uchicago.edu
++ Christelle Inema inema@uchicago.edu
++ Kaya Borlase borlasekn@uchicago.edu
++ Kamran Ahmed kamranahmed@uchicago.edu
 
 Mentors: Evelyn Campbelle and Nick Ross
 
@@ -71,97 +87,195 @@ Once installed, access modules from the main directory via relative imports - fo
 
 #### Notes
 
-There are note in the notes subdirectory. These notes are not on the technical aspect, but on the research and decision-making part of the project.
+There are note in the notes subdirectory. These notes are not on the technical aspect, but on the research and decision-making part of the project. This folder contain notes on the Broadband Equity Data Science Clinic Project. It contains the following:
++ [Planning Notes](planning-notes) is a folder that contains planning notes taken over the course of the two quarters
++ [Frequently Asked Questions](faq.md) is a file that contains frequently asked questions that aid in the understanding of the analysis work
++ [Data Description and EDA](Data-description-and-EDA.md) is a file that contains information on how the data was gathered and the exploratory data analysis that was performed.
++ [Project Goals Winter 2023](goals-w23.md) is a file containing the goals for the Data Science Clinic Project Winter 2023 cohort
 
 #### Sources
 
 We fetched our data for analysis from the following sources:
-+ American Community Survey (ACS) 2015-2019 data
-  + [Individual](https://api.census.gov/data/2019/acs/acs5/pums/variables.html)
-  + [Aggregate](https://api.census.gov/data/2019/acs/acs5/variables.html)
-  + [Profile](https://api.census.gov/data/2019/acs/acs5/profile/variables.html) 
-+ [Current Population Survey (CPS) data](https://api.census.gov/data/2019/cps/internet/nov/variables.html)
-+ [Federal Communications Commission (FCC) Form 477 2020 data](https://www.fcc.gov/general/broadband-deployment-data-fcc-form-477)
-+ Chicago Data Portal
-  + [Chicago Community Area Boundaries](https://data.cityofchicago.org/Facilities-Geographic-Boundaries/Boundaries-Community-Areas-current-/cauq-8yn6)
-  + [Census Tract Boundaries](https://data.cityofchicago.org/Facilities-Geographic-Boundaries/Boundaries-Census-Tracts-2010/5jrd-6zik)
-  + [Covid Community Vulnerability Index (CCVI)](https://data.cityofchicago.org/Health-Human-Services/Chicago-COVID-19-Community-Vulnerability-Index-CCV/xhc6-88s9)
-  + [Hardship Index](https://data.cityofchicago.org/Health-Human-Services/hardship-index/792q-4jtu)
++ American Community Survey (ACS) 2017 and 2021 5 yr estimades
+  + [Individual 2017](https://api.census.gov/data/2017/acs/acs5/pums/variables.html)
+  + [Aggregate 2017](https://api.census.gov/data/2017/acs/acs5/variables.html)
+  + [Profile 2017](https://api.census.gov/data/2017/acs/acs5/profile/variables.html) 
+  + [Individual 2021](https://api.census.gov/data/2021/acs/acs5/pums/variables.html)
+  + [Aggregate 2021](https://api.census.gov/data/2021/acs/acs5/variables.html)
+  + [Profile 2021](https://api.census.gov/data/2021/acs/acs5/profile/variables.html) 
++ [TIGER State Census Tract Data](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html)
++ City Data Portals (more information in README's in data folder
+  + City Shapefile Boundaries
+  + City Neighborhood Boundaries
 
 ---
 
 ## Contents
 
- * [Analysis](#analysis)
+ * [Archived Chicago Code](#archived-chicago-code)
  * [Data](#data)
- * [Data Pipeline](#data-pipeline) 
- * [Geo](#geo)
- * [Tests](#tests)
+ * [Lib](#lib)
+ * [Notebooks](#notebooks)
+ * [Notes](#notes)
+ * [Visualizations](#visualizations)
  * [Additional Files](#additional-files)
  
----
-
-#### Analysis
-
-This folder contains notebooks used to analyze the data. 
-+ [acs_aggregate_analysis.ipynb](analysis/acs_aggregate_analysis.ipynb) is a Jupyter notebook used to import, clean, analyze, merge, and visualize summaries of the fetched aggregate ACS, CCVI, and Hardship data for a community area level analysis. 
-+ [acs_individual_analysis.ipynb](analysis/acs_individual_analysis.ipynb) is a Jupyter notebook used to import, clean, analyze, merge, and visualize summaries of the fetched individual ACS data for a household level analysis. 
-+ [acs_visualizations.ipynb](analysis/acs_visualizations.ipynb) is a Jupyter notebook used to import and visualize fetched aggregate ACS data. 
-+ [cps_analysis.ipynb](analysis/cps_analysis.ipynb) is a Jupyter notebook  used to import, clean, analyze, merge, and visualize summaries of the fetched Current Population Survey (CPS) data. 
-+ [fcc_analysis.ipynb](analysis/fcc_analysis.ipynb) is a Jupyter notebook used to import, clean, analyze, merge, and visualize summaries of the fetched FCC data. 
 
 ---
 
 #### Data
 
-This folder contains the raw and processed data used in our analysis. 
-+ [CMAP_2019_comm_data.csv](data/CMAP_2019_comm_data.csv) is a csv with Community Area information for spatial validation.
-+ [comm_areas.csv](data/comm_areas.csv) and [tracts_comm_areas.csv](data/tracts_comm_areas.csv) are csvs used to crosswalk Census tracts to Chicago community areas for ACS data analysis.
-+ [acs5_aggregate.csv](data/acs5_aggregate.csv) is a csv with ACS 5-year aggregate data.
-+ [acs5_indvidual.csv](data/acs5_individual.csv) is a csv with ACS 5-year individual data.
-+ [acs5_profile.csv](data/acs5_profile.csv) is a csv with ACS 5-year profile data.
-+ [cps_individual.csv](data/cps_individual.csv) is a csv with the CPS individual data.
-+ [chicago_internet.csv](data/chicago_internet.csv) is a csv of the final table showing total populations, number of households, broadband access, and sociodemographics by Chicago community area. 
-+ [covid_index.csv](data/covid_index.csv) is a csv of the CCVI scores.
-+ [hardship_index.csv](data/hardship_index.csv) is a csv of the hardship scores.
-+ [fcc_acs_combined_community_areas](data/fcc_acs_combined_community_areas) and [fcc_acs_combined_tracts](data/fcc_acs_combined_tracts) are csvs containing combined ACS and FCC data at a community area and tract level, respectively.
-+ [chicago_block_list.csv](data/chicago_block_list.csv) is a csv containing a list of 2010s Chicago Census block numbers.
+This folder contains the raw and processed data used in our analysis. More information is included in the data folder. It contains the following sets of data:
++ [acs_data](data/acs_data): Pulled ACS 5-year estimate data and columns of interest for 2017 and 2021 5 yr estimates
++ [archived_chicago_data](data/archived_chicago_data): Archived Chicago data from before the data science clinic projects
++ [boundary-shapefiles](data/boundary-shapefiles): SHP files for cities of interest. This includes city boundary data and census tract dataframes
++ [standard_dataframes](data/standard_dataframes): Standard dataframes produced for analysis. These dataframes combine neighorhood, census tract, and ACS dataframes for all cities into a single dataframe
++ [TIGER-census-data](data/TIGER-census-data): State-based TIGER shapefiles for states for both 2017 and 2021.
 
-Note: _Raw_ FCC Form 477 data is not included in the repository due to size (`chi_fcc.csv` is .gitignore'd). Please see the code cells at the beginning of [fcc_analysis.ipynb](analysis/fcc_analysis.ipynb) to fetch, filter, and write `chi_fcc.csv` locally.
 
 ---
 
-#### Data Pipeline
+#### Lib
 
-This folder contains scripts used to fetch and manipulate data. 
-+ [data_pipeline_how_to.ipynb](data_pipeline/data_pipeline_how_to.ipynb) is a tutorial on how to use the fetching and spatial operations scripts.
-+ [fetch_census_data.py](data_pipeline/fetch_census_data.py) is a module to fetch ACS and CPS data via API.
-+ [fetch_fcc_data.py](data_pipeline/fetch_fcc_data.py) is a module to fetch FCC data via API.
-+ [interactive_mapping.py](data_pipeline/interactive_mapping.py) is preliminary work towards producing interactive maps.
-+ [spatial_operations.py](data_pipeline/spatial_operations.py) is a module to match geography shapefiles with 
-data, carry out aggregation from one geography to another, and produce simple choropleths.
-
----
-
-#### Geo
-
-This folder contains shapefiles for spatial analysis.
-+ The "blocks" files are block geographies.
-+ The "community_areas" files are community area geographies.
-+ The "tracts" files are Census tract geographies.
-+ The "wards" files are Chciago ward geographies.
-+ [fix_block_shapes.ipynb](geo/fix_block_shapes.ipynb) is a notebook used to modify the Chicago Data Portal's block shapefiles so that they do not contain parts of Lake Michigan.
-+ [fix_ohare_shape.ipynb](geo/fix_ohare_shape.ipynb) is a notebook used to modify the Chicago Data Portal's community area shapefiles so that the O'Hare shapefile does not contain the single tract that it has in DuPage County.
+This folder contains the libraries for the pipeline to standardize and visualize the census data from different cities. It contains the following files:
++ [race_categories_2017.json](lib/race_categories_2017.json) is a file that contains the different race categories and their new names for 2017, used in the standard ACS dataframe calculations.
++ [race_categories_2021.json](lib/race_categories_2021.json) is a file that contains the different race categories and their new names for 2021, used in the standard ACS dataframe calculations.
++ [standard_acs_dataframe.py](lib/standard_acs_dataframe.py) is code that creates the standard ACS dataframe for a given 5 yr estimate and cities of interest. This is the most up to data standard_dataframe.py code
++ [visualizations.py](lib/visualizations.py) is code that creates visualizations of interest for the standard ACS dataframe
++ [wip](lip/wip/) is a directory containing archived versions of the standard_df code, including code to produce neighborhood level and census tract level standard dataframes
 
 ---
 
-#### Tests
+#### Census Tract Data
 
-This folder contains notebooks and shapefiles to validate areal interpolation.
-+ [neighborhood_spatial_validation.ipynb](tests/neighborhood_spatial_validation.ipynb) is a notebook previously used to inspect some of the neighborhoods that were producing outlier results via areal interpolation. This problem was resolved (we determined it was due to lake area being included in geographies) but we are leaving this notebook in the repository for documentation purposes.
-+ [spatial_operations_validation.ipynb](tests/spatial_operations_validation.ipynb) is a notebook demonstrating that our areal interpolation functions produce extensive and intensive statistics similar to known values.
-+ [tract_validation_and_masking.ipynb](tests/tract_validation_and_masking.ipynb) is a notebook previously used to mask tract boundaries, removing a duplicated tract number (specifically, the tract of O'Hare community area that lies in DuPage County). It no longer fully functions now that we have made the change, but we are retaining it in the repository for documentation purposes.
-+ [validation_data](tests/validation_data) is a csv with community-area population estimates to validate areal interpolation.
+This folder contains the census tract geojson and/or shapefiles that were used in the analysis. The cities included in the analysis are:
++ Arlington
++ Atlanta
++ Austin
++ Bakersfield
++ Baltimore
++ Boston
++ Chicago
++ Colorado City
++ Dallas
++ Denver
++ Detroit
++ El Paso
++ Fort Worth
++ Fresno
++ Houston
++ Indianapolis
++ Kansas City
++ Long Beach
++ Los Angeles
++ Louisville
++ Memphis
++ Mesa
++ Miami
++ Minneapolis
++ New York City
++ Oakland
++ Oklahoma City
++ Omaha
++ Philadelphia
++ Phoenix
++ Portland
++ Raleigh
++ Sacramento
++ San Antonio
++ San Diego
++ San Francisco
++ San Jose
++ Seattle
++ Tulsa
++ Tucson
++ Virginia Beach
++ Washington, D.C.
++ Wichita
+
+---
+
+#### Census Tract Data WIP
+
+This folder contains the census tract geojson and/or shapefiles that were not fit for analysis. These files were incomplete, inaccurate, or had noise. The cities that were not included in the census-tract-level standard dataframe (and thus need further inspection are):
++ Baltimore
++ San Francisco
+
+---
+
+#### Neighborhood Data
+
+This folder contains the neighborhood geojson and/or shapefiles that were used in the analysis. The cities included in the analysis are:
++ Atlanta
++ Austin
++ Baltimore
++ Chicago
++ Dallas
++ Denver
++ Detroit
++ Houston
++ Indianapolis
++ Kansas City
++ Long Beach
++ Los Angeles
++ Louisville
++ Miami
++ Minneapolis
++ Oakland
++ Phoenix
++ Portland
++ Raleigh
++ Sacramento
++ San Diego
++ San Francisco
++ San Jose
++ Seattle
++ Tucson
++ Washington, D.C.
+
+---
+
+#### Neighborhood Data WIP
+
+This folder contains the neighborhood geojson and/or shapefiles that were not fit for analysis. These files were incomplete, inaccurate, or had noise. The cities that were not included in the neighborhood-level standard dataframe (and thus need further inspection are):
++ Albuquerque
++ Boston
++ Charlotte
++ Columbus
++ El Paso
++ Jacksonville
++ Las Vegas
++ Memphis
++ Milwaukee
++ Nashville
++ New York City
++ Philadelphia
++ San Antonio
+
+---
+
+#### Notebooks
+
+This folder contains notebooks for use in the broadband equity project.  These were created during Fall 2022 and Winter 2023. Each notebook contains information on running the code within it to reproduce the analysis, dataframes, and visualizations. It contains the following:
++ [Work In Progress Folder](notebooks/wip): This folder contains code used by participants in the Data Science Clinic. It is not cleaned and is kept for archival purposes
++ [Inequality Measures](inequality_measures.ipynb): This notebook computes and produces inequality measures for each city from the standard dataframes.
++ [Neighborhood Boxplots](neighborhood_boxplots.ipynb): This notebook produces boxplots showing the range of neighborhood-level broadband access for each city
++ [Standard Dataframe Notebook](standard_tiger_df_notebook.ipynb): This notebook goes through how to run the standard_tiger_dataframe.py library and produce the standard ACS merged dataframe
++ [ACS Data Notebooks](acs_data.ipynb): This notebook goes through and pull the ACS columns of interest from the ACS census data for 2021 and 2017 5 yr estimates
++ [ACS Race Percentage Notebook](acs_race_pct_final.ipynb): This notebook contains code to clean the race columns in the dataframe. This is not necessary to use when running to create the standard dataframe as the code has been merged into lib/standard_tiger_df.py
++ [ACS Visualizations Notebook](ACS_Visualizations.ipynb): This notebook exhibits how to display cloropleth maps for a given column of interest in our dataframes
++ [ACS Policy Memos Notebook](ACS_policymemo_visualizations.ipynb): This notebook produces visualizations of interest for the policy memo that can be sent out to policy stakeholders
+
+---
+
+#### Visualizations
+
+This folder contains visualizations produced by our libraries. We have the following types of visualizations:
++ [Boxplot Visualizations](visualizations/boxplot_visualizations): This folder contains boxplots showing the range of broadband adoption at the neighborhood level within cities
++ "City-census-cleaned.png": Contains geospatial visualization for broadband access for a given city at the census tract level, controlling for overlap duplication
++ "City-census.png": Contains geospatial visualization for broadband access for a given city at the census tract level, with no control for overlap duplication
++ "City-neighborhood-cleaned.png": Contains geospatial visualization for broadband access for a given city at the neighborhood boundary level, controlling for overlap duplication
++ "City-neighborhood.png": Contains geospatial visualization for broadband access for a given city at the census tract level, with no control for overlap duplication
 
 ---
 
