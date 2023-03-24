@@ -7,6 +7,24 @@ Authors: Lena Diasti, Drew Keller, Amy Maldonado, Nick Ross (Autumn 2022)
  * [Goals](#goals)
  * [Installation](#installation)
  * [Sources](#sources)
+ 
+ ---
+
+#### Deliverables Spring 2023
+
+----
+
+
+PeopleSpring 2023:
++ Victoria Kielb vkielb@uchicago.edu
++ Chandler Hall cgwhall@uchicago.edu
+
+Mentor: James Turk
+
+TA: Kenia Godinez Nogueda
+
+---
+
 
 ---
 
