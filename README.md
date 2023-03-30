@@ -10,6 +10,21 @@ Authors: Lena Diasti, Drew Keller, Amy Maldonado, Nick Ross (Autumn 2022)
 
 ---
 
+#### Deliverables Spring 2023
+
+----
+
+People Spring 2023:
++ Victoria Kielb vkielb@uchicago.edu
++ Chandler Hall cgwhall@uchicago.edu
++ Sarah Lueling slueling@uchicago.edu
+
+Mentor: James Turk
+
+TA: Kenia Godinez Nogueda
+
+---
+
 #### Deliverables Winter 2023
 
 We are looking to build a set of jupyter notebooks to generate maps for the specified metro areas. We are looking to move beyond description and look at association/causal inference analysis. We want to connect our data to sociodemographic factors and use multi-level modeling. We also want to build the pipeline to include data at the neighborhood as well as census tract. This code should be standardized, generalizeable, and reproducible. For that reason, we will use docker.
