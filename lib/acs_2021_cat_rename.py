@@ -32,7 +32,7 @@ with open(f'{sys.path[0]}//data/acs_data/acs_categories_2021.json', 'w') as f:
     
     
 ACS_CAT_FILE_2021 = open(f"{sys.path[0]}/data/acs_data/acs_categories_2021.json", "r")
-ACS_CAT_2021 = json.load(ACS_CAT_FILE_2021)
+ACS_CAT_2021 = json.load(ACS_CAT_FILE_2021) 
 
 # Read in the ACS columns of interest
 FILE_2021 = open(f"{sys.path[0]}/data/acs_data/2021_columns.json", "r")
@@ -62,3 +62,4 @@ def get_percentages(city_df):
 acs_2021_standard_df = get_percentages(acs_2021_standard_df)
 
 acs_2021_standard_df.to_csv(f"{sys.path[0]}/data/standard_dataframes/standard_acs_censustract_df_2021.csv", index=False)
+acs_2021_standard_df.to_file(f"{sys.path[0]}/data/standard_dataframes/standard_acs_censustract_df_2021.geojson", driver="GeoJSON")
