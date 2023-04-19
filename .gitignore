@@ -137,4 +137,4 @@ data_pipeline/.DS_Store
 chi_fcc.csv
 IL-Fixed-Dec2020-v1.csv
 internet-access-map/data/
-
+data/boundary-shapefiles/city-boundaries/*/*.geojson
