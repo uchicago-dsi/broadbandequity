@@ -9,7 +9,7 @@ Created on Fri Apr 21 14:41:24 2023
 import zipfile
 import os
 import pandas as pd
-import numpy
+import numpy as np
 import sys
 
 ############
@@ -18,11 +18,11 @@ os.chdir('/Users/chandlerhall/Desktop/Github/broadbandequity')
 
 # 2019 release CDC csv
 if os.path.exists('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv'):
-    cdc = pd.read_csv('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv')
+    cdc_clean = pd.read_csv('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv')
 else:
     with zipfile.ZipFile('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.zip', 'r') as zip_ref:
         zip_ref.extractall('data/CDC_PLACES/')
-    cdc = pd.read_csv('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv')
+    cdc_clean = pd.read_csv('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv')
     
 # 2022 release CDC csv
 if os.path.exists('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv'):
@@ -39,10 +39,13 @@ else:
     with zipfile.ZipFile('data/standard_dataframes/standard_acs_censustract_df_2017.zip', 'r') as zip_ref:
         zip_ref.extractall('data/standard_dataframes/')
     df_2017 = pd.read_csv('data/standard_dataframes/standard_acs_censustract_df_2017.csv')
+    
+    
+# Social Vulnerability index
+svi = pd.read_csv('data/Social Vulnerability Index/SVI2016_US.csv')
 
 ##############
-cdc = cdc[cdc['GeographicLevel'] == 'Census Tract']
-cdc = cdc[cdc['Year']==2017]
+cdc = cdc_clean[cdc_clean ['GeographicLevel'] == 'Census Tract']
 
 cdc = cdc.pivot(index=['UniqueID'], columns='Measure', values='Data_Value').reset_index()
 cdc['UniqueID'] = cdc['UniqueID'].str[8:]
@@ -95,7 +98,7 @@ standard_merged = standard_merged.rename(columns = {
 # List of variables that need to be taken in inverse for indexing
 inverse_vars = ['health_arthritis', 'health_cancer', 'health_KdnyDisease', 'health_PulDisease', 'health_HrtDisease', 'health_asthma', 'health_diab',
                   'health_HighBldPrs','health_CholHigh','health_GoodMent', 'health_GoodPhys','health_stroke','behav_drink','behav_smoking','behav_NoPhysAct',
-                  'behav_obesity', 'prev_HlthInsur', 'prev_DocVisit']
+                  'behav_obesity', 'prev_HlthInsur']
 
 # Comprehensive index variable list 
 hlth_indx_vars = ['health_arthritis', 'health_cancer', 'health_KdnyDisease', 'health_PulDisease', 'health_HrtDisease', 'health_asthma', 'health_diab',
@@ -126,9 +129,27 @@ standard_merged['health_indx_outcomes'] = standard_merged[hlth_indx_outcomes].su
 standard_merged['health_indx_behav'] = standard_merged[hlth_indx_behav].sum(axis=1)
 standard_merged['health_indx_prev'] = standard_merged[hlth_indx_prev].sum(axis=1)
 
+standard_merged['health_indx'] = standard_merged['health_indx'].replace(0, np.nan)
+standard_merged['health_indx_outcomes'] = standard_merged['health_indx_outcomes'].replace(0, np.nan)
+standard_merged['health_indx_behav'] = standard_merged['health_indx_behav'].replace(0, np.nan)
+standard_merged['health_indx_prev'] = standard_merged['health_indx_prev'].replace(0, np.nan)
+
+
+### Merge SVI data with standard dataframe
+svi['FIPS'] = svi['FIPS'].astype('string')
+
+for index, val in enumerate(svi['FIPS']):
+    if len(val) == 10:
+        val = '0' + val
+        svi.at[index, 'FIPS'] = val
+
+standard_merged_final = pd.merge(standard_merged, svi, left_on='GEOID', right_on='FIPS', how='inner')
+
 
 ## Write to CSV
-standard_merged.to_csv('../../standard_merged_2017.csv', index=False)
+standard_merged_final.to_csv('data/standard_dataframes/standard_merged_2017.csv', index=False)
+
+low_numbs = standard_merged[standard_merged['health_indx'] < 1]
 
 ## Original Health Index List
 # ## Health index
