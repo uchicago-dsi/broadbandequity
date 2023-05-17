@@ -12,71 +12,103 @@ import pandas as pd
 import numpy as np
 import sys
 
-os.chdir('/Users/chandlerhall/Desktop/Github/broadbandequity')
+### add system path to get other library directories
+sys.path[0] = os.path.join(os.path.abspath(''),'..')
 
-# load standard dataframes
-#################################
 
-# 2019 release CDC csv
-if os.path.exists('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv'):
-    cdc_clean = pd.read_csv('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv')
-else:
-    with zipfile.ZipFile('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.zip', 'r') as zip_ref:
-        zip_ref.extractall('data/CDC_PLACES/')
-    cdc_clean = pd.read_csv('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv')
+def load_csv_or_zip(path=sys.path[0]):
+    '''
+    Check if required csv files exist in directory or needs to be unzipped. Loads data to unique variable name.
+
+    Parameters
+    ----------
+    path : string from user directory
+        The default is sys.path[0].
+
+    Returns
+    -------
+    cdc : pd.DataFrame
+        2019 release of CDC's PLACES dataset with data measuring 27 health indicators in 2017
+    df_2017 : pd.DataFrame
+        2017 standard dataframe with 5-yr ACS data and internet connectivity.
+    svi : pd.DataFrame
+        Social Vulnerability Index variables and component data.
+
+    '''
     
-# # 2022 release CDC csv
-# if os.path.exists('data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv'):
-#     cdc_2022 = pd.read_csv('data/CDC_PLACES/PLACES__Local_Data_for_Better_Health__Census_Tract_Data_2022_release.csv')
-# else:
-#     with zipfile.ZipFile('data/CDC_PLACES/PLACES__Local_Data_for_Better_Health__Census_Tract_Data_2022_release.zip', 'r') as zip_ref:
-#         zip_ref.extractall('data/CDC_PLACES/')
-#     cdc_2022 = pd.read_csv('data/CDC_PLACES/PLACES__Local_Data_for_Better_Health__Census_Tract_Data_2022_release.csv')
+    # 2019 release CDC csv
+    if os.path.exists(f'{path}/data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv'):
+        cdc = pd.read_csv(f'{path}/data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv')
+    else:
+        with zipfile.ZipFile(f'{path}/data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.zip', 'r') as zip_ref:
+            zip_ref.extractall(f'{path}/data/CDC_PLACES/')
+        cdc = pd.read_csv(f'{path}/data/CDC_PLACES/500_Cities__Local_Data_for_Better_Health__2019_release.csv')
+        
+    # Standard Dataframe 2017
+    if os.path.exists(f'{path}/data/standard_dataframes/standard_acs_censustract_df_2017.csv'):
+        df_2017 = pd.read_csv(f'{path}/data/standard_dataframes/standard_acs_censustract_df_2017.csv')
+    else:
+        with zipfile.ZipFile(f'{path}data/standard_dataframes/standard_acs_censustract_df_2017.zip', 'r') as zip_ref:
+            zip_ref.extractall(f'{path}/data/standard_dataframes/')
+        df_2017 = pd.read_csv(f'{path}/data/standard_dataframes/standard_acs_censustract_df_2017.csv')
+        
+        
+    # Social Vulnerability index
+    if os.path.exists(f'{path}/data/Social Vulnerability Index/SVI2016_US.csv'):
+        svi = pd.read_csv('data/Social Vulnerability Index/SVI2016_US.csv')
+    else:
+        with zipfile.ZipFile(f'{path}/data/Social Vulnerability Index/SVI2016_US.zip', 'r') as zip_ref:
+            zip_ref.extractall(f'{path}/data/Social Vulnerability Index/')
+        svi = pd.read_csv(f'{path}/data/Social Vulnerability Index/SVI2016_US.csv')
+        
+    return cdc, df_2017, svi
 
-# Standard Dataframe 2017
-if os.path.exists('data/standard_dataframes/standard_acs_censustract_df_2017.csv'):
-    df_2017 = pd.read_csv('data/standard_dataframes/standard_acs_censustract_df_2017.csv')
-else:
-    with zipfile.ZipFile('data/standard_dataframes/standard_acs_censustract_df_2017.zip', 'r') as zip_ref:
-        zip_ref.extractall('data/standard_dataframes/')
-    df_2017 = pd.read_csv('data/standard_dataframes/standard_acs_censustract_df_2017.csv')
+
+
+def merge_dataframes(cdc, df_2017, svi):
+    '''
+    Prepares all input dataframes for final merge and merges on GEOID
+
+    Parameters
+    ----------
+    cdc : pd.DataFrame
+        includes 27 cdc health measures aggregated at the census tract level for year 2017.
+    df_2017 : pd.DataFrame
+        includes 5-year ACS data for 2017 aggregated at census tract level and internet connectivity measures
+    svi : pd.DataFrame
+        social vulnerability index variables and components.
+
+    Returns
+    -------
+    standard_merged_final : pd.Dataframe
+    
+    '''
+
+    cdc = cdc[cdc['GeographicLevel'] == 'Census Tract']
+    cdc = cdc.pivot(index=['UniqueID'], columns='Measure', values='Data_Value').reset_index()
+    cdc['UniqueID'] = cdc['UniqueID'].str[8:]
     
     
-# Social Vulnerability index
-if os.path.exists('data/Social Vulnerability Index/SVI2016_US.csv'):
-    svi = pd.read_csv('data/Social Vulnerability Index/SVI2016_US.csv')
-else:
-    with zipfile.ZipFile('data/Social Vulnerability Index/SVI2016_US.zip', 'r') as zip_ref:
-        zip_ref.extractall('data/Social Vulnerability Index/')
-    svi = pd.read_csv('data/Social Vulnerability Index/SVI2016_US.csv')
+    df_2017['GEOID'] = df_2017['GEOID'].astype('string')
+    for index, val in enumerate(df_2017['GEOID']):
+        if len(val) == 10:
+            val = '0' + val
+            df_2017.at[index, 'GEOID'] = val
+            
+            
+    standard_merged = pd.merge(df_2017, cdc, left_on='GEOID', right_on='UniqueID', how='inner')
+    
+    svi['FIPS'] = svi['FIPS'].astype('string')
 
-####################################
+    for index, val in enumerate(svi['FIPS']):
+        if len(val) == 10:
+            val = '0' + val
+            svi.at[index, 'FIPS'] = val
 
+    standard_merged_final = pd.merge(standard_merged, svi, left_on='GEOID', right_on='FIPS', how='inner')
+    return standard_merged_final
 
-# Prep CDC Data for merge and merge
-####################################
-cdc = cdc_clean[cdc_clean ['GeographicLevel'] == 'Census Tract']
-
-cdc = cdc.pivot(index=['UniqueID'], columns='Measure', values='Data_Value').reset_index()
-cdc['UniqueID'] = cdc['UniqueID'].str[8:]
-
-# Convert GEOID to string to add leading zero
-df_2017['GEOID'] = df_2017['GEOID'].astype('string')
-
-for index, val in enumerate(df_2017['GEOID']):
-    if len(val) == 10:
-        val = '0' + val
-        df_2017.at[index, 'GEOID'] = val
-
-
-# Merge with standard dataframe
-standard_merged = pd.merge(df_2017, cdc, left_on='GEOID', right_on='UniqueID', how='inner')
-
-
-
-# Construct Health Index Variables
-####################################
-standard_merged = standard_merged.rename(columns = {
+column_map = {
     # Health Outcomes
     'Arthritis among adults aged >=18 Years': 'health_arthritis', #take inverse
     'Cancer (excluding skin cancer) among adults aged >=18 Years': 'health_cancer', #take inverse
@@ -114,7 +146,28 @@ standard_merged = standard_merged.rename(columns = {
     #Internet connectivity
     'PERC Est_Total: With an Internet subscription: PRESENCE AND TYPES OF INTERNET SUBSCRIPTIONS IN HOUSEHOLD_tct17': 'inter_conrate'
     }
-    )
+
+
+
+def rename_cols(standard_merged_final, column_map):
+    '''
+    Rename columns in standard dataframe to match naming convention
+
+    Parameters
+    ----------
+    standard_merged_final : pd.Dataframe
+        Dataframe created from merge of cdc, df_2017, and svi
+    column_map : dict
+        Changes to variables names to match convention
+
+    Returns
+    -------
+    standard_merged_final : pd.DataFrame
+
+    '''
+    standard_merged_final = standard_merged_final.rename(columns = column_map)
+    return standard_merged_final
+
 
 # List of variables that need to be taken in inverse for indexing
 inverse_vars = ['health_arthritis', 'health_cancer', 'health_KdnyDisease', 'health_PulDisease', 'health_HrtDisease', 'health_asthma', 'health_diab',
@@ -127,17 +180,6 @@ hlth_indx_vars = ['health_arthritis', 'health_cancer', 'health_KdnyDisease', 'he
                   'behav_obesity', 'prev_CholScreen','prev_HlthInsur', 'prev_BloodMed', 'prev_DocVisit', 'prev_DentVisits', 'behav_sleep', 'prev_mammogram',
                   'prev_smear',  'prev_MenPrev', 'prev_WomPrev', 'prev_tests']
 
-
-for i in standard_merged.columns:
-    if i in hlth_indx_vars:
-        if i in inverse_vars:
-            standard_merged[f'{i}_inv'] = 1-(standard_merged[i]/100)
-            standard_merged[i] = (standard_merged[i]/100)
-        else:
-            standard_merged[i] = standard_merged[i]/100
-            
-            
-            
 # Comprehensive index variable list 
 hlth_indx = ['health_arthritis_inv', 'health_cancer_inv', 'health_KdnyDisease_inv', 'health_PulDisease_inv', 'health_HrtDisease_inv', 'health_asthma_inv', 'health_diab_inv',
                   'health_HighBldPrs_inv','health_CholHigh_inv','health_GoodMent_inv', 'health_GoodPhys_inv','health_stroke_inv','behav_drink_inv','behav_smoking_inv','behav_NoPhysAct_inv',
@@ -155,39 +197,76 @@ hlth_indx_behav = ['behav_drink_inv','behav_smoking_inv','behav_NoPhysAct_inv','
 hlth_indx_prev = ['prev_CholScreen','prev_HlthInsur', 'prev_BloodMed', 'prev_DocVisit', 'prev_DentVisits','prev_mammogram','prev_smear',  'prev_MenPrev', 'prev_WomPrev', 'prev_tests']
 
 
-# Comprehensive index, outcomes index, preventative services index
-standard_merged['health_indx'] = standard_merged[hlth_indx].sum(axis=1)
-standard_merged['health_indx_outcomes'] = standard_merged[hlth_indx_outcomes].sum(axis=1)
-standard_merged['health_indx_behav'] = standard_merged[hlth_indx_behav].sum(axis=1)
-standard_merged['health_indx_prev'] = standard_merged[hlth_indx_prev].sum(axis=1)
+def calculate_health_indexes(standard_merged_final, inverse_vars, hlth_indx_vars, hlth_indx, hlth_indx_outcomes, hlth_indx_behav, hlth_indx_prev):
+    '''
+    From the list of health variables, calculates and adds health index variables by transforming each variable
+    for directional consistency and summing together based on category
 
-indexes = ['health_indx', 'health_indx_outcomes', 'health_indx_behav', 'health_indx_prev']
+    Parameters
+    ----------
+    standard_merged_final : pd.DataFrame
 
-for indx in indexes:
-    standard_merged[indx] = standard_merged[indx].replace(0, np.nan)
+    inverse_vars : list
+        List of variables that need to be inversed to be consistent with direction of outcome
+    hlth_indx_vars : list
+        List of all health variables without transformation
+    hlth_indx : list
+        New list of all health variables after necessary transformation
+    hlth_indx_outcomes : list
+        list of outcome only health variables
+    hlth_indx_behav : list
+        list of risky behvaiors only health variables
+    hlth_indx_prev : list
+        list of preventative services only health variables
+
+    Returns
+    -------
+    standard_merged_final : pd.DataFrame
+        Final dataframe for analysis
+
+    '''
+    
+    for i in standard_merged_final.columns:
+        if i in hlth_indx_vars:
+            if i in inverse_vars:
+                standard_merged_final[f'{i}_inv'] = 1-(standard_merged_final[i]/100)
+                standard_merged_final[i] = (standard_merged_final[i]/100)
+            else:
+                standard_merged_final[i] = standard_merged_final[i]/100
+                
+    # Comprehensive index, outcomes index, preventative services index
+    standard_merged_final['health_indx'] = standard_merged_final[hlth_indx].sum(axis=1)
+    standard_merged_final['health_indx_outcomes'] = standard_merged_final[hlth_indx_outcomes].sum(axis=1)
+    standard_merged_final['health_indx_behav'] = standard_merged_final[hlth_indx_behav].sum(axis=1)
+    standard_merged_final['health_indx_prev'] = standard_merged_final[hlth_indx_prev].sum(axis=1)
+
+    indexes = ['health_indx', 'health_indx_outcomes', 'health_indx_behav', 'health_indx_prev']
+
+    for indx in indexes:
+        standard_merged_final[indx] = standard_merged_final[indx].replace(0, np.nan)
+                
+    return standard_merged_final
+
+def main():
+    '''
+    Run to merge cdc, standard dataframe, and social vulnerability index dataframes into one
+    and add health index variables for analysis
+
+    Returns
+    -------
+    Saves final ready-for-analysis dataframe as zip to data/standard_dataframes folder
+
+    '''
+    cdc, df_2017, svi = load_csv_or_zip(path=sys.path[0])
+    standard_merged_final = merge_dataframes(cdc, df_2017, svi)
+    standard_merged_final = rename_cols(standard_merged_final, column_map)
+    standard_merged_final = calculate_health_indexes(standard_merged_final, inverse_vars, hlth_indx_vars, hlth_indx, hlth_indx_outcomes, hlth_indx_behav, hlth_indx_prev)
+    
+    standard_merged_final.to_csv('data/standard_dataframes/standard_merged_2017.csv.gz', compression='gzip', index=False)
 
 
 
-
-###################
-##  Merge SVI data with standard dataframe
-svi['FIPS'] = svi['FIPS'].astype('string')
-
-for index, val in enumerate(svi['FIPS']):
-    if len(val) == 10:
-        val = '0' + val
-        svi.at[index, 'FIPS'] = val
-
-standard_merged_final = pd.merge(standard_merged, svi, left_on='GEOID', right_on='FIPS', how='inner')
-
-# col_lst = list(standard_merged_final.columns)
-# for e in col_lst:
-#     print(e, '\n')
-
-
-####################################
-## Write to CSV 
-standard_merged_final.to_csv('data/standard_dataframes/standard_merged_2017.csv.gz', compression='gzip', index=False)
-
+if __name__ == "__main__":
+    main()
 
 
