@@ -12,7 +12,7 @@ Authors: Lena Diasti, Drew Keller, Amy Maldonado, Nick Ross (Autumn 2022)
 
 #### Deliverables Spring 2023
 
-----
+This quarter's project involved merging and cleaning the 2013-2017 American Community Survey (ACS) datasets with the CDC’s PLACES dataset by census tracts, creating spatial visualizations of health indicators, and conducting an exploratory analysis report of the observed relationship between broadband connectivity and a constructed health index. The code accompanying the newly merged dataset should be standardized, generalizable, and reproducible. 
 
 People Spring 2023:
 + Victoria Kielb vkielb@uchicago.edu
@@ -27,7 +27,7 @@ TA: Kenia Godinez Nogueda
 
 #### Deliverables Winter 2023
 
-We are looking to build a set of jupyter notebooks to generate maps for the specified metro areas. We are looking to move beyond description and look at association/causal inference analysis. We want to connect our data to sociodemographic factors and use multi-level modeling. We also want to build the pipeline to include data at the neighborhood as well as census tract. This code should be standardized, generalizeable, and reproducible. For that reason, we will use docker.
+We are looking to build a set of jupyter notebooks to generate maps for the specified metro areas. We are looking to move beyond description and look at association/causal inference analysis. We want to connect our data to sociodemographic factors and use multi-level modeling. We also want to build the pipeline to include data at the neighborhood as well as census tract. This code should be standardized, generalizeable, and reproducible. 
 
 
 People Winter 2023:
