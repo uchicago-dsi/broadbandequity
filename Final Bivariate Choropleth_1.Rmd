@@ -1,0 +1,90 @@
+---
+title: "Bivariate Choropleth"
+output: html_document
+date: "2023-05-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library('biscale')
+library('cowplot')
+library('sf')
+library(rgdal)
+library('ggplot2')
+```
+
+```{r}
+
+states <- st_read("/Users/sarahlueling/Desktop/Upload_ArcGis/gdf_2017_1.shp")
+colnames(states)
+```
+
+
+```{r}
+data <- bi_class(states, x = inter_conr, y = health_ind, style = "quantile", dim = 4)
+```
+
+
+```{r}
+map <- ggplot() +
+  geom_sf(data = data, mapping = aes(fill = bi_class), color = "white", size = 0.1, show.legend = FALSE) +
+  bi_scale_fill(pal = "PurpleGrn", dim = 4) +
+  bi_theme()
+
+```
+
+```{r}
+legend <- bi_legend(pal = "PurpleGrn",
+                    dim = 4,
+                    xlab = "Higher Health Index Score",
+                    ylab = "Higher Internet Connectivity",
+                    size = 12)
+```
+
+```{r}
+finalPlot <- ggdraw() +
+  draw_plot(map, 0, 0, 1, 1) +
+  draw_plot(legend, 0.2, .65, 0.2, 0.35)
+```
+
+```{r}
+finalPlot
+```
+
+
+
+
+```{r}
+data1 <- bi_class(states, x = inter_conr, y = health_i_1, style = "quantile", dim = 4)
+```
+
+
+```{r}
+map2 <- ggplot() +
+  geom_sf(data = data1, mapping = aes(fill = bi_class), color = "white", size = 0.1, show.legend = FALSE) +
+  bi_scale_fill(pal = "PurpleGrn", dim = 4) +
+  bi_theme()
+
+```
+
+```{r}
+legend2 <- bi_legend(pal = "PurpleGrn",
+                    dim = 4,
+                    xlab = "Higher Prevent. Health Index Score",
+                    ylab = "Higher Internet Connectivity",
+                    size = 12)
+```
+
+```{r}
+finalPlot1 <- ggdraw() +
+  draw_plot(map2, 0, 0, 1, 1) +
+  draw_plot(legend2, 0.2, .65, 0.2, 0.3)
+```
+
+```{r}
+finalPlot1
+```
+
