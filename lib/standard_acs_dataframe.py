@@ -206,7 +206,6 @@ def get_standard_df(city_merged_df, year, city):
     
     Inputs:
       city_merged_df
-
     Outputs:
       city_standard_df
     '''
